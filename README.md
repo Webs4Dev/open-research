@@ -1,4 +1,4 @@
-# OpenResearchGPT
+# OpenResearch
 
 OpenResearchGPT is an open-source multi-agent research discovery and analysis platform designed to help users find, understand, rank, and interact with research papers from multiple sources.
 
@@ -108,20 +108,6 @@ A Vite + React + TypeScript app that talks to the FastAPI backend over `/api/v1/
 
 ---
 
-## Planned Features
-
-- Research gap detection
-- Automated literature review generation
-- Fine-tuned explanation model (LoRA)
-- Personalized research memory
-- Citation graph visualization
-- Model evaluation pipeline
-- Local model support
-- Pixel-accurate highlight bounding boxes (current highlighting matches on text content, not stored coordinates)
-- Content-hash-based ingestion dedup (currently deduplicates by filename)
-
----
-
 ## Project Architecture
 
 ### Research Retrieval Pipeline
@@ -219,65 +205,6 @@ Dashboard ──→ Search Papers ──→ POST /api/v1/search ──→ ranked
 
 ---
 
-## Current Progress
-
-### Backend
-
-- ✅ Day 1 — Project setup
-- ✅ Day 2 — arXiv paper retrieval
-- ✅ Day 3 — Semantic Scholar retrieval
-- ✅ Day 4 — Retrieval manager and logging
-- ✅ Day 5 — PubMed, OpenAlex, and CrossRef retrieval
-- ✅ Day 6 — Source Discovery and Web Retrieval foundation
-- ✅ Day 7 — Ranking Agent v1
-- ✅ Day 8 — Ranking Result Schema and JSON Parser
-- ✅ Day 9 — FastAPI Endpoint (Ranking)
-- ✅ Day 10 — Fixing Endpoint issues
-- ✅ Day 11 — Concurrent Retrieval using ThreadPoolExecutor
-- ✅ Day 12 — Concurrent Ranking using ThreadPoolExecutor
-- ✅ Day 13 — Paper Deduplication Layer
-- ✅ Day 14 — Edge Case Handling and Ranking Robustness
-- ✅ Day 15 — LLM-powered Source Discovery Agent
-- ✅ Day 16 — Web Retrieval Agent v1
-- ✅ Day 17 — Web Retrieval Agent Integration
-- ✅ Day 18 — Retrieval Statistics & Pipeline Stabilization
-- ✅ Day 19 — PDF Upload and Text Extraction Pipeline
-- ✅ Day 20 — PDF Chunking Pipeline
-- ✅ Day 21 — Project Relevance Agent
-- ✅ Day 22 — PDF QA Agent
-- ✅ Day 23 — PDF Deep Dive Endpoint
-- ✅ Day 24 — Page-Aware Overlap Chunking
-- ✅ Day 25 — ChromaDB Vector Storing
-- ✅ Day 26 — Paper Metadata Addition to DB
-- ✅ Day 27 — ChromaDB Paper Storage & RAG QA Endpoint
-- ✅ Day 28 — Fixed Minor Issues & Added Relevance Score
-- ✅ Day 29 — PDF Ingestion Pipeline
-- ✅ Day 30 — Integration PDF Ingestion in Search
-- ✅ Day 31 — Creating Separate Chunk & Paper Collection
-- ✅ Day 32 — Hybrid Retrieval using Chunk & Paper Collection
-- ✅ Day 33 — Fixing RAG source metadata
-- ✅ Day 34 — Chunk-aware Paper Filtering & Fixing Pipeline
-- ✅ Day 35 — Resolve has_chunks Metadata Update in Hybrid Retrieval
-- ✅ Day 36 — PDF Endpoint v2
-- ✅ Day 37 — Adding chunk_text to the PDF Analysis Pipeline
-- ✅ Day 38 — Storing PDF
-- ✅ Day 39 — Ingestion deduplication
-- ✅ Day 40 — CORS configuration for frontend integration
-
-### Frontend
-
-- ✅ Day 41 — App shell, sidebar navigation, and Dashboard
-- ✅ Day 41 — Search Papers — query, project description, results-per-source, source picker, ranked result cards
-- ✅ Day 41 — PDF Workspace — upload flow with Analyse / Ingest-and-ask choice
-- ✅ Day 41 — Ingest-and-ask — inline chat scoped to the ingested paper
-- ✅ Day 42 — Analyse — real PDF rendering with numbered, color-matched chunk highlighting
-- ✅ Day 42 — Recent activity feed on the Dashboard, persisted locally
-- ✅ Day 43 — Branding (logo, sidebar identity)
-- ⬜ Pixel-exact highlight bounding boxes (pending backend support)
-- ⬜ Deployed instance (frontend on Netlify, backend host TBD)
-
----
-
 ## Tech Stack
 
 ### Backend
@@ -289,7 +216,6 @@ Dashboard ──→ Search Papers ──→ POST /api/v1/search ──→ ranked
 ### AI / ML
 
 - OpenAI API
-- LoRA fine-tuning
 - Retrieval-Augmented Generation (RAG)
 
 ### Database
@@ -307,11 +233,6 @@ Dashboard ──→ Search Papers ──→ POST /api/v1/search ──→ ranked
 - TanStack Query (request state for search/ingest/analyze/ask)
 - Zustand (shared workspace state, persisted activity log)
 - react-pdf / pdf.js (in-browser PDF rendering and highlighting)
-
-### Deployment
-
-- Docker (backend)
-- Netlify (frontend)
 
 ---
 
