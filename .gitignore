@@ -9,3 +9,6 @@ docs/
 
 #Database
 chroma_db/
+
+#Mac
+.DS_Store
