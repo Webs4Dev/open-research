@@ -9,6 +9,7 @@ import { ChunkTypeBadge } from "../components/common/ChunkTypeBadge";
 import { Spinner } from "../components/common/Spinner";
 import type { RelevantChunk } from "../api/types";
 import { useActivityStore } from "../store/activityStore";
+import { getErrorMessage } from "../lib/errors";
 
 export function Analyze() {
   const navigate = useNavigate();
@@ -85,6 +86,7 @@ export function Analyze() {
           <textarea
             className="textarea h-20"
             placeholder="Describe your project so chunks can be scored against it…"
+            maxLength={2000}
             value={projectDescription}
             onChange={(e) => setProjectDescription(e.target.value)}
           />
@@ -102,7 +104,7 @@ export function Analyze() {
 
       {mutation.isError && (
         <p className="mb-4 text-sm text-red-600">
-          Analysis failed. Check that the backend is running and reachable.
+          Analysis failed: {getErrorMessage(mutation.error)}
         </p>
       )}
 

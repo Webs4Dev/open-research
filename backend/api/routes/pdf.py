@@ -16,13 +16,41 @@ os.makedirs(PDF_DIR, exist_ok=True)
 
 LLM_ERROR = "The AI returned an unexpected response. Please try again."
 
+# Upload limits: every page costs embedding/LLM tokens, so cap size and length.
+MAX_PDF_BYTES = 25 * 1024 * 1024
+MAX_PDF_PAGES = 100
+MAX_DESCRIPTION_CHARS = 2000
+
 router = APIRouter()
+
+def read_pdf_upload(file: UploadFile) -> tuple[bytes, int]:
+    """Read and validate an uploaded PDF; return its bytes and page count."""
+    contents = file.file.read(MAX_PDF_BYTES + 1)
+    if len(contents) > MAX_PDF_BYTES:
+        raise HTTPException(status_code=413, detail=f"PDF is larger than {MAX_PDF_BYTES // (1024 * 1024)} MB")
+    # The spec allows the header anywhere in the first 1024 bytes.
+    if b"%PDF-" not in contents[:1024]:
+        raise HTTPException(status_code=415, detail="File is not a PDF")
+
+    try:
+        with fitz.open(stream=contents, filetype="pdf") as doc:
+            if doc.needs_pass:
+                raise HTTPException(status_code=400, detail="PDF is password-protected")
+            total_pages = len(doc)
+    except RuntimeError:  # FileDataError and other MuPDF failures
+        raise HTTPException(status_code=400, detail="PDF is damaged or unreadable")
+
+    if total_pages == 0:
+        raise HTTPException(status_code=400, detail="PDF has no pages")
+    if total_pages > MAX_PDF_PAGES:
+        raise HTTPException(status_code=413, detail=f"PDF has {total_pages} pages; the limit is {MAX_PDF_PAGES}")
+    return contents, total_pages
 
 # Routes are plain `def` (not async) because they make blocking OpenAI/Chroma calls;
 # FastAPI runs sync routes in a threadpool so one request can't freeze the server.
 @router.post("/ingest",response_model=PDFIngestResponse)
 def ingest_pdf(file:UploadFile=File(...)):
-    contents = file.file.read()
+    contents, total_pages = read_pdf_upload(file)
     paper_id = generate_content_id(contents)
     temp_path = f"{PDF_DIR}/{paper_id}.pdf"
 
@@ -30,8 +58,6 @@ def ingest_pdf(file:UploadFile=File(...)):
         log(f"'{file.filename}' already ingested — skipping re-ingest")
         with open(temp_path, "wb") as f:
             f.write(contents)
-        with fitz.open(temp_path) as doc:
-            total_pages = len(doc)
         return PDFIngestResponse(
             filename=file.filename,
             paper_id=paper_id,
@@ -60,8 +86,12 @@ def ingest_pdf(file:UploadFile=File(...)):
     )
 
 @router.post("/analyze",response_model=PDFAnalysisResponse)
-def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...)):
-    contents=(file.file.read())
+def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_length=1)):
+    # Browsers send textarea newlines as \r\n in multipart bodies; count them as one char
+    # so text that fit the frontend's maxLength isn't rejected here.
+    if len(project_description.replace("\r\n", "\n")) > MAX_DESCRIPTION_CHARS:
+        raise HTTPException(status_code=422, detail=f"Project description is longer than {MAX_DESCRIPTION_CHARS} characters")
+    contents, _ = read_pdf_upload(file)
     paper_id = generate_content_id(contents)
     temp_path=(f"{PDF_DIR}/{paper_id}.pdf")
 

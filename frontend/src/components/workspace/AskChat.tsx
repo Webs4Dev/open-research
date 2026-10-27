@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { askQuestion } from "../../api/endpoints";
 import { useWorkspaceStore } from "../../store/workspaceStore";
 import { useActivityStore } from "../../store/activityStore";
+import { getErrorMessage } from "../../lib/errors";
 
 interface AskChatProps {
   paperId: string;
@@ -35,10 +36,10 @@ export function AskChat({ paperId, paperTitle }: AskChatProps) {
         foundInPages: result.found_in_pages,
       });
       logActivity({ type: "ask", label: trimmed, detail: paperTitle });
-    } catch {
+    } catch (err) {
       updateChatTurn(id, {
         status: "error",
-        errorMessage: "Couldn't get an answer -- check the backend connection and try again.",
+        errorMessage: `Couldn't get an answer: ${getErrorMessage(err)}`,
       });
     } finally {
       setIsSending(false);
@@ -92,6 +93,7 @@ export function AskChat({ paperId, paperTitle }: AskChatProps) {
         <input
           className="input flex-1"
           placeholder="Ask a question about this PDF"
+          maxLength={1000}
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAsk()}

@@ -9,6 +9,7 @@ import { Spinner } from "../components/common/Spinner";
 import { ingestPdf } from "../api/endpoints";
 import { useWorkspaceStore } from "../store/workspaceStore";
 import { useActivityStore } from "../store/activityStore";
+import { getErrorMessage } from "../lib/errors";
 
 type Stage = "dropzone" | "choice" | "ingesting" | "chat";
 
@@ -72,7 +73,7 @@ export function PdfWorkspace() {
 
       {stage === "choice" && ingestMutation.isError && (
         <p className="mb-3 text-sm text-red-600">
-          Ingest failed. Check that the backend is running and reachable, then try again.
+          Ingest failed: {getErrorMessage(ingestMutation.error)}
         </p>
       )}
 

@@ -1,12 +1,13 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 from backend.schemas.stats import RetrievalStats
 
 class SearchRequest(BaseModel):
-    query: str
-    project_description: Optional[str] = None   
-    max_results: Optional[int] = 5
-    sources: Optional[list[str]] = None           
+    query: str = Field(min_length=1, max_length=500)
+    project_description: Optional[str] = Field(default=None, max_length=2000)
+    # Every retrieved paper costs one LLM ranking call, so keep this small.
+    max_results: int = Field(default=5, ge=1, le=10)
+    sources: Optional[list[str]] = Field(default=None, max_length=10)
 
 class SourceReport(BaseModel):
     count: int
