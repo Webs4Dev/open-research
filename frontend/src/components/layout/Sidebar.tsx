@@ -1,5 +1,11 @@
-import { NavLink } from "react-router-dom";
-import { Home, Search, FileText } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import { Home, Search, FileText, LogOut } from "lucide-react";
+import { logout } from "../../api/endpoints";
+import type { User } from "../../api/types";
+import { ME_QUERY_KEY } from "../auth/RequireAuth";
+import { useActivityStore } from "../../store/activityStore";
+import { useWorkspaceStore } from "../../store/workspaceStore";
 
 const navItems = [
   { to: "/", label: "Dashboard", icon: Home, end: true },
@@ -8,6 +14,19 @@ const navItems = [
 ];
 
 export function Sidebar() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const user = queryClient.getQueryData<User>(ME_QUERY_KEY);
+
+  const handleLogout = async () => {
+    await logout().catch(() => {}); // the cookie is cleared server-side; leave either way
+    queryClient.clear(); // drop every cached response from this user
+    // The activity list is kept in localStorage, so clear it for whoever logs in next.
+    useActivityStore.getState().clearActivity();
+    useWorkspaceStore.getState().reset();
+    navigate("/login", { replace: true });
+  };
+
   return (
     <aside className="flex w-56 shrink-0 flex-col border-r border-border bg-surface-1 px-3 py-4">
       <div className="mb-6 flex items-center gap-2 px-2 text-[15px] font-medium">
@@ -38,6 +57,15 @@ export function Sidebar() {
           </NavLink>
         ))}
       </nav>
+      <div className="mt-auto border-t border-border px-2 pt-3">
+        <p className="mb-2 truncate text-xs text-text-secondary" title={user?.email}>
+          {user?.email}
+        </p>
+        <button className="btn-secondary w-full px-2.5 py-1.5 text-xs" onClick={handleLogout}>
+          <LogOut size={14} />
+          Log out
+        </button>
+      </div>
     </aside>
   );
 }

@@ -24,3 +24,4 @@ class SearchResponse(BaseModel):
     source_report: dict[str, SourceReport]
     retrieval_stats: RetrievalStats
     ranked_results: list
+    search_id: Optional[int] = None  # id in the user's saved history

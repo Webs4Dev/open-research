@@ -9,6 +9,7 @@ docs/
 
 #Database
 chroma_db/
+data/
 
 #Mac
 .DS_Store

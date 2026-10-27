@@ -69,6 +69,16 @@ export interface PDFIngestResponse {
   chunks_stored: number;
 }
 
+export interface User {
+  id: number;
+  email: string;
+}
+
+export interface Credentials {
+  email: string;
+  password: string;
+}
+
 // One text line of a chunk, as fractions (0-1) of the page width/height.
 export interface HighlightBox {
   page_no: number;
