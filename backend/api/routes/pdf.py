@@ -20,6 +20,8 @@ LLM_ERROR = "The AI returned an unexpected response. Please try again."
 MAX_PDF_BYTES = 25 * 1024 * 1024
 MAX_PDF_PAGES = 100
 MAX_DESCRIPTION_CHARS = 2000
+# Real papers have thousands of characters per page; scans have ~0 (maybe page numbers).
+MIN_TEXT_CHARS_PER_PAGE = 50
 
 router = APIRouter()
 
@@ -46,6 +48,17 @@ def read_pdf_upload(file: UploadFile) -> tuple[bytes, int]:
         raise HTTPException(status_code=413, detail=f"PDF has {total_pages} pages; the limit is {MAX_PDF_PAGES}")
     return contents, total_pages
 
+def extract_text_pages(path: str) -> list[dict]:
+    """Extract page text, rejecting PDFs with no text layer before any embedding/LLM spend."""
+    pages = extract_pdf_pages(path)
+    text_chars = sum(len(page["text"].strip()) for page in pages)
+    if text_chars < MIN_TEXT_CHARS_PER_PAGE * len(pages):
+        raise HTTPException(
+            status_code=422,
+            detail="This PDF has little or no selectable text (it may be scanned). OCR isn't supported yet.",
+        )
+    return pages
+
 # Routes are plain `def` (not async) because they make blocking OpenAI/Chroma calls;
 # FastAPI runs sync routes in a threadpool so one request can't freeze the server.
 @router.post("/ingest",response_model=PDFIngestResponse)
@@ -69,7 +82,7 @@ def ingest_pdf(file:UploadFile=File(...)):
     with open(temp_path, 'wb') as f:
         f.write(contents)
 
-    pages = extract_pdf_pages(temp_path)
+    pages = extract_text_pages(temp_path)
     total_pages = len(pages)
     log(f"Extracted {total_pages} pages from {file.filename}")
 
@@ -99,7 +112,7 @@ def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_l
     with open(temp_path,"wb") as f:
         f.write(contents)
 
-    pages=extract_pdf_pages(temp_path)
+    pages=extract_text_pages(temp_path)
     total_pages=len(pages)
     log(f"Extracted {total_pages} pages from {file.filename}")
 
