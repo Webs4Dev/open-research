@@ -11,17 +11,11 @@ USER PROJECT DETAILS: (Use this field if details given else ignore if None)
 
 PAPER:
 Title: {paper.title}
-Abstract: {paper.abstract}
-URL: {paper.url}
+Abstract: {abstract}
+Published year: {year}
+Citations: {paper.citation_count}
 Source: {paper.source}
-
----
-
-PDF DETECTION RULES:
-Classify `pdf_status` based on the URL:
-- "available"     → URL ends in .pdf or contains /pdf/ (e.g. arxiv.org/pdf/...)
-- "unavailable"   → URL points to a landing/metadata page (e.g. arxiv.org/abs/, semanticscholar.org, doi.org, acm.org, springer.com)
-- "unknown"       → URL is empty, broken, or unrecognizable
+PDF status: {pdf_status}
 
 ---
 
@@ -36,7 +30,7 @@ SCORING RUBRIC (reduce score if information is insufficient to judge):
 | potential_value     | 10  | Insights, techniques, or inspiration it could offer |
 | pdf_availability    | 15  | Full PDF present and suitable for deep analysis (Q&A, highlighting, idea extraction) |
 
-Note: Score `pdf_availability` higher only if `pdf_status` is "available".
+Note: Score `pdf_availability` higher only if PDF status is "available".
 
 ---
 
@@ -49,11 +43,6 @@ INSTRUCTIONS:
 
 OUTPUT FORMAT:
 {{
-  "paper_name": "<exact paper title>",
-  "source": "<e.g. arxiv, semantic_scholar, acm, springer, pubmed>",
-  "published_year": <exact year paper was published, or null>,
-  "pdf_status": "<available | unavailable | unknown>",
-  "paper_url": "<the original URL>",
   "scores": {{
     "topic_match": <0–25>,
     "project_relevance": <0–25>,
@@ -62,7 +51,6 @@ OUTPUT FORMAT:
     "potential_value": <0–10>,
     "pdf_availability": <0–15>
   }},
-  "total_score": <0–100>,
   "why_it_matches": [
     "<bullet>",
     "<bullet>"

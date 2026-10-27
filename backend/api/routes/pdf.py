@@ -109,8 +109,7 @@ def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_l
     try:
         relevant_chunks = sort_relevant_chunks(
             chunks=chunks,
-            project_description=project_description,
-            top_k=max(5,total_pages)
+            project_description=project_description
         )
     except ValueError as e:  # bad JSON or schema mismatch from the LLM
         log(f"Relevance parse error: {e}")

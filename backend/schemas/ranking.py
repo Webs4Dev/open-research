@@ -1,31 +1,26 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field
 from typing import Optional
 
+# Bounds match the rubric in prompts/ranking_prompt.py, so the sum is at most 100.
 class Scores(BaseModel):
-    topic_match: int
-    project_relevance: int
-    research_similarity: int
-    recency: int
-    potential_value: int
-    pdf_availability: int
+    topic_match: int = Field(ge=0, le=25)
+    project_relevance: int = Field(ge=0, le=25)
+    research_similarity: int = Field(ge=0, le=15)
+    recency: int = Field(ge=0, le=10)
+    potential_value: int = Field(ge=0, le=10)
+    pdf_availability: int = Field(ge=0, le=15)
+
+class LLMRanking(BaseModel):
+    """What the LLM returns: judgment only. Paper facts come from `Paper`."""
+    scores: Scores
+    why_it_matches: list[str]
+    useful_ideas: list[str]
+    pdf_usefulness: str
 
 class RankingResult(BaseModel):
     paper_name: str
     source: str
     published_year: Optional[int] = None
-    @field_validator("published_year", mode="before")
-    @classmethod
-    def coerce_published_year(cls, value):
-        if value is None:
-            return None
-        if isinstance(value, int):
-            return value
-        if isinstance(value, str):
-            stripped = value.strip()
-            if stripped.isdigit():
-                return int(stripped)
-            return None
-        return None
     pdf_status: str
     paper_url: Optional[str] = None
     scores: Scores
@@ -33,11 +28,3 @@ class RankingResult(BaseModel):
     why_it_matches: list[str]
     useful_ideas: list[str]
     pdf_usefulness: str
-
-   
-
-
-
-
-
-    
