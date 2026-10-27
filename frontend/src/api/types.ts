@@ -69,6 +69,15 @@ export interface PDFIngestResponse {
   chunks_stored: number;
 }
 
+// One text line of a chunk, as fractions (0-1) of the page width/height.
+export interface HighlightBox {
+  page_no: number;
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+}
+
 export interface RelevantChunk {
   chunk_id: number;
   chunk_text?: string | null;
@@ -77,6 +86,7 @@ export interface RelevantChunk {
   chunk_type: string;
   reason: string;
   suggested_use: string;
+  boxes: HighlightBox[];
 }
 
 export interface PDFAnalysisResponse {

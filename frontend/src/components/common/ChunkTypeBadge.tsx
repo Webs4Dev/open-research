@@ -19,5 +19,5 @@ export function ChunkTypeBadge({ type }: { type: string }) {
  * the pastel per-type tints were too faint to notice. Which chunk is which
  * is now conveyed by the numbered badge (see PdfChunkViewer), not color.
  */
-export const HIGHLIGHT_YELLOW = "rgba(255, 224, 0, 0.50)";
-export const HIGHLIGHT_YELLOW_ACTIVE_OUTLINE = "#B45309";
+export const HIGHLIGHT_YELLOW = "rgba(255, 224, 0, 0.35)";
+export const HIGHLIGHT_YELLOW_ACTIVE = "rgba(255, 200, 0, 0.70)";

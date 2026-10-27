@@ -3,7 +3,7 @@ import fitz
 import os
 
 from backend.pdf.parser import extract_pdf_pages
-from backend.pdf.chunker import build_chunks_from_pages
+from backend.pdf.chunker import build_chunks_from_pdf
 from backend.rag.vector_store import *
 from backend.agents.project_relevance_agent import sort_relevant_chunks
 from backend.agents.pdf_qa_agent import answer_question
@@ -86,7 +86,7 @@ def ingest_pdf(file:UploadFile=File(...)):
     total_pages = len(pages)
     log(f"Extracted {total_pages} pages from {file.filename}")
 
-    chunks = build_chunks_from_pages(pages)
+    chunks = build_chunks_from_pdf(temp_path)
     log(f"Created {len(chunks)} chunks")
 
     store_chunks(paper_id=paper_id, paper_title=file.filename, chunks=chunks)
@@ -116,7 +116,7 @@ def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_l
     total_pages=len(pages)
     log(f"Extracted {total_pages} pages from {file.filename}")
 
-    chunks = build_chunks_from_pages(pages)
+    chunks = build_chunks_from_pdf(temp_path)
     log(f"Created {len(chunks)} chunks")
 
     try:
@@ -134,6 +134,7 @@ def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_l
         original = chunk_map[rc.chunk_id]
         rc.chunk_text = original.text
         rc.page_no = original.page_no
+        rc.boxes = original.boxes
 
     return PDFAnalysisResponse(
         filename=file.filename,

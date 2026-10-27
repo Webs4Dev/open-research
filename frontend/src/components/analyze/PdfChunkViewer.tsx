@@ -1,8 +1,8 @@
-import { useCallback, useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { Document, Page } from "react-pdf";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { RelevantChunk } from "../../api/types";
-import { HIGHLIGHT_YELLOW, HIGHLIGHT_YELLOW_ACTIVE_OUTLINE } from "../common/ChunkTypeBadge";
+import { HIGHLIGHT_YELLOW, HIGHLIGHT_YELLOW_ACTIVE } from "../common/ChunkTypeBadge";
 import "react-pdf/dist/Page/TextLayer.css";
 
 interface PdfChunkViewerProps {
@@ -10,13 +10,6 @@ interface PdfChunkViewerProps {
   chunks: RelevantChunk[];
   activeChunkId: number | null;
   onChunkClick: (chunkId: number) => void;
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
 }
 
 export function PdfChunkViewer({
@@ -51,40 +44,19 @@ export function PdfChunkViewer({
     if (active?.page_no) setPageNumber(active.page_no);
   }, [activeChunkId, chunks]);
 
-  const pageChunks = useMemo(
-    () => chunks.filter((c) => c.page_no === pageNumber && c.chunk_text),
-    [chunks, pageNumber]
-  );
-
-  // react-pdf calls this per text-layer span. We wrap a span's text in <mark>
-  // if it is a substring of one of this page's relevant chunk texts -- a
-  // heuristic that works well since chunk_text is the concatenation of many
-  // such spans. This is a stand-in for real bounding-box highlighting; see
-  // the README note about adding bounding boxes server-side for pixel-exact
-  // highlights instead of text-containment matching.
-  //
-  // Memoized so react-pdf doesn't see a new function identity on every
-  // parent render and needlessly re-run/repaint the whole text layer.
-  const customTextRenderer = useCallback(
-    ({ str }: { str: string }) => {
-      const trimmed = str.trim();
-      if (trimmed.length < 4) return escapeHtml(str);
-
-      const match = pageChunks.find((c) => c.chunk_text?.includes(trimmed));
-      if (!match) return escapeHtml(str);
-
-      const isActive = match.chunk_id === activeChunkId;
-      const outline = isActive
-        ? `outline:2px solid ${HIGHLIGHT_YELLOW_ACTIVE_OUTLINE};outline-offset:1px;`
-        : "";
-      // color:transparent keeps the text layer invisible: <mark> defaults to black
-      // text, which drew every highlighted line a second time over the canvas (blurry).
-      // (The highlighter-style blend lives on the text layer in index.css.)
-      return `<mark data-chunk-id="${match.chunk_id}" style="background:${HIGHLIGHT_YELLOW};color:transparent;border-radius:2px;${outline}">${escapeHtml(
-        str
-      )}</mark>`;
-    },
-    [pageChunks, activeChunkId]
+  // The server sends one box per text line (fractions of the page size), so
+  // highlights are drawn as overlays at exact positions instead of guessing
+  // which text-layer spans belong to a chunk.
+  const pageBoxes = useMemo(
+    () =>
+      chunks.flatMap((c) =>
+        c.boxes
+          .filter((b) => b.page_no === pageNumber)
+          .map((b) => ({ ...b, chunkId: c.chunk_id }))
+      )
+        // Draw the active chunk last so neighbouring boxes never paint over it.
+        .sort((a, b) => Number(a.chunkId === activeChunkId) - Number(b.chunkId === activeChunkId)),
+    [chunks, pageNumber, activeChunkId]
   );
 
   return (
@@ -112,11 +84,6 @@ export function PdfChunkViewer({
       <div
         ref={containerRef}
         className="relative overflow-auto rounded-lg border border-border bg-surface-2"
-        onClick={(e) => {
-          const target = (e.target as HTMLElement).closest("mark[data-chunk-id]");
-          const id = target?.getAttribute("data-chunk-id");
-          if (id) onChunkClick(Number(id));
-        }}
       >
         <Document
           file={file}
@@ -124,12 +91,31 @@ export function PdfChunkViewer({
           loading={<p className="p-6 text-sm text-text-secondary">Loading PDF...</p>}
           error={<p className="p-6 text-sm text-red-600">Could not load this PDF.</p>}
         >
-          <Page
-            pageNumber={pageNumber}
-            width={containerWidth || 420}
-            customTextRenderer={customTextRenderer}
-            renderAnnotationLayer={false}
-          />
+          {/* inline-block: the wrapper (and so the overlay) is exactly the page's size. */}
+          <div className="relative inline-block align-top">
+            <Page
+              pageNumber={pageNumber}
+              width={containerWidth || 420}
+              renderAnnotationLayer={false}
+            />
+            {/* Above the text layer (z-index 2); multiply keeps the text under the yellow black. */}
+            <div className="pointer-events-none absolute inset-0 z-10">
+              {pageBoxes.map((b, i) => (
+                <div
+                  key={`${b.chunkId}-${i}`}
+                  className="pointer-events-auto absolute cursor-pointer mix-blend-multiply"
+                  style={{
+                    left: `${b.x0 * 100}%`,
+                    top: `${b.y0 * 100}%`,
+                    width: `${(b.x1 - b.x0) * 100}%`,
+                    height: `${(b.y1 - b.y0) * 100}%`,
+                    background: b.chunkId === activeChunkId ? HIGHLIGHT_YELLOW_ACTIVE : HIGHLIGHT_YELLOW,
+                  }}
+                  onClick={() => onChunkClick(b.chunkId)}
+                />
+              ))}
+            </div>
+          </div>
         </Document>
       </div>
     </div>
