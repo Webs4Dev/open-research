@@ -12,3 +12,5 @@ chroma_db/
 
 #Mac
 .DS_Store
+#Claude Code local settings
+.claude/settings.local.json
