@@ -88,7 +88,7 @@ export interface PDFAnalysisResponse {
 }
 
 export interface PDFQARequest {
-  paper_title: string;
+  paper_id: string;
   question: string;
 }
 

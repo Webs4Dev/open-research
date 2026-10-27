@@ -44,10 +44,9 @@ export async function analyzePdf(
   return data;
 }
 
-// POST /api/v1/ask  (json: paper_title, question)
-// NOTE: the backend keys retrieval off `paper_title`, which /ingest sets to the
-// raw uploaded filename (file.filename) — not the generated paper_id. We pass
-// the ingested filename through as paper_title to stay consistent with that.
+// POST /api/v1/ask  (json: paper_id, question)
+// paper_id comes from /ingest and is a hash of the PDF's contents, so two
+// different files with the same name never share answers.
 export async function askQuestion(body: PDFQARequest): Promise<PDFQAResponse> {
   const { data } = await apiClient.post<PDFQAResponse>("/ask", body);
   return data;

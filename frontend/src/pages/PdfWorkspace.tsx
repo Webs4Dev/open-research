@@ -103,7 +103,7 @@ export function PdfWorkspace() {
             </button>
           </div>
 
-          <AskChat paperTitle={ingestResult.filename} />
+          <AskChat paperId={ingestResult.paper_id} paperTitle={ingestResult.filename} />
         </div>
       )}
     </div>

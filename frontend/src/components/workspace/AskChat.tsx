@@ -5,10 +5,11 @@ import { useWorkspaceStore } from "../../store/workspaceStore";
 import { useActivityStore } from "../../store/activityStore";
 
 interface AskChatProps {
+  paperId: string;
   paperTitle: string;
 }
 
-export function AskChat({ paperTitle }: AskChatProps) {
+export function AskChat({ paperId, paperTitle }: AskChatProps) {
   const [question, setQuestion] = useState("");
   const [isSending, setIsSending] = useState(false);
   const chatHistory = useWorkspaceStore((s) => s.chatHistory);
@@ -26,7 +27,7 @@ export function AskChat({ paperTitle }: AskChatProps) {
     setIsSending(true);
 
     try {
-      const result = await askQuestion({ paper_title: paperTitle, question: trimmed });
+      const result = await askQuestion({ paper_id: paperId, question: trimmed });
       updateChatTurn(id, {
         status: "done",
         answer: result.answer,

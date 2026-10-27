@@ -8,7 +8,7 @@ from backend.rag.vector_store import *
 from backend.agents.project_relevance_agent import sort_relevant_chunks
 from backend.agents.pdf_qa_agent import answer_question
 from backend.schemas.pdf import *
-from backend.utils.hash import generate_paper_id
+from backend.utils.hash import generate_content_id
 from backend.utils.logger import log
 
 PDF_DIR = "docs/pdfs"
@@ -22,11 +22,11 @@ router = APIRouter()
 # FastAPI runs sync routes in a threadpool so one request can't freeze the server.
 @router.post("/ingest",response_model=PDFIngestResponse)
 def ingest_pdf(file:UploadFile=File(...)):
-    paper_id = generate_paper_id(file.filename)
-    temp_path = f"{PDF_DIR}/{paper_id}.pdf"
     contents = file.file.read()
+    paper_id = generate_content_id(contents)
+    temp_path = f"{PDF_DIR}/{paper_id}.pdf"
 
-    if is_paper_ingested(file.filename):
+    if is_paper_ingested(paper_id):
         log(f"'{file.filename}' already ingested — skipping re-ingest")
         with open(temp_path, "wb") as f:
             f.write(contents)
@@ -36,7 +36,7 @@ def ingest_pdf(file:UploadFile=File(...)):
             filename=file.filename,
             paper_id=paper_id,
             pages=total_pages,
-            chunks_stored=count_chunks_for_paper(file.filename)
+            chunks_stored=count_chunks_for_paper(paper_id)
         )
 
     log(f"PDF uploaded: {file.filename}")
@@ -50,7 +50,7 @@ def ingest_pdf(file:UploadFile=File(...)):
     chunks = build_chunks_from_pages(pages)
     log(f"Created {len(chunks)} chunks")
 
-    store_chunks(paper_title=file.filename, chunks=chunks)
+    store_chunks(paper_id=paper_id, paper_title=file.filename, chunks=chunks)
 
     return PDFIngestResponse(
         filename=file.filename,
@@ -61,9 +61,9 @@ def ingest_pdf(file:UploadFile=File(...)):
 
 @router.post("/analyze",response_model=PDFAnalysisResponse)
 def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...)):
-    paper_id = generate_paper_id(file.filename)
-    temp_path=(f"{PDF_DIR}/{paper_id}.pdf")
     contents=(file.file.read())
+    paper_id = generate_content_id(contents)
+    temp_path=(f"{PDF_DIR}/{paper_id}.pdf")
 
     log(f"PDF uploaded: {file.filename}")
     with open(temp_path,"wb") as f:
@@ -105,7 +105,7 @@ def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...)):
 def ask_question(request:PDFQARequest):
     retrieved_chunks = search_chunks(
         query=request.question,
-        paper_title=request.paper_title,
+        paper_id=request.paper_id,
         k=10
     )
 

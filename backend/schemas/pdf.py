@@ -19,7 +19,7 @@ class PDFAnalysisResponse(BaseModel):
     relevant_chunks:list[RelevantChunk]
 
 class PDFQARequest(BaseModel):
-    paper_title: str
+    paper_id: str
     question: str
 
 class PDFQAResponse(BaseModel):
