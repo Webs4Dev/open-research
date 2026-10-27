@@ -35,16 +35,20 @@ export function PdfWorkspace() {
         detail: `${result.pages} pages · ${result.chunks_stored} chunks`,
       });
     },
+    // Back to the choice cards so the user can retry or pick another action.
+    onError: () => setStage("choice"),
   });
 
   const handleFileSelected = (f: File) => {
     resetWorkspace();
+    ingestMutation.reset();
     setFile(f);
     setStage("choice");
   };
 
   const handleSwap = () => {
     resetWorkspace();
+    ingestMutation.reset();
     setStage("dropzone");
   };
 
@@ -66,6 +70,12 @@ export function PdfWorkspace() {
 
       {stage === "dropzone" && <UploadDropzone onFileSelected={handleFileSelected} />}
 
+      {stage === "choice" && ingestMutation.isError && (
+        <p className="mb-3 text-sm text-red-600">
+          Ingest failed. Check that the backend is running and reachable, then try again.
+        </p>
+      )}
+
       {stage === "choice" && file && (
         <ChoiceCards
           filename={file.name}
@@ -76,12 +86,6 @@ export function PdfWorkspace() {
       )}
 
       {stage === "ingesting" && <Spinner label={`Ingesting ${file?.name}…`} />}
-
-      {stage === "ingesting" && ingestMutation.isError && (
-        <p className="text-sm text-red-600">
-          Ingest failed. Check that the backend is running and reachable, then try again.
-        </p>
-      )}
 
       {stage === "chat" && file && ingestResult && (
         <div>

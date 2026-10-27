@@ -17,6 +17,7 @@ def discover_sources(query:str):
         )
     response = client.chat.completions.create(
         model="gpt-4o-mini",
+        response_format={"type":"json_object"},
         messages=[
             {
                 "role":"user",

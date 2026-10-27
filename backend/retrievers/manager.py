@@ -39,7 +39,7 @@ def retrieve_source(source_name,retriever,query,max_results):
         return (source_name,[],str(e),0.0)
 
 
-def retrieve_all(query: str,max_results: int,sources: list[str] | None = None) -> tuple[list, dict]:
+def retrieve_all(query: str,max_results: int,sources: list[str] | None = None) -> tuple[list, dict, RetrievalStats]:
     """
     Returns:
         papers        - flat list of Paper objects

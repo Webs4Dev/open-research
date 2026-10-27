@@ -1,6 +1,7 @@
 const TONE_BY_TYPE: Record<string, string> = {
-  method: "bg-chip-amber text-chip-amber-text",
-  result: "bg-chip-teal text-chip-teal-text",
+  // Keys must match chunk_type values in prompts/project_relevance_prompt.py
+  methodology: "bg-chip-amber text-chip-amber-text",
+  results: "bg-chip-teal text-chip-teal-text",
   background: "bg-surface-1 text-text-secondary",
 };
 
