@@ -6,6 +6,7 @@ type ValidationIssue = { loc?: (string | number)[]; msg?: string };
 
 /** Turn any thrown value (usually an axios error) into a message a user can act on. */
 export function getErrorMessage(err: unknown): string {
+  if (isCancelled(err)) return "Request cancelled.";
   if (axios.isAxiosError(err)) {
     if (!err.response) {
       return err.code === "ECONNABORTED" || err.code === "ETIMEDOUT"
@@ -28,4 +29,9 @@ export function getErrorMessage(err: unknown): string {
 
   if (err instanceof Error) return err.message;
   return "Something went wrong.";
+}
+
+/** True when the request was stopped on purpose (AbortController), not a failure. */
+export function isCancelled(err: unknown): boolean {
+  return axios.isCancel(err);
 }

@@ -6,7 +6,8 @@ import type { RankingResult } from "../api/types";
 import { ScoreBadge } from "../components/common/ScoreBadge";
 import { Spinner } from "../components/common/Spinner";
 import { useActivityStore } from "../store/activityStore";
-import { getErrorMessage } from "../lib/errors";
+import { getErrorMessage, isCancelled } from "../lib/errors";
+import { useAbortController } from "../lib/useAbortController";
 
 // Each paper costs one LLM ranking call, so keep this small.
 const MAX_RESULTS_PER_SOURCE = 10;
@@ -29,15 +30,19 @@ export function SearchPapers() {
   });
 
   const logActivity = useActivityStore((s) => s.logActivity);
+  const { nextSignal, cancel } = useAbortController();
 
   const mutation = useMutation({
     mutationFn: () =>
-      searchPapers({
-        query,
-        project_description: projectDescription || undefined,
-        max_results: maxResults,
-        sources: selectedSources.length > 0 ? selectedSources : undefined,
-      }),
+      searchPapers(
+        {
+          query,
+          project_description: projectDescription || undefined,
+          max_results: maxResults,
+          sources: selectedSources.length > 0 ? selectedSources : undefined,
+        },
+        nextSignal()
+      ),
     onSuccess: (data) => {
       logActivity({
         type: "search",
@@ -149,9 +154,13 @@ export function SearchPapers() {
         Search
       </button>
 
-      {mutation.isPending && <Spinner label="Retrieving and ranking papers…" />}
+      {mutation.isPending && <Spinner label="Retrieving and ranking papers…" onCancel={cancel} />}
 
-      {mutation.isError && (
+      {mutation.isError && isCancelled(mutation.error) && (
+        <p className="text-sm text-text-muted">Search cancelled.</p>
+      )}
+
+      {mutation.isError && !isCancelled(mutation.error) && (
         <p className="text-sm text-red-600">
           Search failed: {getErrorMessage(mutation.error)}
         </p>
