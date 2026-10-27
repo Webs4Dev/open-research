@@ -17,7 +17,7 @@ def list_sources():
 
 
 @router.post("/search", response_model=SearchResponse)
-async def search_and_rank(request: SearchRequest):
+def search_and_rank(request: SearchRequest):
 
     if not request.query.strip():
         raise HTTPException(status_code=400,detail="Query cannot be empty")

@@ -24,6 +24,7 @@ def rank_paper(query,paper,project_description=None):
 
   response = client.chat.completions.create(
     model="gpt-4o-mini",
+    response_format={"type":"json_object"},
     messages=[
       {
         "role":"user",

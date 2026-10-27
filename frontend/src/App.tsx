@@ -4,6 +4,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { SearchPapers } from "./pages/SearchPapers";
 import { PdfWorkspace } from "./pages/PdfWorkspace";
 import { Analyze } from "./pages/Analyze";
+import { NotFound } from "./pages/NotFound";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/search" element={<SearchPapers />} />
         <Route path="/workspace" element={<PdfWorkspace />} />
         <Route path="/workspace/analyze" element={<Analyze />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );

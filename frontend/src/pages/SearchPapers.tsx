@@ -7,6 +7,14 @@ import { ScoreBadge } from "../components/common/ScoreBadge";
 import { Spinner } from "../components/common/Spinner";
 import { useActivityStore } from "../store/activityStore";
 
+// Each paper costs one LLM ranking call, so keep this small.
+const MAX_RESULTS_PER_SOURCE = 10;
+
+// Retrievers use the placeholder "Not Available" when a paper has no link.
+function isRealUrl(url?: string | null): url is string {
+  return !!url && /^https?:\/\//i.test(url);
+}
+
 export function SearchPapers() {
   const [query, setQuery] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
@@ -77,10 +85,14 @@ export function SearchPapers() {
           <input
             type="number"
             min={1}
-            max={50}
+            max={MAX_RESULTS_PER_SOURCE}
             className="input"
             value={maxResults}
-            onChange={(e) => setMaxResults(Math.max(1, Number(e.target.value) || 1))}
+            onChange={(e) =>
+              setMaxResults(
+                Math.min(MAX_RESULTS_PER_SOURCE, Math.max(1, Number(e.target.value) || 1))
+              )
+            }
           />
         </div>
 
@@ -91,6 +103,18 @@ export function SearchPapers() {
           <div className="flex max-h-24 flex-wrap gap-1.5 overflow-y-auto rounded border border-border p-2">
             {sourcesQuery.isLoading && (
               <span className="text-xs text-text-muted">Loading sources…</span>
+            )}
+            {sourcesQuery.isError && (
+              <span className="text-xs text-red-600">
+                Couldn't load sources.{" "}
+                <button
+                  type="button"
+                  className="underline"
+                  onClick={() => sourcesQuery.refetch()}
+                >
+                  Retry
+                </button>
+              </span>
             )}
             {sourcesQuery.data?.available_sources.map((source) => {
               const isSelected = selectedSources.includes(source);
@@ -157,7 +181,7 @@ function ResultCard({ paper }: { paper: RankingResult }) {
       <p className="mt-1.5 text-sm text-text-secondary">
         {paper.source}
         {paper.published_year ? ` · ${paper.published_year}` : ""}
-        {paper.paper_url && (
+        {isRealUrl(paper.paper_url) && (
           <>
             {" · "}
             <a
@@ -166,7 +190,7 @@ function ResultCard({ paper }: { paper: RankingResult }) {
               rel="noreferrer"
               className="inline-flex items-center gap-0.5 text-text-accent hover:underline"
             >
-              PDF <ExternalLink size={12} />
+              {paper.pdf_status === "available" ? "PDF" : "Link"} <ExternalLink size={12} />
             </a>
           </>
         )}

@@ -10,3 +10,5 @@ dist-ssr
 *.log
 npm-debug.log*
 vite.config.d.ts
+vite.config.js
+*.tsbuildinfo

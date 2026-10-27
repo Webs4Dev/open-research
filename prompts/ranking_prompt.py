@@ -51,7 +51,7 @@ OUTPUT FORMAT:
 {{
   "paper_name": "<exact paper title>",
   "source": "<e.g. arxiv, semantic_scholar, acm, springer, pubmed>",
-  "published_year: <exact year paper was published>"
+  "published_year": <exact year paper was published, or null>,
   "pdf_status": "<available | unavailable | unknown>",
   "paper_url": "<the original URL>",
   "scores": {{

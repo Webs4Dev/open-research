@@ -37,3 +37,10 @@ body {
 .card {
   @apply rounded-xl border border-border bg-surface-0 p-4;
 }
+
+/* Blend chunk highlights like a real highlighter so the PDF text under them
+   stays fully black. Must sit on the text layer itself: it has z-index:2,
+   which isolates any blend mode set on the <mark>s inside it. */
+.react-pdf__Page__textContent {
+  mix-blend-mode: multiply;
+}

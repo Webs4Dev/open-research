@@ -11,7 +11,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # add your Netlify URL here once deployed
+    allow_origins=["http://localhost:5173","http://localhost:5174"],  # add your Netlify URL here once deployed
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

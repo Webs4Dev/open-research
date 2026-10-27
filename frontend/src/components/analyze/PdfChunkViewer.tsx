@@ -77,7 +77,10 @@ export function PdfChunkViewer({
       const outline = isActive
         ? `outline:2px solid ${HIGHLIGHT_YELLOW_ACTIVE_OUTLINE};outline-offset:1px;`
         : "";
-      return `<mark data-chunk-id="${match.chunk_id}" style="background:${HIGHLIGHT_YELLOW};border-radius:2px;${outline}">${escapeHtml(
+      // color:transparent keeps the text layer invisible: <mark> defaults to black
+      // text, which drew every highlighted line a second time over the canvas (blurry).
+      // (The highlighter-style blend lives on the text layer in index.css.)
+      return `<mark data-chunk-id="${match.chunk_id}" style="background:${HIGHLIGHT_YELLOW};color:transparent;border-radius:2px;${outline}">${escapeHtml(
         str
       )}</mark>`;
     },
