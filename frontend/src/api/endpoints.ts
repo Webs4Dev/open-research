@@ -8,9 +8,21 @@ import type {
   PDFQAResponse,
 } from "./types";
 
+// Search ranks every paper with the LLM and analyze scores every chunk, so both
+// can take well over a minute on real inputs.
+const TIMEOUT_MS = {
+  search: 180_000,
+  analyze: 180_000,
+  ingest: 120_000,
+  ask: 60_000,
+};
+
 // POST /api/v1/search  (backend/api/routes/search.py)
-export async function searchPapers(body: SearchRequest): Promise<SearchResponse> {
-  const { data } = await apiClient.post<SearchResponse>("/search", body);
+export async function searchPapers(body: SearchRequest, signal?: AbortSignal): Promise<SearchResponse> {
+  const { data } = await apiClient.post<SearchResponse>("/search", body, {
+    timeout: TIMEOUT_MS.search,
+    signal,
+  });
   return data;
 }
 
@@ -21,11 +33,13 @@ export async function listSources(): Promise<{ available_sources: string[]; tota
 }
 
 // POST /api/v1/ingest  (multipart/form-data: file)
-export async function ingestPdf(file: File): Promise<PDFIngestResponse> {
+export async function ingestPdf(file: File, signal?: AbortSignal): Promise<PDFIngestResponse> {
   const form = new FormData();
   form.append("file", file);
   const { data } = await apiClient.post<PDFIngestResponse>("/ingest", form, {
     headers: { "Content-Type": "multipart/form-data" },
+    timeout: TIMEOUT_MS.ingest,
+    signal,
   });
   return data;
 }
@@ -33,22 +47,24 @@ export async function ingestPdf(file: File): Promise<PDFIngestResponse> {
 // POST /api/v1/analyze  (multipart/form-data: file, project_description)
 export async function analyzePdf(
   file: File,
-  projectDescription: string
+  projectDescription: string,
+  signal?: AbortSignal
 ): Promise<PDFAnalysisResponse> {
   const form = new FormData();
   form.append("file", file);
   form.append("project_description", projectDescription);
   const { data } = await apiClient.post<PDFAnalysisResponse>("/analyze", form, {
     headers: { "Content-Type": "multipart/form-data" },
+    timeout: TIMEOUT_MS.analyze,
+    signal,
   });
   return data;
 }
 
-// POST /api/v1/ask  (json: paper_title, question)
-// NOTE: the backend keys retrieval off `paper_title`, which /ingest sets to the
-// raw uploaded filename (file.filename) — not the generated paper_id. We pass
-// the ingested filename through as paper_title to stay consistent with that.
+// POST /api/v1/ask  (json: paper_id, question)
+// paper_id comes from /ingest and is a hash of the PDF's contents, so two
+// different files with the same name never share answers.
 export async function askQuestion(body: PDFQARequest): Promise<PDFQAResponse> {
-  const { data } = await apiClient.post<PDFQAResponse>("/ask", body);
+  const { data } = await apiClient.post<PDFQAResponse>("/ask", body, { timeout: TIMEOUT_MS.ask });
   return data;
 }

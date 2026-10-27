@@ -19,41 +19,62 @@ def get_embedding(text):
 
     return response.data[0].embedding
 
-def is_paper_ingested(paper_title: str) -> bool:
+# Papers are keyed by paper_id (hash of the PDF bytes), so two different files
+# with the same name never mix; paper_title is kept only for display.
+def is_paper_ingested(paper_id: str) -> bool:
     existing = chunk_collection.get(
-        where={"paper_title": paper_title},
+        where={"paper_id": paper_id},
         limit=1
     )
     return len(existing["ids"]) > 0
 
-def count_chunks_for_paper(paper_title: str) -> int:
-    existing = chunk_collection.get(where={"paper_title": paper_title})
+def count_chunks_for_paper(paper_id: str) -> int:
+    existing = chunk_collection.get(where={"paper_id": paper_id})
     return len(existing["ids"])
 
-def store_chunks(chunks,paper_title):
+# One embeddings request per batch instead of one per chunk (81 chunks took 44s one-by-one).
+EMBED_BATCH_SIZE = 100
 
-    for chunk in chunks:
-        embedding = get_embedding(chunk.text)
-        chunk_code = generate_paper_id(f"{paper_title}_{chunk.chunk_id}")
-        chunk_collection.add(
-            ids=[chunk_code],
-            documents=[chunk.text],
-            embeddings=[embedding],
-            metadatas=[
-                {
-                    "paper_title":paper_title,
-                    "page_no":chunk.page_no,
-                    "chunk_id":chunk.chunk_id
-                }
-            ]
-        )
+def get_embeddings(texts):
+    response = client_openai.embeddings.create(
+        model="text-embedding-3-small",
+        input=texts
+    )
+
+    # Sort by index so embeddings line up with the input texts.
+    return [item.embedding for item in sorted(response.data, key=lambda item: item.index)]
+
+def store_chunks(chunks,paper_id,paper_title):
+
+    # Embed everything before writing anything: if an OpenAI call fails midway, nothing is
+    # stored, so is_paper_ingested stays False and a re-upload retries instead of being skipped.
+    embeddings=[]
+    for start in range(0,len(chunks),EMBED_BATCH_SIZE):
+        batch = chunks[start:start+EMBED_BATCH_SIZE]
+        embeddings.extend(get_embeddings([chunk.text for chunk in batch]))
+
+    # upsert, not add: two concurrent uploads of the same file write the same ids harmlessly.
+    chunk_collection.upsert(
+        ids=[generate_paper_id(f"{paper_id}_{chunk.chunk_id}") for chunk in chunks],
+        documents=[chunk.text for chunk in chunks],
+        embeddings=embeddings,
+        metadatas=[
+            {
+                "paper_id":paper_id,
+                "paper_title":paper_title,
+                "page_no":chunk.page_no,
+                "chunk_id":chunk.chunk_id
+            }
+            for chunk in chunks
+        ]
+    )
     log(f"Stored {len(chunks)} chunks")
 
 
-def search_chunks(query,k=5,paper_title=None):
+def search_chunks(query,k=5,paper_id=None):
 
     query_embedding = get_embedding(query)
-    if not paper_title:
+    if not paper_id:
         results = chunk_collection.query(
             query_embeddings=[query_embedding],
             n_results=k
@@ -63,7 +84,7 @@ def search_chunks(query,k=5,paper_title=None):
             query_embeddings=[query_embedding],
             n_results=k,
             where={
-                "paper_title":paper_title
+                "paper_id":paper_id
             }
         )
     

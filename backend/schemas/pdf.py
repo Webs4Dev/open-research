@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from backend.schemas.relevance import RelevantChunk
 
 class PDFRequest(BaseModel):
@@ -19,8 +19,8 @@ class PDFAnalysisResponse(BaseModel):
     relevant_chunks:list[RelevantChunk]
 
 class PDFQARequest(BaseModel):
-    paper_title: str
-    question: str
+    paper_id: str = Field(pattern=r"^[0-9a-f]{16}$")
+    question: str = Field(min_length=1, max_length=1000)
 
 class PDFQAResponse(BaseModel):
     answer:str

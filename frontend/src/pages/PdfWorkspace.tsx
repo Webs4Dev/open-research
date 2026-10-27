@@ -9,6 +9,8 @@ import { Spinner } from "../components/common/Spinner";
 import { ingestPdf } from "../api/endpoints";
 import { useWorkspaceStore } from "../store/workspaceStore";
 import { useActivityStore } from "../store/activityStore";
+import { getErrorMessage, isCancelled } from "../lib/errors";
+import { useAbortController } from "../lib/useAbortController";
 
 type Stage = "dropzone" | "choice" | "ingesting" | "chat";
 
@@ -23,9 +25,10 @@ export function PdfWorkspace() {
   const [stage, setStage] = useState<Stage>(file && ingestResult ? "chat" : "dropzone");
 
   const logActivity = useActivityStore((s) => s.logActivity);
+  const { nextSignal, cancel } = useAbortController();
 
   const ingestMutation = useMutation({
-    mutationFn: (f: File) => ingestPdf(f),
+    mutationFn: (f: File) => ingestPdf(f, nextSignal()),
     onSuccess: (result) => {
       setIngestResult(result);
       setStage("chat");
@@ -35,7 +38,7 @@ export function PdfWorkspace() {
         detail: `${result.pages} pages · ${result.chunks_stored} chunks`,
       });
     },
-    // Back to the choice cards so the user can retry or pick another action.
+    // Back to the choice cards (also after Cancel) so the user can retry or pick another action.
     onError: () => setStage("choice"),
   });
 
@@ -70,9 +73,13 @@ export function PdfWorkspace() {
 
       {stage === "dropzone" && <UploadDropzone onFileSelected={handleFileSelected} />}
 
-      {stage === "choice" && ingestMutation.isError && (
+      {stage === "choice" && ingestMutation.isError && isCancelled(ingestMutation.error) && (
+        <p className="mb-3 text-sm text-text-muted">Ingest cancelled.</p>
+      )}
+
+      {stage === "choice" && ingestMutation.isError && !isCancelled(ingestMutation.error) && (
         <p className="mb-3 text-sm text-red-600">
-          Ingest failed. Check that the backend is running and reachable, then try again.
+          Ingest failed: {getErrorMessage(ingestMutation.error)}
         </p>
       )}
 
@@ -85,7 +92,7 @@ export function PdfWorkspace() {
         />
       )}
 
-      {stage === "ingesting" && <Spinner label={`Ingesting ${file?.name}…`} />}
+      {stage === "ingesting" && <Spinner label={`Ingesting ${file?.name}…`} onCancel={cancel} />}
 
       {stage === "chat" && file && ingestResult && (
         <div>
@@ -103,7 +110,7 @@ export function PdfWorkspace() {
             </button>
           </div>
 
-          <AskChat paperTitle={ingestResult.filename} />
+          <AskChat paperId={ingestResult.paper_id} paperTitle={ingestResult.filename} />
         </div>
       )}
     </div>

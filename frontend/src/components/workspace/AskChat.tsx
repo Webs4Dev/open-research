@@ -3,12 +3,14 @@ import { ArrowRight } from "lucide-react";
 import { askQuestion } from "../../api/endpoints";
 import { useWorkspaceStore } from "../../store/workspaceStore";
 import { useActivityStore } from "../../store/activityStore";
+import { getErrorMessage } from "../../lib/errors";
 
 interface AskChatProps {
+  paperId: string;
   paperTitle: string;
 }
 
-export function AskChat({ paperTitle }: AskChatProps) {
+export function AskChat({ paperId, paperTitle }: AskChatProps) {
   const [question, setQuestion] = useState("");
   const [isSending, setIsSending] = useState(false);
   const chatHistory = useWorkspaceStore((s) => s.chatHistory);
@@ -26,7 +28,7 @@ export function AskChat({ paperTitle }: AskChatProps) {
     setIsSending(true);
 
     try {
-      const result = await askQuestion({ paper_title: paperTitle, question: trimmed });
+      const result = await askQuestion({ paper_id: paperId, question: trimmed });
       updateChatTurn(id, {
         status: "done",
         answer: result.answer,
@@ -34,10 +36,10 @@ export function AskChat({ paperTitle }: AskChatProps) {
         foundInPages: result.found_in_pages,
       });
       logActivity({ type: "ask", label: trimmed, detail: paperTitle });
-    } catch {
+    } catch (err) {
       updateChatTurn(id, {
         status: "error",
-        errorMessage: "Couldn't get an answer -- check the backend connection and try again.",
+        errorMessage: `Couldn't get an answer: ${getErrorMessage(err)}`,
       });
     } finally {
       setIsSending(false);
@@ -91,6 +93,7 @@ export function AskChat({ paperTitle }: AskChatProps) {
         <input
           className="input flex-1"
           placeholder="Ask a question about this PDF"
+          maxLength={1000}
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAsk()}

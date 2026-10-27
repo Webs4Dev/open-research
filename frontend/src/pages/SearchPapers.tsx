@@ -6,6 +6,8 @@ import type { RankingResult } from "../api/types";
 import { ScoreBadge } from "../components/common/ScoreBadge";
 import { Spinner } from "../components/common/Spinner";
 import { useActivityStore } from "../store/activityStore";
+import { getErrorMessage, isCancelled } from "../lib/errors";
+import { useAbortController } from "../lib/useAbortController";
 
 // Each paper costs one LLM ranking call, so keep this small.
 const MAX_RESULTS_PER_SOURCE = 10;
@@ -28,15 +30,19 @@ export function SearchPapers() {
   });
 
   const logActivity = useActivityStore((s) => s.logActivity);
+  const { nextSignal, cancel } = useAbortController();
 
   const mutation = useMutation({
     mutationFn: () =>
-      searchPapers({
-        query,
-        project_description: projectDescription || undefined,
-        max_results: maxResults,
-        sources: selectedSources.length > 0 ? selectedSources : undefined,
-      }),
+      searchPapers(
+        {
+          query,
+          project_description: projectDescription || undefined,
+          max_results: maxResults,
+          sources: selectedSources.length > 0 ? selectedSources : undefined,
+        },
+        nextSignal()
+      ),
     onSuccess: (data) => {
       logActivity({
         type: "search",
@@ -66,6 +72,7 @@ export function SearchPapers() {
       <input
         className="input mb-2"
         placeholder="What are you researching?"
+        maxLength={500}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -73,6 +80,7 @@ export function SearchPapers() {
       <textarea
         className="textarea mb-3 h-14"
         placeholder="Project description (optional) — helps rank results against your project"
+        maxLength={2000}
         value={projectDescription}
         onChange={(e) => setProjectDescription(e.target.value)}
       />
@@ -106,7 +114,7 @@ export function SearchPapers() {
             )}
             {sourcesQuery.isError && (
               <span className="text-xs text-red-600">
-                Couldn't load sources.{" "}
+                Couldn't load sources: {getErrorMessage(sourcesQuery.error)}{" "}
                 <button
                   type="button"
                   className="underline"
@@ -146,11 +154,15 @@ export function SearchPapers() {
         Search
       </button>
 
-      {mutation.isPending && <Spinner label="Retrieving and ranking papers…" />}
+      {mutation.isPending && <Spinner label="Retrieving and ranking papers…" onCancel={cancel} />}
 
-      {mutation.isError && (
+      {mutation.isError && isCancelled(mutation.error) && (
+        <p className="text-sm text-text-muted">Search cancelled.</p>
+      )}
+
+      {mutation.isError && !isCancelled(mutation.error) && (
         <p className="text-sm text-red-600">
-          Search failed. Check that the backend is running and reachable.
+          Search failed: {getErrorMessage(mutation.error)}
         </p>
       )}
 

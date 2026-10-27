@@ -9,6 +9,8 @@ import { ChunkTypeBadge } from "../components/common/ChunkTypeBadge";
 import { Spinner } from "../components/common/Spinner";
 import type { RelevantChunk } from "../api/types";
 import { useActivityStore } from "../store/activityStore";
+import { getErrorMessage, isCancelled } from "../lib/errors";
+import { useAbortController } from "../lib/useAbortController";
 
 export function Analyze() {
   const navigate = useNavigate();
@@ -21,11 +23,12 @@ export function Analyze() {
   const [activeChunkId, setActiveChunkId] = useState<number | null>(null);
 
   const logActivity = useActivityStore((s) => s.logActivity);
+  const { nextSignal, cancel } = useAbortController();
 
   const mutation = useMutation({
     mutationFn: () => {
       if (!file) throw new Error("No file selected");
-      return analyzePdf(file, projectDescription);
+      return analyzePdf(file, projectDescription, nextSignal());
     },
     onSuccess: (result) => {
       setAnalysisResult(result);
@@ -85,6 +88,7 @@ export function Analyze() {
           <textarea
             className="textarea h-20"
             placeholder="Describe your project so chunks can be scored against it…"
+            maxLength={2000}
             value={projectDescription}
             onChange={(e) => setProjectDescription(e.target.value)}
           />
@@ -98,11 +102,15 @@ export function Analyze() {
         </div>
       )}
 
-      {mutation.isPending && <Spinner label={`Analysing ${file.name}…`} />}
+      {mutation.isPending && <Spinner label={`Analysing ${file.name}…`} onCancel={cancel} />}
 
-      {mutation.isError && (
+      {mutation.isError && isCancelled(mutation.error) && (
+        <p className="mb-4 text-sm text-text-muted">Analysis cancelled.</p>
+      )}
+
+      {mutation.isError && !isCancelled(mutation.error) && (
         <p className="mb-4 text-sm text-red-600">
-          Analysis failed. Check that the backend is running and reachable.
+          Analysis failed: {getErrorMessage(mutation.error)}
         </p>
       )}
 
