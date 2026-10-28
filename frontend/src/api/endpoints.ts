@@ -28,6 +28,12 @@ export async function searchPapers(body: SearchRequest, signal?: AbortSignal): P
   return data;
 }
 
+// GET /api/v1/history/searches/{id}  (backend/api/routes/history.py): a saved search, no re-run.
+export async function getSavedSearch(id: number): Promise<SearchResponse> {
+  const { data } = await apiClient.get<SearchResponse>(`/history/searches/${id}`);
+  return data;
+}
+
 // GET /api/v1/sources
 export async function listSources(): Promise<{ available_sources: string[]; total: number }> {
   const { data } = await apiClient.get("/sources");

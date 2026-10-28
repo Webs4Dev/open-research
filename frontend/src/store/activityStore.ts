@@ -8,6 +8,7 @@ export interface ActivityItem {
   type: ActivityType;
   label: string;
   detail?: string;
+  searchId?: number; // search items only: reopens the saved results
   timestamp: number;
 }
 

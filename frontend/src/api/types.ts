@@ -58,6 +58,7 @@ export interface SearchResponse {
   source_report: Record<string, SourceReport>;
   retrieval_stats: RetrievalStats;
   ranked_results: RankingResult[];
+  search_id?: number | null; // id in the user's saved history
 }
 
 // ---- PDF ingest / analyze / ask (backend/schemas/pdf.py, relevance.py) ----

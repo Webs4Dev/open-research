@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Search as SearchIcon, ExternalLink } from "lucide-react";
-import { searchPapers, listSources } from "../api/endpoints";
+import { searchPapers, listSources, getSavedSearch } from "../api/endpoints";
 import type { RankingResult } from "../api/types";
 import { ScoreBadge } from "../components/common/ScoreBadge";
 import { Spinner } from "../components/common/Spinner";
@@ -29,6 +30,24 @@ export function SearchPapers() {
     queryFn: listSources,
   });
 
+  // ?id=N points at a search saved by the backend, so reopening it (from Recent activity,
+  // a refresh or the back button) shows its results without re-running the LLM ranking.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const savedId = Number(searchParams.get("id")) || null;
+  const queryClient = useQueryClient();
+
+  const savedQuery = useQuery({
+    queryKey: ["search", savedId],
+    queryFn: () => getSavedSearch(savedId!),
+    enabled: savedId !== null,
+    staleTime: Infinity, // a saved search never changes
+    retry: false, // a 404 (deleted or not yours) won't succeed on retry
+  });
+
+  useEffect(() => {
+    if (savedQuery.data) setQuery(savedQuery.data.query);
+  }, [savedQuery.data]);
+
   const logActivity = useActivityStore((s) => s.logActivity);
   const { nextSignal, cancel } = useAbortController();
 
@@ -44,13 +63,32 @@ export function SearchPapers() {
         nextSignal()
       ),
     onSuccess: (data) => {
+      const searchId = data.search_id ?? undefined;
       logActivity({
         type: "search",
         label: query,
         detail: `${data.total_ranked} result${data.total_ranked === 1 ? "" : "s"}`,
+        searchId,
       });
+      if (searchId) {
+        queryClient.setQueryData(["search", searchId], data);
+        setSearchParams({ id: String(searchId) });
+      } else {
+        setSearchParams({});
+      }
     },
   });
+
+  // The URL's saved search, or the fresh result only if the backend didn't return an id
+  // (so a bare /search, e.g. after Back, stays blank). Hidden while a new search runs or failed.
+  const shown =
+    mutation.isPending || mutation.isError
+      ? undefined
+      : savedId
+        ? savedQuery.data
+        : mutation.data?.search_id
+          ? undefined
+          : mutation.data;
 
   const handleSearch = () => {
     if (!query.trim()) return;
@@ -63,7 +101,7 @@ export function SearchPapers() {
     );
   };
 
-  const results: RankingResult[] = mutation.data?.ranked_results ?? [];
+  const results: RankingResult[] = shown?.ranked_results ?? [];
 
   return (
     <div>
@@ -166,10 +204,18 @@ export function SearchPapers() {
         </p>
       )}
 
-      {mutation.isSuccess && (
+      {!mutation.isPending && savedQuery.isLoading && <Spinner label="Loading saved search…" />}
+
+      {!mutation.isPending && savedQuery.isError && (
+        <p className="text-sm text-red-600">
+          Couldn't load this search: {getErrorMessage(savedQuery.error)}
+        </p>
+      )}
+
+      {shown && (
         <>
           <p className="mb-3 text-sm text-text-muted">
-            {mutation.data.total_ranked} ranked result{mutation.data.total_ranked === 1 ? "" : "s"}
+            {shown.total_ranked} ranked result{shown.total_ranked === 1 ? "" : "s"}
           </p>
           <div className="flex flex-col gap-2.5">
             {results.map((paper, i) => (

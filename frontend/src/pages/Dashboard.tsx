@@ -67,7 +67,7 @@ export function Dashboard() {
 }
 
 function navigateForActivity(item: ActivityItem, navigate: (path: string) => void) {
-  if (item.type === "search") navigate("/search");
+  if (item.type === "search") navigate(item.searchId ? `/search?id=${item.searchId}` : "/search");
   else navigate("/workspace");
 }
 
