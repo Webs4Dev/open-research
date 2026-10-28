@@ -2,6 +2,8 @@ import { apiClient } from "./client";
 import type {
   SearchRequest,
   SearchResponse,
+  SearchSummary,
+  PaperSummary,
   PDFIngestResponse,
   PDFAnalysisResponse,
   PDFQARequest,
@@ -31,6 +33,23 @@ export async function searchPapers(body: SearchRequest, signal?: AbortSignal): P
 // GET /api/v1/history/searches/{id}  (backend/api/routes/history.py): a saved search, no re-run.
 export async function getSavedSearch(id: number): Promise<SearchResponse> {
   const { data } = await apiClient.get<SearchResponse>(`/history/searches/${id}`);
+  return data;
+}
+
+// GET /api/v1/history/searches: newest first, at most 100.
+export async function listSavedSearches(): Promise<SearchSummary[]> {
+  const { data } = await apiClient.get<SearchSummary[]>("/history/searches");
+  return data;
+}
+
+// DELETE /api/v1/history/searches/{id}
+export async function deleteSavedSearch(id: number): Promise<void> {
+  await apiClient.delete(`/history/searches/${id}`);
+}
+
+// GET /api/v1/history/papers: papers this user has uploaded for Q&A, newest first.
+export async function listSavedPapers(): Promise<PaperSummary[]> {
+  const { data } = await apiClient.get<PaperSummary[]>("/history/papers");
   return data;
 }
 

@@ -4,7 +4,6 @@ import { Home, Search, FileText, LogOut } from "lucide-react";
 import { logout } from "../../api/endpoints";
 import type { User } from "../../api/types";
 import { ME_QUERY_KEY } from "../auth/RequireAuth";
-import { useActivityStore } from "../../store/activityStore";
 import { useWorkspaceStore } from "../../store/workspaceStore";
 
 const navItems = [
@@ -36,8 +35,6 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const handleLogout = async () => {
     await logout().catch(() => {}); // the cookie is cleared server-side; leave either way
     queryClient.clear(); // drop every cached response from this user
-    // The activity list is kept in localStorage, so clear it for whoever logs in next.
-    useActivityStore.getState().clearActivity();
     useWorkspaceStore.getState().reset();
     navigate("/login", { replace: true });
   };

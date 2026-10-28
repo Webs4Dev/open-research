@@ -2,21 +2,18 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { askQuestion } from "../../api/endpoints";
 import { useWorkspaceStore } from "../../store/workspaceStore";
-import { useActivityStore } from "../../store/activityStore";
 import { getErrorMessage } from "../../lib/errors";
 
 interface AskChatProps {
   paperId: string;
-  paperTitle: string;
 }
 
-export function AskChat({ paperId, paperTitle }: AskChatProps) {
+export function AskChat({ paperId }: AskChatProps) {
   const [question, setQuestion] = useState("");
   const [isSending, setIsSending] = useState(false);
   const chatHistory = useWorkspaceStore((s) => s.chatHistory);
   const addChatTurn = useWorkspaceStore((s) => s.addChatTurn);
   const updateChatTurn = useWorkspaceStore((s) => s.updateChatTurn);
-  const logActivity = useActivityStore((s) => s.logActivity);
 
   const handleAsk = async () => {
     const trimmed = question.trim();
@@ -35,7 +32,6 @@ export function AskChat({ paperId, paperTitle }: AskChatProps) {
         confidence: result.confidence,
         foundInPages: result.found_in_pages,
       });
-      logActivity({ type: "ask", label: trimmed, detail: paperTitle });
     } catch (err) {
       updateChatTurn(id, {
         status: "error",

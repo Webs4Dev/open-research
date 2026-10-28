@@ -6,10 +6,11 @@ import { searchPapers, listSources, getSavedSearch } from "../api/endpoints";
 import type { SearchResponse } from "../api/types";
 import { ResultCard } from "../components/search/ResultCard";
 import { Spinner } from "../components/common/Spinner";
-import { useActivityStore } from "../store/activityStore";
+import { ErrorPanel } from "../components/common/ErrorPanel";
 import { getErrorMessage, isCancelled } from "../lib/errors";
 import { useAbortController } from "../lib/useAbortController";
 import { sourceMeta } from "../lib/sources";
+import { HISTORY_SEARCHES_KEY } from "../lib/queryKeys";
 
 // Each paper costs one LLM ranking call, so keep this small.
 const MAX_RESULTS_PER_SOURCE = 10;
@@ -44,7 +45,6 @@ export function SearchPapers() {
     if (savedQuery.data) setQuery(savedQuery.data.query);
   }, [savedQuery.data]);
 
-  const logActivity = useActivityStore((s) => s.logActivity);
   const { nextSignal, cancel } = useAbortController();
 
   const mutation = useMutation({
@@ -60,12 +60,7 @@ export function SearchPapers() {
       ),
     onSuccess: (data) => {
       const searchId = data.search_id ?? undefined;
-      logActivity({
-        type: "search",
-        label: query,
-        detail: `${data.total_ranked} result${data.total_ranked === 1 ? "" : "s"}`,
-        searchId,
-      });
+      queryClient.invalidateQueries({ queryKey: HISTORY_SEARCHES_KEY }); // the Dashboard list
       if (searchId) {
         queryClient.setQueryData(["search", searchId], data);
         setSearchParams({ id: String(searchId) });
@@ -518,18 +513,5 @@ function FilterChip({ label, selected, onClick }: { label: string; selected: boo
       {selected && <Check size={12} strokeWidth={3} aria-hidden />}
       {label}
     </button>
-  );
-}
-
-function ErrorPanel({ message, onRetry }: { message: string; onRetry?: () => void }) {
-  return (
-    <div role="alert" className="flex flex-wrap items-center justify-between gap-3 rounded-md bg-red-soft px-4 py-3">
-      <p className="text-body-sm text-red">{message}</p>
-      {onRetry && (
-        <button type="button" className="btn-secondary min-h-8 px-3 text-body-sm" onClick={onRetry}>
-          Try again
-        </button>
-      )}
-    </div>
   );
 }

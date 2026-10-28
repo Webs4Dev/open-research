@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, ArrowLeft } from "lucide-react";
 import { UploadDropzone } from "../components/workspace/UploadDropzone";
 import { ChoiceCards } from "../components/workspace/ChoiceCards";
@@ -8,7 +8,7 @@ import { AskChat } from "../components/workspace/AskChat";
 import { Spinner } from "../components/common/Spinner";
 import { ingestPdf } from "../api/endpoints";
 import { useWorkspaceStore } from "../store/workspaceStore";
-import { useActivityStore } from "../store/activityStore";
+import { HISTORY_PAPERS_KEY } from "../lib/queryKeys";
 import { getErrorMessage, isCancelled } from "../lib/errors";
 import { useAbortController } from "../lib/useAbortController";
 
@@ -24,7 +24,7 @@ export function PdfWorkspace() {
 
   const [stage, setStage] = useState<Stage>(file && ingestResult ? "chat" : "dropzone");
 
-  const logActivity = useActivityStore((s) => s.logActivity);
+  const queryClient = useQueryClient();
   const { nextSignal, cancel } = useAbortController();
 
   const ingestMutation = useMutation({
@@ -32,11 +32,7 @@ export function PdfWorkspace() {
     onSuccess: (result) => {
       setIngestResult(result);
       setStage("chat");
-      logActivity({
-        type: "ingest",
-        label: result.filename,
-        detail: `${result.pages} pages · ${result.chunks_stored} chunks`,
-      });
+      queryClient.invalidateQueries({ queryKey: HISTORY_PAPERS_KEY }); // the Dashboard list
     },
     // Back to the choice cards (also after Cancel) so the user can retry or pick another action.
     onError: () => setStage("choice"),
@@ -110,7 +106,7 @@ export function PdfWorkspace() {
             </button>
           </div>
 
-          <AskChat paperId={ingestResult.paper_id} paperTitle={ingestResult.filename} />
+          <AskChat paperId={ingestResult.paper_id} />
         </div>
       )}
     </div>
