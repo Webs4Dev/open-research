@@ -10,6 +10,8 @@ export function AppShell() {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
+  // The paper view (/workspace/<id>) is full width and scrolls inside its own panes (DESIGN.md).
+  const fullBleed = /^\/workspace\/[^/]+$/.test(pathname);
 
   // Escape closes the drawer; focus moves into it on open and back to the menu button on close.
   // The page behind is inert while it's open, so Tab can't leave the drawer.
@@ -48,8 +50,12 @@ export function AppShell() {
           </button>
         </header>
 
-        <main className="flex-1 overflow-y-auto px-10 py-8 max-lg:px-6 max-sm:px-4 max-sm:py-6">
-          <div className="mx-auto h-full max-w-[1120px]">
+        <main
+          className={
+            fullBleed ? "min-h-0 flex-1 overflow-hidden" : "flex-1 overflow-y-auto px-10 py-8 max-lg:px-6 max-sm:px-4 max-sm:py-6"
+          }
+        >
+          <div className={fullBleed ? "h-full" : "mx-auto h-full max-w-[1120px]"}>
             <ErrorBoundary key={pathname}>
               <Outlet />
             </ErrorBoundary>

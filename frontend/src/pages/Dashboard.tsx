@@ -128,7 +128,8 @@ function SearchesPanel() {
   );
 }
 
-function PapersPanel() {
+/** Also shown on the Workspace page, where the upload link in the empty state would point at itself. */
+export function PapersPanel({ uploadLink = true }: { uploadLink?: boolean }) {
   const papers = useQuery({ queryKey: HISTORY_PAPERS_KEY, queryFn: listSavedPapers });
 
   return (
@@ -140,16 +141,18 @@ function PapersPanel() {
           <EmptyState
             text="No papers yet. Upload a PDF to ask it questions, and the conversation stays here for later."
             action={
-              <Link to="/workspace" className="btn-secondary">
-                Upload a paper
-              </Link>
+              uploadLink && (
+                <Link to="/workspace" className="btn-secondary">
+                  Upload a paper
+                </Link>
+              )
             }
           />
         }
         renderRow={(paper: PaperSummary) => (
           <li key={paper.paper_id} className="pr-3">
             <Link
-              to={`/workspace?paper=${paper.paper_id}`}
+              to={`/workspace/${paper.paper_id}`}
               className="flex items-center gap-3 rounded-md px-6 py-3 transition-colors duration-fast hover:bg-surface-2"
             >
               <span aria-hidden className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-surface-2 text-ink-muted">

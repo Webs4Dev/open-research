@@ -36,6 +36,8 @@ export default {
         pink: hue("#B92C78", "#F7E6EF"),
         coral: hue("#B83D0E", "#F6E8E2"),
         red: hue("#C42828", "#F8E5E5"),
+        // PDF highlights: intentionally off-brand highlighter yellow (DESIGN.md).
+        highlight: { DEFAULT: "rgba(255,224,0,0.35)", active: "rgba(255,200,0,0.70)", bar: "#FFC800" },
 
         // Legacy names, mapped onto the new tokens until each page is rebuilt.
         border: { DEFAULT: hairline.strong, strong: "rgba(21,20,31,0.24)", accent: "#3D6B00" },

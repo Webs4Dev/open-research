@@ -1,6 +1,8 @@
-from fastapi import APIRouter,UploadFile,File,Form,HTTPException,Depends
+from fastapi import APIRouter,UploadFile,File,Form,HTTPException,Depends,Path
+from fastapi.responses import FileResponse
 import fitz
 import os
+import uuid
 
 from backend.pdf.parser import extract_pdf_pages
 from backend.pdf.chunker import build_chunks_from_pdf
@@ -61,6 +63,16 @@ def extract_text_pages(path: str) -> list[dict]:
         )
     return pages
 
+def save_pdf(path: str, contents: bytes):
+    """Store the upload once. The name is a content hash, so an existing file already holds these bytes;
+    rewriting it in place would truncate it under a concurrent GET /papers/{id}/file."""
+    if os.path.exists(path):
+        return
+    tmp_path = f"{path}.{uuid.uuid4().hex}.tmp"  # unique per request: routes share a threadpool
+    with open(tmp_path, "wb") as f:
+        f.write(contents)
+    os.replace(tmp_path, path)
+
 def link_paper_to_user(user: User, paper_id: str, filename: str | None):
     with get_db() as db:
         db.execute(
@@ -79,8 +91,7 @@ def ingest_pdf(file:UploadFile=File(...), user:User=Depends(current_user)):
     if is_paper_ingested(paper_id):
         log(f"'{file.filename}' already ingested — skipping re-ingest")
         link_paper_to_user(user, paper_id, file.filename)
-        with open(temp_path, "wb") as f:
-            f.write(contents)
+        save_pdf(temp_path, contents)
         return PDFIngestResponse(
             filename=file.filename,
             paper_id=paper_id,
@@ -89,8 +100,7 @@ def ingest_pdf(file:UploadFile=File(...), user:User=Depends(current_user)):
         )
 
     log(f"PDF uploaded: {file.filename}")
-    with open(temp_path, 'wb') as f:
-        f.write(contents)
+    save_pdf(temp_path, contents)
 
     pages = extract_text_pages(temp_path)
     total_pages = len(pages)
@@ -120,8 +130,7 @@ def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_l
     temp_path=(f"{PDF_DIR}/{paper_id}.pdf")
 
     log(f"PDF uploaded: {file.filename}")
-    with open(temp_path,"wb") as f:
-        f.write(contents)
+    save_pdf(temp_path, contents)
 
     pages=extract_text_pages(temp_path)
     total_pages=len(pages)
@@ -155,15 +164,31 @@ def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_l
         relevant_chunks=relevant_chunks
     )
         
-@router.post("/ask",response_model=PDFQAResponse)
-def ask_question(request:PDFQARequest, user:User=Depends(current_user)):
-    # Chroma holds every user's papers; only answer about papers this user uploaded.
+def require_owned_paper(user: User, paper_id: str):
+    # Chroma and docs/pdfs hold every user's papers; only expose papers this user uploaded.
     with get_db() as db:
         owned = db.execute(
-            "SELECT 1 FROM user_papers WHERE user_id = ? AND paper_id = ?", (user.id, request.paper_id)
+            "SELECT 1 FROM user_papers WHERE user_id = ? AND paper_id = ?", (user.id, paper_id)
         ).fetchone()
     if not owned:
         raise HTTPException(status_code=404, detail="Paper not found. Upload it to the workspace first.")
+
+# The stored PDF, so a saved paper can be reopened in the viewer without re-uploading it.
+@router.get("/papers/{paper_id}/file")
+def get_paper_file(paper_id: str = Path(pattern=r"^[0-9a-f]{16}$"), user: User = Depends(current_user)):
+    require_owned_paper(user, paper_id)
+    path = f"{PDF_DIR}/{paper_id}.pdf"
+    if not os.path.exists(path):  # the disk was wiped (e.g. a redeploy) but the history row survived
+        raise HTTPException(status_code=404, detail="The PDF file is no longer stored. Upload it again.")
+    return FileResponse(
+        path,
+        media_type="application/pdf",
+        headers={"X-Content-Type-Options": "nosniff", "Cache-Control": "private, max-age=3600"},
+    )
+
+@router.post("/ask",response_model=PDFQAResponse)
+def ask_question(request:PDFQARequest, user:User=Depends(current_user)):
+    require_owned_paper(user, request.paper_id)
 
     retrieved_chunks = search_chunks(
         query=request.question,

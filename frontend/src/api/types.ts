@@ -70,6 +70,13 @@ export interface SearchSummary {
   created_at: string; // ISO 8601, UTC
 }
 
+export interface QAMessage {
+  id: number;
+  question: string;
+  response: PDFQAResponse;
+  created_at: string; // ISO 8601, UTC
+}
+
 export interface PaperSummary {
   paper_id: string;
   filename: string;
