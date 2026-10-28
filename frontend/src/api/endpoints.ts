@@ -6,6 +6,8 @@ import type {
   PDFAnalysisResponse,
   PDFQARequest,
   PDFQAResponse,
+  User,
+  Credentials,
 } from "./types";
 
 // Search ranks every paper with the LLM and analyze scores every chunk, so both
@@ -23,6 +25,12 @@ export async function searchPapers(body: SearchRequest, signal?: AbortSignal): P
     timeout: TIMEOUT_MS.search,
     signal,
   });
+  return data;
+}
+
+// GET /api/v1/history/searches/{id}  (backend/api/routes/history.py): a saved search, no re-run.
+export async function getSavedSearch(id: number): Promise<SearchResponse> {
+  const { data } = await apiClient.get<SearchResponse>(`/history/searches/${id}`);
   return data;
 }
 
@@ -67,4 +75,24 @@ export async function analyzePdf(
 export async function askQuestion(body: PDFQARequest): Promise<PDFQAResponse> {
   const { data } = await apiClient.post<PDFQAResponse>("/ask", body, { timeout: TIMEOUT_MS.ask });
   return data;
+}
+
+// /api/v1/auth/*  (backend/api/routes/auth.py): the session lives in an httpOnly cookie.
+export async function getMe(): Promise<User> {
+  const { data } = await apiClient.get<User>("/auth/me");
+  return data;
+}
+
+export async function login(body: Credentials): Promise<User> {
+  const { data } = await apiClient.post<User>("/auth/login", body);
+  return data;
+}
+
+export async function register(body: Credentials): Promise<User> {
+  const { data } = await apiClient.post<User>("/auth/register", body);
+  return data;
+}
+
+export async function logout(): Promise<void> {
+  await apiClient.post("/auth/logout");
 }

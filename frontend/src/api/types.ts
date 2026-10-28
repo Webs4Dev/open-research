@@ -58,6 +58,7 @@ export interface SearchResponse {
   source_report: Record<string, SourceReport>;
   retrieval_stats: RetrievalStats;
   ranked_results: RankingResult[];
+  search_id?: number | null; // id in the user's saved history
 }
 
 // ---- PDF ingest / analyze / ask (backend/schemas/pdf.py, relevance.py) ----
@@ -69,6 +70,25 @@ export interface PDFIngestResponse {
   chunks_stored: number;
 }
 
+export interface User {
+  id: number;
+  email: string;
+}
+
+export interface Credentials {
+  email: string;
+  password: string;
+}
+
+// One text line of a chunk, as fractions (0-1) of the page width/height.
+export interface HighlightBox {
+  page_no: number;
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+}
+
 export interface RelevantChunk {
   chunk_id: number;
   chunk_text?: string | null;
@@ -77,6 +97,7 @@ export interface RelevantChunk {
   chunk_type: string;
   reason: string;
   suggested_use: string;
+  boxes: HighlightBox[];
 }
 
 export interface PDFAnalysisResponse {

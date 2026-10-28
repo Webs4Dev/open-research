@@ -1,15 +1,17 @@
-from fastapi import APIRouter,UploadFile,File,Form,HTTPException
+from fastapi import APIRouter,UploadFile,File,Form,HTTPException,Depends
 import fitz
 import os
 
 from backend.pdf.parser import extract_pdf_pages
-from backend.pdf.chunker import build_chunks_from_pages
+from backend.pdf.chunker import build_chunks_from_pdf
 from backend.rag.vector_store import *
 from backend.agents.project_relevance_agent import sort_relevant_chunks
 from backend.agents.pdf_qa_agent import answer_question
 from backend.schemas.pdf import *
 from backend.utils.hash import generate_content_id
 from backend.utils.logger import log
+from backend.auth import User, current_user
+from backend.db import get_db
 
 PDF_DIR = "docs/pdfs"
 os.makedirs(PDF_DIR, exist_ok=True)
@@ -59,16 +61,24 @@ def extract_text_pages(path: str) -> list[dict]:
         )
     return pages
 
+def link_paper_to_user(user: User, paper_id: str, filename: str | None):
+    with get_db() as db:
+        db.execute(
+            "INSERT OR IGNORE INTO user_papers (user_id, paper_id, filename) VALUES (?, ?, ?)",
+            (user.id, paper_id, filename or "paper.pdf"),
+        )
+
 # Routes are plain `def` (not async) because they make blocking OpenAI/Chroma calls;
 # FastAPI runs sync routes in a threadpool so one request can't freeze the server.
 @router.post("/ingest",response_model=PDFIngestResponse)
-def ingest_pdf(file:UploadFile=File(...)):
+def ingest_pdf(file:UploadFile=File(...), user:User=Depends(current_user)):
     contents, total_pages = read_pdf_upload(file)
     paper_id = generate_content_id(contents)
     temp_path = f"{PDF_DIR}/{paper_id}.pdf"
 
     if is_paper_ingested(paper_id):
         log(f"'{file.filename}' already ingested — skipping re-ingest")
+        link_paper_to_user(user, paper_id, file.filename)
         with open(temp_path, "wb") as f:
             f.write(contents)
         return PDFIngestResponse(
@@ -86,10 +96,11 @@ def ingest_pdf(file:UploadFile=File(...)):
     total_pages = len(pages)
     log(f"Extracted {total_pages} pages from {file.filename}")
 
-    chunks = build_chunks_from_pages(pages)
+    chunks = build_chunks_from_pdf(temp_path)
     log(f"Created {len(chunks)} chunks")
 
     store_chunks(paper_id=paper_id, paper_title=file.filename, chunks=chunks)
+    link_paper_to_user(user, paper_id, file.filename)
 
     return PDFIngestResponse(
         filename=file.filename,
@@ -116,7 +127,7 @@ def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_l
     total_pages=len(pages)
     log(f"Extracted {total_pages} pages from {file.filename}")
 
-    chunks = build_chunks_from_pages(pages)
+    chunks = build_chunks_from_pdf(temp_path)
     log(f"Created {len(chunks)} chunks")
 
     try:
@@ -134,6 +145,7 @@ def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_l
         original = chunk_map[rc.chunk_id]
         rc.chunk_text = original.text
         rc.page_no = original.page_no
+        rc.boxes = original.boxes
 
     return PDFAnalysisResponse(
         filename=file.filename,
@@ -144,7 +156,15 @@ def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_l
     )
         
 @router.post("/ask",response_model=PDFQAResponse)
-def ask_question(request:PDFQARequest):
+def ask_question(request:PDFQARequest, user:User=Depends(current_user)):
+    # Chroma holds every user's papers; only answer about papers this user uploaded.
+    with get_db() as db:
+        owned = db.execute(
+            "SELECT 1 FROM user_papers WHERE user_id = ? AND paper_id = ?", (user.id, request.paper_id)
+        ).fetchone()
+    if not owned:
+        raise HTTPException(status_code=404, detail="Paper not found. Upload it to the workspace first.")
+
     retrieved_chunks = search_chunks(
         query=request.question,
         paper_id=request.paper_id,
@@ -157,9 +177,15 @@ def ask_question(request:PDFQARequest):
         log(f"QA parse error: {e}")
         raise HTTPException(status_code=502, detail=LLM_ERROR)
 
-    return PDFQAResponse(
+    response = PDFQAResponse(
         answer=qa_result.answer,
         confidence=qa_result.confidence,
         found_in_chunks=qa_result.found_in_chunks,
         found_in_pages=qa_result.found_in_pages
     )
+    with get_db() as db:
+        db.execute(
+            "INSERT INTO qa_messages (user_id, paper_id, question, response_json) VALUES (?, ?, ?, ?)",
+            (user.id, request.paper_id, request.question, response.model_dump_json()),
+        )
+    return response

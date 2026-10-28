@@ -1,8 +1,6 @@
-from backend.pdf.chunker import build_chunks_from_pages
-from backend.pdf.parser import extract_pdf_pages
+from backend.pdf.chunker import build_chunks_from_pdf
 
-pages = extract_pdf_pages("docs/Ai_Agent_Architectures_Survey.pdf")
-chunks = build_chunks_from_pages(pages)
+chunks = build_chunks_from_pdf("docs/Ai_Agent_Architectures_Survey.pdf")
 
 for chunk in chunks[0:11]:
     print()
