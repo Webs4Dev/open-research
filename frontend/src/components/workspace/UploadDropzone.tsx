@@ -52,7 +52,12 @@ export function UploadDropzone({ onFileSelected }: UploadDropzoneProps) {
       >
         <span
           aria-hidden
-          className="grid h-14 w-14 place-items-center rounded-lg bg-accent text-on-accent shadow-[inset_0_0_0_1px_theme(colors.hairline.strong)]"
+          // Neutral at rest: lime means "act here", so it only lights up while a file is over the zone.
+          className={`grid h-14 w-14 place-items-center rounded-lg transition-colors duration-fast ${
+            isDragOver
+              ? "bg-accent text-on-accent shadow-[inset_0_0_0_1px_theme(colors.hairline.strong)]"
+              : "bg-surface-2 text-ink-muted"
+          }`}
         >
           <Upload size={24} />
         </span>

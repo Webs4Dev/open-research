@@ -15,3 +15,6 @@ data/
 .DS_Store
 #Claude Code local settings
 .claude/
+
+# Impeccable critique snapshots (local design-review history)
+.impeccable/

@@ -12,6 +12,20 @@ body {
   @apply bg-canvas font-sans text-body text-ink antialiased;
 }
 
+/* No lone word on a heading's or paragraph's last line. In the base layer so a utility can override it. */
+@layer base {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+}
+
 /* One focus ring everywhere (DESIGN.md: 2px accent-ink, 2px offset in canvas). */
 :focus-visible {
   @apply outline-none ring-2 ring-accent-ink ring-offset-2 ring-offset-canvas;

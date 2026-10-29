@@ -155,7 +155,8 @@ function Turn({
       <div>
         <p className="whitespace-pre-wrap text-body-lg text-ink">{response.answer}</p>
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          {response.found_in_pages.map((page) => (
+          {/* Several matching chunks can sit on one page, so the server may repeat a page. */}
+          {[...new Set(response.found_in_pages)].map((page) => (
             <button
               key={page}
               type="button"
