@@ -11,6 +11,7 @@ import { ScoreMeter } from "../search/ScoreMeter";
 import { getErrorMessage, isCancelled } from "../../lib/errors";
 import { useAbortController } from "../../lib/useAbortController";
 import { paperAnalysisKey } from "../../lib/queryKeys";
+import { DEMO_HINT, useIsDemo } from "../auth/RequireAuth";
 
 interface HighlightsPanelProps {
   paperId: string;
@@ -24,6 +25,7 @@ export function HighlightsPanel({ paperId, file, activeChunkId, onSelectChunk }:
   const description = useWorkspaceStore((s) => s.projectDescription);
   const setDescription = useWorkspaceStore((s) => s.setProjectDescription);
   const queryClient = useQueryClient();
+  const isDemo = useIsDemo();
   // Same key as PaperView, so the saved analysis is fetched once and shared.
   const saved = useQuery({ queryKey: paperAnalysisKey(paperId), queryFn: () => getPaperAnalysis(paperId) });
   const analysis = saved.data ?? null;
@@ -94,7 +96,12 @@ export function HighlightsPanel({ paperId, file, activeChunkId, onSelectChunk }:
             onChange={(e) => setDescription(e.target.value)}
           />
           <div className="flex flex-wrap items-center gap-2">
-            <button type="submit" className="btn" disabled={!file || mutation.isPending || !description.trim() || saved.isError}>
+            <button
+              type="submit"
+              className="btn"
+              title={isDemo ? DEMO_HINT : undefined}
+              disabled={!file || mutation.isPending || !description.trim() || saved.isError || isDemo}
+            >
               <Sparkles size={16} aria-hidden />
               {analysis ? "Score again" : "Find relevant passages"}
             </button>

@@ -8,6 +8,7 @@ from backend.auth import (
     delete_session, hash_password, set_session_cookie, verify_password,
 )
 from backend.db import get_db
+from backend.demo import DEMO_EMAIL, DEMO_ENABLED, DEMO_SESSION_DAYS, demo_user_id, prune_demo_sessions
 
 router = APIRouter()
 
@@ -23,6 +24,9 @@ class Credentials(BaseModel):
 
 @router.post("/auth/register", response_model=User)
 def register(credentials: Credentials, response: Response):
+    # Reserved even while the demo is off, so seeding never finds a real account holding it.
+    if credentials.email == DEMO_EMAIL:
+        raise HTTPException(status_code=409, detail="An account with this email already exists")
     try:
         with get_db() as db:
             user_id = db.execute(
@@ -48,6 +52,22 @@ def login(credentials: Credentials, response: Response):
 
     set_session_cookie(response, create_session(row["id"]))
     return User(id=row["id"], email=credentials.email)
+
+# Public on purpose: logs any visitor into the shared demo account, which is read-only (block_demo_writes).
+@router.post("/auth/demo", response_model=User)
+def demo_login(request: Request, response: Response):
+    user_id = demo_user_id() if DEMO_ENABLED else None
+    if user_id is None:
+        raise HTTPException(status_code=404, detail="The demo isn't available right now")
+    demo_user = User(id=user_id, email=DEMO_EMAIL, is_demo=True)
+    try:
+        if current_user(request) == demo_user:  # already in the demo: keep that session, don't mint another
+            return demo_user
+    except HTTPException:
+        pass  # no valid session yet
+    set_session_cookie(response, create_session(user_id, days=DEMO_SESSION_DAYS), days=DEMO_SESSION_DAYS)
+    prune_demo_sessions(user_id)
+    return demo_user
 
 @router.post("/auth/logout", status_code=204)
 def logout(request: Request, response: Response):

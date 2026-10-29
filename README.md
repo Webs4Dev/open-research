@@ -257,4 +257,21 @@ npm run dev
 
 Runs on `http://localhost:5173` by default. See `frontend/README.md` for Netlify deployment steps and known gaps between the frontend and backend schemas.
 
+### Demo account
+
+"Try the demo" on the login page opens a shared, read-only account with a saved search and an
+analysed paper, so visitors can look around without signing up. The backend rebuilds it from
+`backend/demo_data/` on every start and refuses any write from it (no searches, uploads, analyses
+or questions, so it can't spend OpenAI credits). Set `DEMO_ENABLED=false` in `.env` to turn it off.
+
+### Tests
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
+`pytest` runs only `tests/api/` (offline, with a throwaway database and a fake OpenAI key).
+The older scripts directly under `tests/` call live paid APIs, so run those by hand only.
+
 ---

@@ -145,6 +145,12 @@ export async function register(body: Credentials): Promise<User> {
   return data;
 }
 
+// POST /api/v1/auth/demo: logs into the shared read-only demo account, no password.
+export async function startDemo(): Promise<User> {
+  const { data } = await apiClient.post<User>("/auth/demo");
+  return data;
+}
+
 export async function logout(): Promise<void> {
   await apiClient.post("/auth/logout");
 }

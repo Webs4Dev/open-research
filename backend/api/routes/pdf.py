@@ -2,7 +2,6 @@ from fastapi import APIRouter,UploadFile,File,Form,HTTPException,Depends,Path
 from fastapi.responses import FileResponse
 import fitz
 import os
-import uuid
 
 from backend.pdf.parser import extract_pdf_pages
 from backend.pdf.chunker import build_chunks_from_pdf
@@ -11,11 +10,11 @@ from backend.agents.project_relevance_agent import sort_relevant_chunks
 from backend.agents.pdf_qa_agent import answer_question
 from backend.schemas.pdf import *
 from backend.utils.hash import generate_content_id
+from backend.utils.files import PDF_DIR, save_pdf
 from backend.utils.logger import log
 from backend.auth import User, current_user
 from backend.db import get_db
 
-PDF_DIR = "docs/pdfs"
 os.makedirs(PDF_DIR, exist_ok=True)
 
 LLM_ERROR = "The AI returned an unexpected response. Please try again."
@@ -62,16 +61,6 @@ def extract_text_pages(path: str) -> list[dict]:
             detail="This PDF has little or no selectable text (it may be scanned). OCR isn't supported yet.",
         )
     return pages
-
-def save_pdf(path: str, contents: bytes):
-    """Store the upload once. The name is a content hash, so an existing file already holds these bytes;
-    rewriting it in place would truncate it under a concurrent GET /papers/{id}/file."""
-    if os.path.exists(path):
-        return
-    tmp_path = f"{path}.{uuid.uuid4().hex}.tmp"  # unique per request: routes share a threadpool
-    with open(tmp_path, "wb") as f:
-        f.write(contents)
-    os.replace(tmp_path, path)
 
 def link_paper_to_user(user: User, paper_id: str, filename: str | None):
     with get_db() as db:
