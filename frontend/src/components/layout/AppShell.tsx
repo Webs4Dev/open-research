@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { BrandMark, Sidebar } from "./Sidebar";
@@ -57,7 +57,15 @@ export function AppShell() {
         >
           <div className={fullBleed ? "h-full" : "mx-auto h-full max-w-[1120px]"}>
             <ErrorBoundary key={pathname}>
-              <Outlet />
+              <Suspense
+                fallback={
+                  <p role="status" className="p-6 text-body-sm text-ink-subtle">
+                    Loading…
+                  </p>
+                }
+              >
+                <Outlet />
+              </Suspense>
             </ErrorBoundary>
           </div>
         </main>

@@ -4,6 +4,7 @@ import type { PDFDocumentProxy } from "pdfjs-dist";
 import { ChevronDown, ChevronUp, MoveHorizontal, ZoomIn, ZoomOut } from "lucide-react";
 import type { HighlightBox, RelevantChunk } from "../../api/types";
 import "react-pdf/dist/Page/TextLayer.css";
+import "../../lib/pdfWorker"; // here, not in main.tsx, so pdf.js only loads with the viewer
 
 /** A request to scroll the viewer. `seq` changes on every request, so the same target can be jumped to twice. */
 export interface ViewerJump {
