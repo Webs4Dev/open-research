@@ -2,15 +2,14 @@ import { useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
-import { getPaperFile, listSavedPapers } from "../api/endpoints";
+import { getPaperAnalysis, getPaperFile, listSavedPapers } from "../api/endpoints";
 import type { RelevantChunk } from "../api/types";
 import { PdfViewer, type ViewerJump } from "../components/workspace/PdfViewer";
 import { HighlightsPanel } from "../components/workspace/HighlightsPanel";
 import { AskChat } from "../components/workspace/AskChat";
 import { ErrorPanel } from "../components/common/ErrorPanel";
-import { useWorkspaceStore } from "../store/workspaceStore";
 import { getErrorMessage } from "../lib/errors";
-import { HISTORY_PAPERS_KEY, paperFileKey } from "../lib/queryKeys";
+import { HISTORY_PAPERS_KEY, paperAnalysisKey, paperFileKey } from "../lib/queryKeys";
 
 type PanelTab = "highlights" | "ask";
 type MobileTab = "paper" | PanelTab;
@@ -47,7 +46,12 @@ function PaperPage({ paperId }: { paperId: string }) {
     [pdf.data, filename]
   );
 
-  const chunks = useWorkspaceStore((s) => s.analyses[paperId]?.result.relevant_chunks) ?? [];
+  const analysis = useQuery({
+    queryKey: paperAnalysisKey(paperId),
+    queryFn: () => getPaperAnalysis(paperId),
+    enabled: validId,
+  });
+  const chunks = analysis.data?.result.relevant_chunks ?? [];
   const [activeChunkId, setActiveChunkId] = useState<number | null>(null);
   const [jump, setJump] = useState<ViewerJump | null>(null);
   const [panelTab, setPanelTab] = useState<PanelTab>("highlights");

@@ -120,7 +120,7 @@ def ingest_pdf(file:UploadFile=File(...), user:User=Depends(current_user)):
     )
 
 @router.post("/analyze",response_model=PDFAnalysisResponse)
-def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_length=1)):
+def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_length=1),user:User=Depends(current_user)):
     # Browsers send textarea newlines as \r\n in multipart bodies; count them as one char
     # so text that fit the frontend's maxLength isn't rejected here.
     if len(project_description.replace("\r\n", "\n")) > MAX_DESCRIPTION_CHARS:
@@ -156,14 +156,21 @@ def analyze_pdf(file:UploadFile=File(...),project_description:str=Form(...,min_l
         rc.page_no = original.page_no
         rc.boxes = original.boxes
 
-    return PDFAnalysisResponse(
+    response = PDFAnalysisResponse(
         filename=file.filename,
         paper_id=paper_id,
         pages=total_pages,
         chunk_count=len(chunks),
         relevant_chunks=relevant_chunks
     )
-        
+    with get_db() as db:
+        db.execute(
+            "INSERT OR REPLACE INTO paper_analyses (user_id, paper_id, project_description, response_json) "
+            "VALUES (?, ?, ?, ?)",
+            (user.id, paper_id, project_description, response.model_dump_json()),
+        )
+    return response
+
 def require_owned_paper(user: User, paper_id: str):
     # Chroma and docs/pdfs hold every user's papers; only expose papers this user uploaded.
     with get_db() as db:

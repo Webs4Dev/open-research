@@ -6,6 +6,7 @@ import type {
   SearchSummary,
   PaperSummary,
   QAMessage,
+  SavedAnalysis,
   PDFIngestResponse,
   PDFAnalysisResponse,
   PDFQARequest,
@@ -58,6 +59,12 @@ export async function listSavedPapers(): Promise<PaperSummary[]> {
 // GET /api/v1/history/papers/{paper_id}/qa: this user's saved Q&A for one paper, oldest first.
 export async function listPaperQA(paperId: string): Promise<QAMessage[]> {
   const { data } = await apiClient.get<QAMessage[]>(`/history/papers/${paperId}/qa`);
+  return data;
+}
+
+// GET /api/v1/history/papers/{paper_id}/analysis: the latest analysis, or null if never scored.
+export async function getPaperAnalysis(paperId: string): Promise<SavedAnalysis | null> {
+  const { data } = await apiClient.get<SavedAnalysis | null>(`/history/papers/${paperId}/analysis`);
   return data;
 }
 

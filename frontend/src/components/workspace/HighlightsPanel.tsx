@@ -1,8 +1,8 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Pencil, Sparkles } from "lucide-react";
-import { analyzePdf } from "../../api/endpoints";
-import type { RelevantChunk } from "../../api/types";
+import { analyzePdf, getPaperAnalysis } from "../../api/endpoints";
+import type { RelevantChunk, SavedAnalysis } from "../../api/types";
 import { useWorkspaceStore } from "../../store/workspaceStore";
 import { ChunkTypeBadge } from "../common/ChunkTypeBadge";
 import { ErrorPanel } from "../common/ErrorPanel";
@@ -10,6 +10,7 @@ import { Spinner } from "../common/Spinner";
 import { ScoreMeter } from "../search/ScoreMeter";
 import { getErrorMessage, isCancelled } from "../../lib/errors";
 import { useAbortController } from "../../lib/useAbortController";
+import { paperAnalysisKey } from "../../lib/queryKeys";
 
 interface HighlightsPanelProps {
   paperId: string;
@@ -22,17 +23,21 @@ interface HighlightsPanelProps {
 export function HighlightsPanel({ paperId, file, activeChunkId, onSelectChunk }: HighlightsPanelProps) {
   const description = useWorkspaceStore((s) => s.projectDescription);
   const setDescription = useWorkspaceStore((s) => s.setProjectDescription);
-  const analysis = useWorkspaceStore((s) => s.analyses[paperId]);
-  const setAnalysis = useWorkspaceStore((s) => s.setAnalysis);
+  const queryClient = useQueryClient();
+  // Same key as PaperView, so the saved analysis is fetched once and shared.
+  const saved = useQuery({ queryKey: paperAnalysisKey(paperId), queryFn: () => getPaperAnalysis(paperId) });
+  const analysis = saved.data ?? null;
 
-  const [editing, setEditing] = useState(!analysis);
+  const [editing, setEditing] = useState(false);
   const fieldId = useId();
   const { nextSignal, cancel } = useAbortController();
 
   const mutation = useMutation({
     mutationFn: (text: string) => analyzePdf(file!, text, nextSignal()),
     onSuccess: (result, text) => {
-      setAnalysis(paperId, { result, description: text });
+      // The server saved it; store it locally instead of refetching.
+      const fresh: SavedAnalysis = { result, description: text, created_at: new Date().toISOString() };
+      queryClient.setQueryData(paperAnalysisKey(paperId), fresh);
       setEditing(false);
       const best = result.relevant_chunks[0];
       if (best) onSelectChunk(best, false);
@@ -48,8 +53,22 @@ export function HighlightsPanel({ paperId, file, activeChunkId, onSelectChunk }:
 
   const chunks = analysis?.result.relevant_chunks ?? [];
 
+  if (saved.isPending) {
+    return (
+      <p role="status" className="text-body-sm text-ink-subtle">
+        Loading saved highlights…
+      </p>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
+      {saved.isError && (
+        <ErrorPanel
+          message={`Couldn't load saved highlights: ${getErrorMessage(saved.error)}`}
+          onRetry={() => saved.refetch()}
+        />
+      )}
       {editing || !analysis ? (
         <form
           className="flex flex-col gap-3"
@@ -75,7 +94,7 @@ export function HighlightsPanel({ paperId, file, activeChunkId, onSelectChunk }:
             onChange={(e) => setDescription(e.target.value)}
           />
           <div className="flex flex-wrap items-center gap-2">
-            <button type="submit" className="btn" disabled={!file || mutation.isPending || !description.trim()}>
+            <button type="submit" className="btn" disabled={!file || mutation.isPending || !description.trim() || saved.isError}>
               <Sparkles size={16} aria-hidden />
               {analysis ? "Score again" : "Find relevant passages"}
             </button>

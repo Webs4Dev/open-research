@@ -57,6 +57,16 @@ CREATE TABLE IF NOT EXISTS qa_messages (
     created_at TEXT NOT NULL DEFAULT ({NOW})
 );
 CREATE INDEX IF NOT EXISTS idx_qa_user_paper ON qa_messages(user_id, paper_id, created_at);
+
+-- Only the latest relevance analysis per paper; scoring again replaces it.
+CREATE TABLE IF NOT EXISTS paper_analyses (
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    paper_id TEXT NOT NULL,
+    project_description TEXT NOT NULL,
+    response_json TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT ({NOW}),
+    PRIMARY KEY (user_id, paper_id)
+);
 """
 
 def init_db():

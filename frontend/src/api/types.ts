@@ -77,6 +77,12 @@ export interface QAMessage {
   created_at: string; // ISO 8601, UTC
 }
 
+export interface SavedAnalysis {
+  description: string; // what it was scored against (the shared draft may have changed since)
+  result: PDFAnalysisResponse;
+  created_at: string; // ISO 8601, UTC
+}
+
 export interface PaperSummary {
   paper_id: string;
   filename: string;

@@ -1,11 +1,11 @@
 import json
 
 from fastapi import APIRouter, Depends, HTTPException, Path
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 from backend.auth import User, current_user
 from backend.db import get_db
-from backend.schemas.pdf import PDFQAResponse
+from backend.schemas.pdf import PDFAnalysisResponse, PDFQAResponse
 from backend.schemas.report import SearchResponse
 
 router = APIRouter()
@@ -25,6 +25,11 @@ class QAMessage(BaseModel):
     id: int
     question: str
     response: PDFQAResponse
+    created_at: str
+
+class SavedAnalysis(BaseModel):
+    description: str
+    result: PDFAnalysisResponse
     created_at: str
 
 @router.get("/history/searches", response_model=list[SearchSummary])
@@ -79,3 +84,20 @@ def list_qa(paper_id: str = Path(pattern=r"^[0-9a-f]{16}$"), user: User = Depend
         )
         for row in rows
     ]
+
+# null (not 404) when the paper hasn't been scored yet, so the frontend doesn't log an error.
+@router.get("/history/papers/{paper_id}/analysis", response_model=SavedAnalysis | None)
+def get_analysis(paper_id: str = Path(pattern=r"^[0-9a-f]{16}$"), user: User = Depends(current_user)):
+    with get_db() as db:
+        row = db.execute(
+            "SELECT project_description, response_json, created_at FROM paper_analyses "
+            "WHERE user_id = ? AND paper_id = ?",
+            (user.id, paper_id),
+        ).fetchone()
+    if not row:
+        return None
+    try:
+        result = PDFAnalysisResponse.model_validate_json(row["response_json"])
+    except ValidationError:  # saved by an older schema; treat as not scored, the next score replaces it
+        return None
+    return SavedAnalysis(description=row["project_description"], result=result, created_at=row["created_at"])
