@@ -41,9 +41,19 @@ export function SearchPapers() {
     retry: false, // a 404 (deleted or not yours) won't succeed on retry
   });
 
+  // Refill the form from the saved search, so "Search" re-runs it as it was. Once per search (after
+  // the source list settles), so a late /sources response can't overwrite the user's edits.
+  // No chips selected means all sources, so a search that used every source restores as none selected.
+  const allSources = sourcesQuery.data?.available_sources;
+  const restoredId = useRef<number | null>(null);
   useEffect(() => {
-    if (savedQuery.data) setQuery(savedQuery.data.query);
-  }, [savedQuery.data]);
+    if (!savedQuery.data || sourcesQuery.isPending || restoredId.current === savedId) return;
+    restoredId.current = savedId;
+    setQuery(savedQuery.data.query);
+    if (!allSources) return; // /sources failed: no chips to restore
+    const requested = savedQuery.data.sources_requested.filter((s) => allSources.includes(s)); // drop removed sources
+    setSelectedSources(requested.length === allSources.length ? [] : requested);
+  }, [savedQuery.data, sourcesQuery.isPending, allSources, savedId]);
 
   const { nextSignal, cancel } = useAbortController();
 
@@ -150,7 +160,7 @@ export function SearchPapers() {
           <ErrorPanel message={`Couldn't open this search: ${getErrorMessage(savedQuery.error)}`} />
         )}
 
-        {/* Keyed so sort and filters reset for each new set of results. */}
+        {/* A new search sets only ?id=, which clears the sort and filter params too. */}
         {shown && <Results key={shown.search_id ?? "fresh"} response={shown} />}
       </div>
     </div>
@@ -398,9 +408,20 @@ function SourceToggle({ label, selected, selectedClass, dotClass, onClick }: Sou
 type SortKey = "score" | "newest";
 
 function Results({ response }: { response: SearchResponse }) {
-  const [sort, setSort] = useState<SortKey>("score");
-  const [pdfOnly, setPdfOnly] = useState(false);
-  const [sourceFilter, setSourceFilter] = useState<string | null>(null);
+  // Sort and filters live in the URL next to ?id=, so a refresh or coming Back from a paper keeps them.
+  const [params, setParams] = useSearchParams();
+  const sort: SortKey = params.get("sort") === "newest" ? "newest" : "score";
+  const pdfOnly = params.get("pdf") === "1";
+  const setParam = (key: string, value: string | null) =>
+    setParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (value === null) next.delete(key);
+        else next.set(key, value);
+        return next;
+      },
+      { replace: true } // a filter click isn't a new page for the Back button
+    );
 
   // A Set, because several web_* sources share the label "Web".
   const failedSources = [
@@ -417,6 +438,9 @@ function Results({ response }: { response: SearchResponse }) {
     const key = sourceMeta(paper.source).label;
     sourceCounts.set(key, (sourceCounts.get(key) ?? 0) + 1);
   }
+  // Only a source with a visible chip can filter; a stale ?source= would hide everything with no way to clear it.
+  const rawSource = params.get("source");
+  const sourceFilter = rawSource && sourceCounts.size > 1 && sourceCounts.has(rawSource) ? rawSource : null;
 
   // filter() returns a new array, so sorting it in place leaves the response untouched.
   const visible = response.ranked_results
@@ -458,7 +482,7 @@ function Results({ response }: { response: SearchResponse }) {
                 key={key}
                 type="button"
                 aria-pressed={sort === key}
-                onClick={() => setSort(key)}
+                onClick={() => setParam("sort", key === "score" ? null : key)}
                 className={`chip h-6 transition duration-base ${
                   sort === key ? "bg-surface-1 font-semibold text-ink shadow-page" : "text-ink-muted hover:text-ink"
                 }`}
@@ -470,14 +494,14 @@ function Results({ response }: { response: SearchResponse }) {
 
           <span aria-hidden className="mx-1 h-5 w-px shrink-0 bg-hairline-strong" />
 
-          <FilterChip label="Has PDF" selected={pdfOnly} onClick={() => setPdfOnly((v) => !v)} />
+          <FilterChip label="Has PDF" selected={pdfOnly} onClick={() => setParam("pdf", pdfOnly ? null : "1")} />
           {sourceCounts.size > 1 &&
             [...sourceCounts].map(([label, count]) => (
               <FilterChip
                 key={label}
                 label={`${label} ${count}`}
                 selected={sourceFilter === label}
-                onClick={() => setSourceFilter((current) => (current === label ? null : label))}
+                onClick={() => setParam("source", sourceFilter === label ? null : label)}
               />
             ))}
         </div>
