@@ -120,6 +120,8 @@ export function SearchPapers() {
             </p>
           </header>
         )}
+        {/* The visible headline is landing-only; keep one h1 for screen readers once results show. */}
+        {!isLanding && <h1 className="sr-only">Search papers</h1>}
 
         <SearchForm
           query={query}

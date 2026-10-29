@@ -34,10 +34,12 @@ export function Login() {
 
   return (
     <div className="flex min-h-full flex-col bg-canvas px-10 py-10 max-lg:px-6 max-sm:px-4">
-      <BrandMark />
+      <header>
+        <BrandMark />
+      </header>
 
       <main className="mx-auto grid w-full max-w-[1120px] flex-1 items-center gap-16 py-12 lg:grid-cols-[1fr_400px] max-lg:gap-10">
-        <header className="animate-rise">
+        <div className="animate-rise">
           <h1 className="max-w-xl text-balance font-display text-display text-ink max-sm:text-display-sm">
             Research that starts with your project.
           </h1>
@@ -45,7 +47,7 @@ export function Login() {
             Search six sources at once, score every paper against what you're building, then read it with the relevant
             passages highlighted and ask it questions.
           </p>
-        </header>
+        </div>
 
         <form onSubmit={onSubmit} className="card flex flex-col gap-4 animate-rise" style={{ animationDelay: "80ms" }}>
           <h2 className="font-display text-h2 text-ink">{isLogin ? "Log in" : "Create an account"}</h2>

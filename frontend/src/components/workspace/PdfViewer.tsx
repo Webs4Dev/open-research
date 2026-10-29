@@ -230,7 +230,15 @@ export function PdfViewer({ file, chunks, activeChunkId, onChunkClick, jump }: P
         </div>
       </div>
 
-      <div ref={scrollRef} onScroll={handleScroll} className="min-h-0 flex-1 overflow-auto px-6 pb-6 pt-20 [scrollbar-gutter:stable] max-sm:px-3">
+      {/* Focusable, so keyboard users can scroll the pages with the arrow keys. */}
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        tabIndex={0}
+        role="region"
+        aria-label="PDF pages"
+        className="min-h-0 flex-1 overflow-auto px-6 pb-6 pt-20 [scrollbar-gutter:stable] focus-visible:ring-inset focus-visible:ring-offset-0 max-sm:px-3"
+      >
         <Document
           file={file}
           onLoadSuccess={handleLoad}
