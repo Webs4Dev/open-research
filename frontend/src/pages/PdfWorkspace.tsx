@@ -8,11 +8,13 @@ import { ingestPdf } from "../api/endpoints";
 import { HISTORY_PAPERS_KEY, paperFileKey } from "../lib/queryKeys";
 import { getErrorMessage, isCancelled } from "../lib/errors";
 import { useAbortController } from "../lib/useAbortController";
+import { useIsDemo } from "../components/auth/RequireAuth";
 
 /** Upload a paper (ingested right away, so Ask works) and open it in the paper view. */
 export function PdfWorkspace() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const isDemo = useIsDemo();
   const { nextSignal, cancel } = useAbortController();
 
   const ingest = useMutation({
@@ -35,6 +37,10 @@ export function PdfWorkspace() {
 
       {ingest.isPending ? (
         <Spinner label={`Reading ${ingest.variables.name}…`} onCancel={cancel} />
+      ) : isDemo ? (
+        <p className="rounded-xl border border-hairline bg-surface-1 px-6 py-8 text-center text-body text-ink-muted">
+          Uploading is switched off in the demo. Open the sample paper below to see its highlights and answers.
+        </p>
       ) : (
         <UploadDropzone onFileSelected={(file) => ingest.mutate(file)} />
       )}

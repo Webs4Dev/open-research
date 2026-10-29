@@ -1,10 +1,8 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { Home, Search, FileText, LogOut } from "lucide-react";
-import { logout } from "../../api/endpoints";
 import type { User } from "../../api/types";
-import { ME_QUERY_KEY } from "../auth/RequireAuth";
-import { useWorkspaceStore } from "../../store/workspaceStore";
+import { ME_QUERY_KEY, useLogout } from "../auth/RequireAuth";
 
 const navItems = [
   { to: "/", label: "Dashboard", icon: Home, end: true },
@@ -28,16 +26,11 @@ export function BrandMark() {
 
 /** Rail contents, shared by the desktop rail and the mobile drawer. */
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData<User>(ME_QUERY_KEY);
-
-  const handleLogout = async () => {
-    await logout().catch(() => {}); // the cookie is cleared server-side; leave either way
-    queryClient.clear(); // drop every cached response from this user
-    useWorkspaceStore.getState().reset();
-    navigate("/login", { replace: true });
-  };
+  const handleLogout = useLogout();
+  // The demo's address is a placeholder; the banner already says what this account is.
+  const accountLabel = user?.is_demo ? "Demo account" : user?.email;
 
   return (
     <div className="flex h-full flex-col px-4 py-6">
@@ -65,10 +58,10 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         ))}
       </nav>
       <div className="mt-auto border-t border-hairline px-2 pt-4">
-        <p className="mb-3 truncate text-body-sm text-ink-subtle" title={user?.email}>
-          {user?.email}
+        <p className="mb-3 truncate text-body-sm text-ink-subtle" title={accountLabel}>
+          {accountLabel}
         </p>
-        <button type="button" className="btn-ghost -ml-3" onClick={handleLogout}>
+        <button type="button" className="btn-ghost -ml-3" onClick={() => handleLogout()}>
           <LogOut size={16} aria-hidden />
           Log out
         </button>

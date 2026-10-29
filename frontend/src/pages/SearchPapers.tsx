@@ -11,6 +11,7 @@ import { getErrorMessage, isCancelled } from "../lib/errors";
 import { useAbortController } from "../lib/useAbortController";
 import { sourceMeta } from "../lib/sources";
 import { HISTORY_SEARCHES_KEY } from "../lib/queryKeys";
+import { DEMO_HINT, useIsDemo } from "../components/auth/RequireAuth";
 
 // Each paper costs one LLM ranking call, so keep this small.
 const MAX_RESULTS_PER_SOURCE = 10;
@@ -190,6 +191,7 @@ interface SearchFormProps {
 }
 
 function SearchForm(props: SearchFormProps) {
+  const isDemo = useIsDemo();
   const inputRef = useRef<HTMLInputElement>(null);
   const [showContext, setShowContext] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
@@ -249,7 +251,8 @@ function SearchForm(props: SearchFormProps) {
           <button
             type="submit"
             aria-label="Search"
-            disabled={props.isPending || !props.query.trim()}
+            title={isDemo ? DEMO_HINT : undefined}
+            disabled={props.isPending || !props.query.trim() || isDemo}
             className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-on-accent shadow-[inset_0_0_0_1px_theme(colors.hairline.strong)] transition duration-base ease-spring hover:bg-accent-hover active:scale-90 disabled:cursor-not-allowed disabled:bg-surface-2 disabled:text-ink-faint disabled:shadow-none"
           >
             <ArrowUp size={20} strokeWidth={2.5} />

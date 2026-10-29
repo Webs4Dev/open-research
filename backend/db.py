@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY,
     email TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
+    -- 1 for the shared read-only demo account (backend/demo.py)
+    is_demo INTEGER NOT NULL DEFAULT 0,
     created_at TEXT NOT NULL DEFAULT ({NOW})
 );
 
@@ -27,6 +29,8 @@ CREATE TABLE IF NOT EXISTS sessions (
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     expires_at TEXT NOT NULL
 );
+-- Every login prunes expired rows, and POST /auth/demo is public, so keep that DELETE cheap.
+CREATE INDEX IF NOT EXISTS idx_sessions_expires ON sessions(expires_at);
 
 CREATE TABLE IF NOT EXISTS searches (
     id INTEGER PRIMARY KEY,
@@ -74,6 +78,10 @@ def init_db():
     with get_db() as db:
         db.execute("PRAGMA journal_mode=WAL")  # readers don't block the writer
         db.executescript(SCHEMA)
+        # CREATE TABLE IF NOT EXISTS doesn't add columns to a DB made before they existed.
+        user_columns = {row["name"] for row in db.execute("PRAGMA table_info(users)")}
+        if "is_demo" not in user_columns:
+            db.execute("ALTER TABLE users ADD COLUMN is_demo INTEGER NOT NULL DEFAULT 0")
 
 @contextmanager
 def get_db():

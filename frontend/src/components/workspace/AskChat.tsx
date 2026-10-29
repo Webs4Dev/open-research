@@ -6,6 +6,7 @@ import type { PDFQAResponse, QAMessage } from "../../api/types";
 import { ErrorPanel } from "../common/ErrorPanel";
 import { getErrorMessage } from "../../lib/errors";
 import { paperQAKey } from "../../lib/queryKeys";
+import { DEMO_HINT, useIsDemo } from "../auth/RequireAuth";
 
 interface AskChatProps {
   paperId: string;
@@ -14,6 +15,7 @@ interface AskChatProps {
 
 export function AskChat({ paperId, onJumpToPage }: AskChatProps) {
   const queryClient = useQueryClient();
+  const isDemo = useIsDemo();
   const history = useQuery({ queryKey: paperQAKey(paperId), queryFn: () => listPaperQA(paperId) });
 
   const [question, setQuestion] = useState("");
@@ -113,7 +115,8 @@ export function AskChat({ paperId, onJumpToPage }: AskChatProps) {
           id={fieldId}
           rows={2}
           className="textarea flex-1"
-          placeholder="Ask a question about this paper"
+          placeholder={isDemo ? "Asking is switched off in the demo" : "Ask a question about this paper"}
+          disabled={isDemo}
           maxLength={1000}
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
@@ -125,7 +128,13 @@ export function AskChat({ paperId, onJumpToPage }: AskChatProps) {
             }
           }}
         />
-        <button type="submit" aria-label="Send question" className="btn w-10 px-0" disabled={ask.isPending || !question.trim()}>
+        <button
+          type="submit"
+          aria-label="Send question"
+          title={isDemo ? DEMO_HINT : undefined}
+          className="btn w-10 px-0"
+          disabled={ask.isPending || !question.trim() || isDemo}
+        >
           <ArrowUp size={18} />
         </button>
       </form>

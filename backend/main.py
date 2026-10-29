@@ -7,12 +7,19 @@ from backend.api.routes.search import router as search_router
 from backend.api.routes.pdf import router as pdf_router
 from backend.api.routes.auth import router as auth_router
 from backend.api.routes.history import router as history_router
-from backend.auth import current_user
+from backend.auth import block_demo_writes
 from backend.db import init_db
+from backend.demo import DEMO_ENABLED, seed_demo
+from backend.utils.logger import log
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
+    if DEMO_ENABLED:
+        try:
+            seed_demo()
+        except Exception as e:  # the demo is optional: without a demo user, /auth/demo just returns 404
+            log(f"Demo seeding failed, demo disabled: {e}")
     yield
 
 app = FastAPI(
@@ -43,7 +50,8 @@ async def require_csrf_header(request: Request, call_next):
     return await call_next(request)
 
 # Every feature route needs a logged-in user; only /auth/* and /health are public.
-login_required = [Depends(current_user)]
+# block_demo_writes resolves current_user too, and also keeps the demo account read-only.
+login_required = [Depends(block_demo_writes)]
 app.include_router(auth_router, prefix="/api/v1", tags=["AUTH"])
 app.include_router(search_router, prefix="/api/v1", tags=["SEARCH"], dependencies=login_required)
 app.include_router(pdf_router, prefix="/api/v1", tags=["PDF"], dependencies=login_required)

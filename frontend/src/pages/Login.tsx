@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { login, register } from "../api/endpoints";
+import { ArrowRight } from "lucide-react";
+import { listSavedPapers, login, register, startDemo } from "../api/endpoints";
 import { getErrorMessage } from "../lib/errors";
 import { ME_QUERY_KEY } from "../components/auth/RequireAuth";
 import { BrandMark } from "../components/layout/Sidebar";
@@ -12,7 +13,9 @@ export function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const state = location.state as { from?: string; mode?: "register" } | null;
+  // The demo banner's "Create your account" opens the register form directly.
+  const [mode, setMode] = useState<"login" | "register">(state?.mode === "register" ? "register" : "login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,8 +23,21 @@ export function Login() {
     mutationFn: () => (mode === "login" ? login : register)({ email, password }),
     onSuccess: (user) => {
       queryClient.setQueryData(ME_QUERY_KEY, user);
-      const from = (location.state as { from?: string } | null)?.from;
-      navigate(from && from !== "/login" ? from : "/", { replace: true });
+      navigate(state?.from && state.from !== "/login" ? state.from : "/", { replace: true });
+    },
+  });
+
+  // Straight into the demo paper: the highlighted PDF is the part worth seeing first.
+  const demo = useMutation({
+    mutationFn: async () => {
+      const user = await startDemo();
+      // The session is already set at this point, so a failed lookup still lands on the Dashboard.
+      const papers = await listSavedPapers().catch(() => []);
+      return { user, paperId: papers[0]?.paper_id };
+    },
+    onSuccess: ({ user, paperId }) => {
+      queryClient.setQueryData(ME_QUERY_KEY, user);
+      navigate(paperId ? `/workspace/${paperId}` : "/", { replace: true });
     },
   });
 
@@ -47,6 +63,18 @@ export function Login() {
             Search six sources at once, score every paper against what you're building, then read it with the relevant
             passages highlighted and ask it questions.
           </p>
+          <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <button type="button" className="btn-secondary" onClick={() => demo.mutate()} disabled={demo.isPending}>
+              {demo.isPending ? "Opening the demo…" : "Try the demo"}
+              {!demo.isPending && <ArrowRight size={16} aria-hidden />}
+            </button>
+            <p className="text-body-sm text-ink-subtle">No sign-up. A real paper and search, read-only.</p>
+          </div>
+          {demo.isError && (
+            <div className="mt-4 max-w-md">
+              <ErrorPanel message={getErrorMessage(demo.error)} />
+            </div>
+          )}
         </div>
 
         <form onSubmit={onSubmit} className="card flex flex-col gap-4 animate-rise" style={{ animationDelay: "80ms" }}>

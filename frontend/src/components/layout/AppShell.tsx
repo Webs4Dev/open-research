@@ -1,7 +1,8 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Eye, Menu, X } from "lucide-react";
 import { BrandMark, Sidebar } from "./Sidebar";
+import { useIsDemo, useLogout } from "../auth/RequireAuth";
 import { ErrorBoundary } from "../common/ErrorBoundary";
 
 export function AppShell() {
@@ -12,6 +13,8 @@ export function AppShell() {
   const pageRef = useRef<HTMLDivElement>(null);
   // The paper view (/workspace/<id>) is full width and scrolls inside its own panes (DESIGN.md).
   const fullBleed = /^\/workspace\/[^/]+$/.test(pathname);
+  const isDemo = useIsDemo();
+  const logoutTo = useLogout();
 
   // Escape closes the drawer; focus moves into it on open and back to the menu button on close.
   // The page behind is inert while it's open, so Tab can't leave the drawer.
@@ -49,6 +52,20 @@ export function AppShell() {
             <Menu size={20} />
           </button>
         </header>
+
+        {isDemo && (
+          <div className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1 border-b border-hairline bg-sky-soft px-4 py-2 text-body-sm text-sky lg:px-10">
+            <Eye size={16} className="shrink-0" aria-hidden />
+            <p>You're exploring a read-only demo. Searching, uploading and asking are switched off.</p>
+            <button
+              type="button"
+              className="rounded-sm font-semibold underline underline-offset-2 hover:no-underline"
+              onClick={() => logoutTo(true)}
+            >
+              Create your account
+            </button>
+          </div>
+        )}
 
         <main
           className={

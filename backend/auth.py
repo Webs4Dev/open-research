@@ -4,7 +4,7 @@ import os
 import secrets
 import threading
 
-from fastapi import HTTPException, Request
+from fastapi import Depends, HTTPException, Request
 from pydantic import BaseModel
 
 from backend.db import NOW, get_db
@@ -28,6 +28,7 @@ def scrypt(password: str, salt: bytes) -> bytes:
 class User(BaseModel):
     id: int
     email: str
+    is_demo: bool = False
 
 def hash_password(password: str) -> str:
     salt = secrets.token_bytes(16)
@@ -46,13 +47,13 @@ DUMMY_HASH = hash_password(secrets.token_hex(16))
 def hash_token(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
 
-def create_session(user_id: int) -> str:
+def create_session(user_id: int, days: int = SESSION_DAYS) -> str:
     token = secrets.token_urlsafe(32)
     with get_db() as db:
         db.execute(f"DELETE FROM sessions WHERE expires_at < {NOW}")
         db.execute(
             f"INSERT INTO sessions (token_hash, user_id, expires_at) "
-            f"VALUES (?, ?, strftime('%Y-%m-%dT%H:%M:%SZ', 'now', '+{SESSION_DAYS} days'))",
+            f"VALUES (?, ?, strftime('%Y-%m-%dT%H:%M:%SZ', 'now', '+{int(days)} days'))",
             (hash_token(token), user_id),
         )
     return token
@@ -61,11 +62,11 @@ def delete_session(token: str):
     with get_db() as db:
         db.execute("DELETE FROM sessions WHERE token_hash = ?", (hash_token(token),))
 
-def set_session_cookie(response, token: str):
+def set_session_cookie(response, token: str, days: int = SESSION_DAYS):
     response.set_cookie(
         SESSION_COOKIE,
         token,
-        max_age=SESSION_DAYS * 24 * 3600,
+        max_age=days * 24 * 3600,
         httponly=True,  # not readable from JavaScript, so XSS can't steal it
         secure=COOKIE_CROSS_SITE,
         samesite="none" if COOKIE_CROSS_SITE else "lax",
@@ -85,10 +86,18 @@ def current_user(request: Request) -> User:
     if token:
         with get_db() as db:
             row = db.execute(
-                f"SELECT users.id, users.email FROM sessions JOIN users ON users.id = sessions.user_id "
+                f"SELECT users.id, users.email, users.is_demo FROM sessions JOIN users ON users.id = sessions.user_id "
                 f"WHERE sessions.token_hash = ? AND sessions.expires_at > {NOW}",
                 (hash_token(token),),
             ).fetchone()
         if row:
-            return User(id=row["id"], email=row["email"])
+            return User(id=row["id"], email=row["email"], is_demo=bool(row["is_demo"]))
     raise HTTPException(status_code=401, detail="Please log in")
+
+DEMO_READ_ONLY = "The demo is read-only. Create a free account to run your own searches and upload papers."
+
+def block_demo_writes(request: Request, user: User = Depends(current_user)):
+    """FastAPI dependency for feature routes: the shared demo account may only read.
+    Deny-by-default on the method, so a new POST/DELETE route is covered without remembering to."""
+    if user.is_demo and request.method not in {"GET", "HEAD", "OPTIONS"}:
+        raise HTTPException(status_code=403, detail=DEMO_READ_ONLY)

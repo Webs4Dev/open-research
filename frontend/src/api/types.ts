@@ -101,6 +101,7 @@ export interface PDFIngestResponse {
 export interface User {
   id: number;
   email: string;
+  is_demo: boolean; // the shared read-only demo account (backend/demo.py)
 }
 
 export interface Credentials {

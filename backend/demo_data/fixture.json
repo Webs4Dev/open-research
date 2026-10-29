@@ -1,0 +1,2852 @@
+{
+ "paper": {
+  "paper_id": "8204e2a238a86af1",
+  "filename": "MIRIX (arXiv 2507.07957).pdf",
+  "pdf": "mirix-2507.07957.pdf"
+ },
+ "searches": [
+  {
+   "query": "Multi Agent Memory",
+   "result_count": 4,
+   "response": {
+    "query": "Multi Agent Memory",
+    "sources_requested": [
+     "arxiv",
+     "semantic_scholar"
+    ],
+    "total_papers_retrieved": 4,
+    "total_ranked": 4,
+    "source_report": {
+     "arxiv": {
+      "count": 2,
+      "status": "ok",
+      "retrieval_type": "api",
+      "duration": 1.39,
+      "error": null
+     },
+     "semantic_scholar": {
+      "count": 2,
+      "status": "ok",
+      "retrieval_type": "api",
+      "duration": 14.34,
+      "error": null
+     }
+    },
+    "retrieval_stats": {
+     "total_papers": 4,
+     "unique_papers": 4,
+     "duplicate_papers_removed": 0,
+     "successful_sources": 2,
+     "failed_sources": 0
+    },
+    "ranked_results": [
+     {
+      "paper_name": "A Survey of Multi-Agent Deep Reinforcement Learning with Communication",
+      "source": "arxiv",
+      "published_year": 2022,
+      "pdf_status": "available",
+      "paper_url": "https://arxiv.org/pdf/2203.08975v2",
+      "scores": {
+       "topic_match": 25,
+       "project_relevance": 20,
+       "research_similarity": 15,
+       "recency": 10,
+       "potential_value": 8,
+       "pdf_availability": 15
+      },
+      "total_score": 93,
+      "why_it_matches": [
+       "Focuses on multi-agent systems.",
+       "Discusses communication in MADRL."
+      ],
+      "useful_ideas": [
+       "Nine dimensions for Comm-MADRL analysis.",
+       "Future directions for designing MADRL systems."
+      ],
+      "pdf_usefulness": "The PDF allows for in-depth exploration of communication dimensions in multi-agent systems."
+     },
+     {
+      "paper_name": "MIRIX: Multi-Agent Memory System for LLM-Based Agents",
+      "source": "semantic_scholar",
+      "published_year": 2025,
+      "pdf_status": "unavailable",
+      "paper_url": "https://www.semanticscholar.org/paper/a38a3460a68c50270548977e66162e92f195334c",
+      "scores": {
+       "topic_match": 25,
+       "project_relevance": 25,
+       "research_similarity": 15,
+       "recency": 10,
+       "potential_value": 10,
+       "pdf_availability": 0
+      },
+      "total_score": 85,
+      "why_it_matches": [
+       "Focus on multi-agent memory systems.",
+       "Addresses memory capabilities in AI agents."
+      ],
+      "useful_ideas": [
+       "Modular design of memory components.",
+       "Strategies for personalizing user interactions."
+      ],
+      "pdf_usefulness": "PDF is unavailable, limiting detailed analysis."
+     },
+     {
+      "paper_name": "PBFT-Backed Semantic Voting for Multi-Agent Memory Pruning",
+      "source": "semantic_scholar",
+      "published_year": 2025,
+      "pdf_status": "unavailable",
+      "paper_url": "https://www.semanticscholar.org/paper/1341f5e68914ea7a462f9cc31ac24e71eb5a7ac4",
+      "scores": {
+       "topic_match": 25,
+       "project_relevance": 20,
+       "research_similarity": 10,
+       "recency": 10,
+       "potential_value": 10,
+       "pdf_availability": 0
+      },
+      "total_score": 75,
+      "why_it_matches": [
+       "Directly addresses multi-agent memory management",
+       "Proposes novel protocols for memory pruning"
+      ],
+      "useful_ideas": [
+       "Context-aware semantic voting for memory relevance",
+       "PBFT-based consensus for distributed systems"
+      ],
+      "pdf_usefulness": "PDF unavailability limits deeper analysis opportunities."
+     },
+     {
+      "paper_name": "A Methodology to Engineer and Validate Dynamic Multi-level Multi-agent Based Simulations",
+      "source": "arxiv",
+      "published_year": 2013,
+      "pdf_status": "available",
+      "paper_url": "https://arxiv.org/pdf/1311.5108v1",
+      "scores": {
+       "topic_match": 20,
+       "project_relevance": 15,
+       "research_similarity": 10,
+       "recency": 0,
+       "potential_value": 5,
+       "pdf_availability": 15
+      },
+      "total_score": 65,
+      "why_it_matches": [
+       "Focus on multi-agent systems",
+       "Discusses dynamic multi-level simulations"
+      ],
+      "useful_ideas": [
+       "Methodology for agent activation/deactivation",
+       "Techniques for agent aggregation/disaggregation"
+      ],
+      "pdf_usefulness": "The PDF allows for in-depth exploration of methodologies and techniques."
+     }
+    ]
+   }
+  }
+ ],
+ "analysis": {
+  "project_description": "A long-term memory system for LLMs to store what they forget",
+  "response": {
+   "filename": "MIRIX (arXiv 2507.07957).pdf",
+   "paper_id": "8204e2a238a86af1",
+   "pages": 17,
+   "chunk_count": 83,
+   "relevant_chunks": [
+    {
+     "chunk_id": 69,
+     "chunk_text": "6 Conclusion and Future Work In this work, we introduce MIRIX, a novel memory architecture designed to enhance the longterm reasoning and personalization capabilities of LLM-based agents. Unlike existing memory systems that primarily rely on flat storage or limited memory types, MIRIX leverages a structured and compositional approach, incorporating six specialized memory components—Core, Episodic, Semantic, Procedural, Resource, and Knowledge Vault—managed by dedicated Memory Managers under the coordination of a Meta Memory Manager. To rigorously evaluate our system, we introduce a challenging multimodal benchmark based on high-resolution screenshots of real user activity, demonstrating that MIRIX achieves substantial gains in accuracy and storage efficiency compared to both retrieval-augmented generation and long-context baselines. Experiments on the LOCOMO benchmark confirm that MIRIX delivers state-of-the-art performance in long-form conversational settings. Finally, to make these capabilities accessible to a broader audience, we build and release a personal assistant application powered by MIRIX, allowing users to experience consistent, memoryenhanced interactions in everyday scenarios.",
+     "page_no": 13,
+     "relevance_score": 90,
+     "chunk_type": "conclusion",
+     "reason": "This chunk effectively summarizes the design and efficacy of MIRIX as a novel memory architecture, which is highly relevant for the user's intent to enhance long-term memory systems.",
+     "suggested_use": "The user could directly adapt the architectural insights from MIRIX into their own memory implementation.",
+     "boxes": [
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.4341,
+       "x1": 0.1862,
+       "y1": 0.4491
+      },
+      {
+       "page_no": 13,
+       "x0": 0.2058,
+       "y0": 0.4341,
+       "x1": 0.4498,
+       "y1": 0.4491
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.4652,
+       "x1": 0.8262,
+       "y1": 0.4779
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.479,
+       "x1": 0.8241,
+       "y1": 0.4917
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.4927,
+       "x1": 0.8235,
+       "y1": 0.5054
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.5065,
+       "x1": 0.8256,
+       "y1": 0.5192
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.5204,
+       "x1": 0.8235,
+       "y1": 0.533
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.5342,
+       "x1": 0.8235,
+       "y1": 0.5467
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.5478,
+       "x1": 0.8256,
+       "y1": 0.5605
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.5616,
+       "x1": 0.8235,
+       "y1": 0.5743
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.5754,
+       "x1": 0.8235,
+       "y1": 0.5881
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.5892,
+       "x1": 0.8235,
+       "y1": 0.6019
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.603,
+       "x1": 0.8235,
+       "y1": 0.6156
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.6168,
+       "x1": 0.8262,
+       "y1": 0.6294
+      },
+      {
+       "page_no": 13,
+       "x0": 0.1765,
+       "y0": 0.6305,
+       "x1": 0.476,
+       "y1": 0.6432
+      }
+     ]
+    },
+    {
+     "chunk_id": 1,
+     "chunk_text": "Abstract Although memory capabilities of AI agents are gaining increasing attention, existing solutions remain fundamentally limited. Most rely on flat, narrowly scoped memory components, constraining their ability to personalize, abstract, and reliably recall user-specific information over time. To this end, we introduce MIRIX, a modular, multi-agent memory system that redefines the future of AI memory by solving the field’s most critical challenge: enabling language models to truly remember. Unlike prior approaches, MIRIX transcends text to embrace rich visual and multimodal experiences, making memory genuinely useful in real-world scenarios. MIRIX consists of six distinct, carefully structured memory types: Core, Episodic, Semantic, Procedural, Resource Memory, and Knowledge Vault, coupled with a multi-agent framework that dynamically controls and coordinates updates and retrieval. This design enables agents to persist, reason over, and accurately retrieve diverse, long-term user data at scale.",
+     "page_no": 1,
+     "relevance_score": 85,
+     "chunk_type": "introduction",
+     "reason": "This abstract directly describes the MIRIX memory system, which is relevant to the user's project focusing on long-term memory for LLMs. It outlines both the problem and the solution being addressed.",
+     "suggested_use": "The user could implement or adapt the MIRIX memory system as a foundation for their long-term memory project.",
+     "boxes": [
+      {
+       "page_no": 1,
+       "x0": 0.4637,
+       "y0": 0.3338,
+       "x1": 0.5363,
+       "y1": 0.3489
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2345,
+       "y0": 0.365,
+       "x1": 0.7676,
+       "y1": 0.3777
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.3789,
+       "x1": 0.7649,
+       "y1": 0.3915
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.3927,
+       "x1": 0.7655,
+       "y1": 0.4052
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.4065,
+       "x1": 0.7676,
+       "y1": 0.419
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.4203,
+       "x1": 0.7649,
+       "y1": 0.4327
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.4337,
+       "x1": 0.7678,
+       "y1": 0.4466
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.4477,
+       "x1": 0.7676,
+       "y1": 0.4603
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.4614,
+       "x1": 0.7678,
+       "y1": 0.4741
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.4754,
+       "x1": 0.767,
+       "y1": 0.4879
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.489,
+       "x1": 0.7649,
+       "y1": 0.5017
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.5027,
+       "x1": 0.7649,
+       "y1": 0.5154
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.5167,
+       "x1": 0.7649,
+       "y1": 0.5292
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.5305,
+       "x1": 0.465,
+       "y1": 0.5429
+      }
+     ]
+    },
+    {
+     "chunk_id": 3,
+     "chunk_text": "1 Introduction Recent advancements in large language model (LLM) agents have focused primarily on improving their capabilities in complex task execution—ranging from code debugging and repository management to autonomous web browsing. While these functionalities are crucial, another foundational yet underexplored dimension is memory: the ability of agents to persist, retrieve, and utilize past user-specific information over time. Human cognition relies heavily on memory—recalling conversations, recognizing patterns, and adapting behavior based on prior experience. Analogously, memory mechanisms in LLM agents are essential for delivering consistent, personalized interactions, learning from feedback, and avoiding repetitive queries. However, most LLM-based personal assistants remain stateless beyond their current prompt window, retaining no lasting memory unless context is explicitly re-provided. This limitation hinders their long-term usability, especially in real-world settings where users expect assistants to evolve, recall, and personalize over time [29].",
+     "page_no": 1,
+     "relevance_score": 85,
+     "chunk_type": "introduction",
+     "reason": "This introduction outlines the current limitations in memory capabilities of LLMs and discusses the necessity of persistent memory systems. It aligns well with the user's aim to address these very limitations.",
+     "suggested_use": "The user could draw inspiration from the outlined problems to frame their own working or research direction.",
+     "boxes": [
+      {
+       "page_no": 1,
+       "x0": 0.1765,
+       "y0": 0.7212,
+       "x1": 0.1862,
+       "y1": 0.7363
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2058,
+       "y0": 0.7212,
+       "x1": 0.3118,
+       "y1": 0.7363
+      },
+      {
+       "page_no": 1,
+       "x0": 0.1765,
+       "y0": 0.7522,
+       "x1": 0.8235,
+       "y1": 0.7648
+      },
+      {
+       "page_no": 1,
+       "x0": 0.1765,
+       "y0": 0.766,
+       "x1": 0.8262,
+       "y1": 0.7786
+      },
+      {
+       "page_no": 1,
+       "x0": 0.1765,
+       "y0": 0.7797,
+       "x1": 0.8235,
+       "y1": 0.7924
+      },
+      {
+       "page_no": 1,
+       "x0": 0.1761,
+       "y0": 0.7935,
+       "x1": 0.8235,
+       "y1": 0.8062
+      },
+      {
+       "page_no": 1,
+       "x0": 0.1765,
+       "y0": 0.8074,
+       "x1": 0.8262,
+       "y1": 0.8199
+      },
+      {
+       "page_no": 1,
+       "x0": 0.1765,
+       "y0": 0.8211,
+       "x1": 0.8241,
+       "y1": 0.8337
+      },
+      {
+       "page_no": 1,
+       "x0": 0.1765,
+       "y0": 0.835,
+       "x1": 0.8235,
+       "y1": 0.8474
+      },
+      {
+       "page_no": 1,
+       "x0": 0.1765,
+       "y0": 0.8488,
+       "x1": 0.8235,
+       "y1": 0.8612
+      },
+      {
+       "page_no": 1,
+       "x0": 0.1765,
+       "y0": 0.8625,
+       "x1": 0.8241,
+       "y1": 0.875
+      },
+      {
+       "page_no": 1,
+       "x0": 0.1765,
+       "y0": 0.8763,
+       "x1": 0.8235,
+       "y1": 0.8888
+      },
+      {
+       "page_no": 1,
+       "x0": 0.1765,
+       "y0": 0.89,
+       "x1": 0.64,
+       "y1": 0.9026
+      }
+     ]
+    },
+    {
+     "chunk_id": 9,
+     "chunk_text": "To address the limitations of existing memory systems, we argue that effective Routing and Retrieving are the key capabilities a memory-augmented agent must possess. Most current systems focus primarily on Short-Term and Long-Term Memory [22, 32, 25], with some incorporating Mid-Term Memory [12]. In contrast, we draw inspiration from works that explore more specialized memory types, including episodic memory [23, 18, 1], semantic memory [15], and procedural memory [33]. Building on these foundations, we propose a more comprehensive architecture consisting of six memory components: Core Memory, Episodic Memory, Semantic Memory, Procedural Memory, Resource Memory, and the Knowledge Vault (As shown in Figure 1). Episodic Memory stores user-specific events and experiences; Semantic Memory captures concepts and named entities (e.g., the meaning of a new phrase or an understanding of a person); Procedural Memory records step-by-step instructions for performing tasks. Resource Memory is designed to store documents, files, and other media shared by the user.",
+     "page_no": 2,
+     "relevance_score": 85,
+     "chunk_type": "methodology",
+     "reason": "This chunk proposes a new architecture with specialized memory components, directly outlining a technique the user could implement or adapt for their long-term memory system.",
+     "suggested_use": "The user could explore implementing the proposed six memory components to enhance their memory system for LLMs.",
+     "boxes": [
+      {
+       "page_no": 2,
+       "x0": 0.176,
+       "y0": 0.5138,
+       "x1": 0.8262,
+       "y1": 0.5264
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.5274,
+       "x1": 0.8235,
+       "y1": 0.5402
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.5413,
+       "x1": 0.8235,
+       "y1": 0.5539
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.555,
+       "x1": 0.8241,
+       "y1": 0.5677
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.5689,
+       "x1": 0.8264,
+       "y1": 0.5815
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.5826,
+       "x1": 0.8239,
+       "y1": 0.5953
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.5964,
+       "x1": 0.8256,
+       "y1": 0.609
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.61,
+       "x1": 0.8235,
+       "y1": 0.6228
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.624,
+       "x1": 0.8256,
+       "y1": 0.6366
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.6378,
+       "x1": 0.8262,
+       "y1": 0.6504
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.6515,
+       "x1": 0.8235,
+       "y1": 0.6641
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.6652,
+       "x1": 0.3826,
+       "y1": 0.6779
+      }
+     ]
+    },
+    {
+     "chunk_id": 21,
+     "chunk_text": "Our memory system is well-suited for integration into such wearable devices. By continuously collecting and processing data streams such as audio, visual scenes, and user queries, our system enables real-time memory formation. For instance, AI glasses equipped with our memory systems can automatically summarize meetings, remember frequently visited places, recognize recurring visual patterns, and recall previous conversations or tasks. With MIRIX, it can also evolve with the user and build a memory that is specifically made for the user. Moreover, the system’s modular memory architecture—including procedural, episodic, semantic, and resource memory—aligns naturally with the needs of lightweight, on-the-go devices. Procedural memory enables the assistant to learn user habits (e.g., daily routes, meeting structures), while semantic memory stores general knowledge about the user’s preferences, environment, and routines. Episodic memory captures time-stamped, situational experiences, and can be queried for recalling specific events (e.g., “What did I see at the conference last week?”).",
+     "page_no": 4,
+     "relevance_score": 85,
+     "chunk_type": "methodology",
+     "reason": "This chunk directly describes a memory system designed for wearable devices that enables real-time memory formation, adapting to user needs. It outlines various types of memory that could be modeled or adapted for the user’s long-term memory system.",
+     "suggested_use": "The user could implement the modular memory architecture described in this chunk in their own system.",
+     "boxes": [
+      {
+       "page_no": 4,
+       "x0": 0.1765,
+       "y0": 0.6722,
+       "x1": 0.8241,
+       "y1": 0.6849
+      },
+      {
+       "page_no": 4,
+       "x0": 0.1765,
+       "y0": 0.6859,
+       "x1": 0.8235,
+       "y1": 0.6986
+      },
+      {
+       "page_no": 4,
+       "x0": 0.1765,
+       "y0": 0.6999,
+       "x1": 0.8235,
+       "y1": 0.7123
+      },
+      {
+       "page_no": 4,
+       "x0": 0.1765,
+       "y0": 0.7135,
+       "x1": 0.8235,
+       "y1": 0.7262
+      },
+      {
+       "page_no": 4,
+       "x0": 0.1765,
+       "y0": 0.7272,
+       "x1": 0.8238,
+       "y1": 0.74
+      },
+      {
+       "page_no": 4,
+       "x0": 0.1765,
+       "y0": 0.7411,
+       "x1": 0.8241,
+       "y1": 0.7537
+      },
+      {
+       "page_no": 4,
+       "x0": 0.1765,
+       "y0": 0.755,
+       "x1": 0.8235,
+       "y1": 0.7674
+      },
+      {
+       "page_no": 4,
+       "x0": 0.1765,
+       "y0": 0.7686,
+       "x1": 0.8238,
+       "y1": 0.7813
+      },
+      {
+       "page_no": 4,
+       "x0": 0.1765,
+       "y0": 0.7823,
+       "x1": 0.8235,
+       "y1": 0.795
+      },
+      {
+       "page_no": 4,
+       "x0": 0.1765,
+       "y0": 0.7961,
+       "x1": 0.8256,
+       "y1": 0.8088
+      },
+      {
+       "page_no": 4,
+       "x0": 0.1765,
+       "y0": 0.81,
+       "x1": 0.8235,
+       "y1": 0.8226
+      },
+      {
+       "page_no": 4,
+       "x0": 0.1765,
+       "y0": 0.8239,
+       "x1": 0.3334,
+       "y1": 0.8363
+      }
+     ]
+    },
+    {
+     "chunk_id": 29,
+     "chunk_text": "3 Methodology 3.1 Memory Components We design a modular memory architecture consisting of six distinct components: Core Memory, Episodic Memory, Semantic Memory, Procedural Memory, Resource Memory, and the Knowledge Vault. Each component is structurally and functionally tailored to capture different aspects of user interaction and world knowledge, enabling the agent to retrieve, reason, and act effectively across time and tasks.",
+     "page_no": 6,
+     "relevance_score": 85,
+     "chunk_type": "methodology",
+     "reason": "This chunk details a modular memory architecture with specific components which are crucial for supporting long-term memory in intelligent systems. This architectural framework can be directly implemented by the user.",
+     "suggested_use": "The user could adopt this modular design for their own long-term memory system.",
+     "boxes": [
+      {
+       "page_no": 6,
+       "x0": 0.1765,
+       "y0": 0.5365,
+       "x1": 0.1862,
+       "y1": 0.5516
+      },
+      {
+       "page_no": 6,
+       "x0": 0.2058,
+       "y0": 0.5365,
+       "x1": 0.3154,
+       "y1": 0.5516
+      },
+      {
+       "page_no": 6,
+       "x0": 0.1765,
+       "y0": 0.5677,
+       "x1": 0.1968,
+       "y1": 0.5803
+      },
+      {
+       "page_no": 6,
+       "x0": 0.2131,
+       "y0": 0.5677,
+       "x1": 0.3646,
+       "y1": 0.5803
+      },
+      {
+       "page_no": 6,
+       "x0": 0.1757,
+       "y0": 0.5929,
+       "x1": 0.8256,
+       "y1": 0.6057
+      },
+      {
+       "page_no": 6,
+       "x0": 0.1765,
+       "y0": 0.6068,
+       "x1": 0.8262,
+       "y1": 0.6194
+      },
+      {
+       "page_no": 6,
+       "x0": 0.1765,
+       "y0": 0.6204,
+       "x1": 0.8235,
+       "y1": 0.6332
+      },
+      {
+       "page_no": 6,
+       "x0": 0.1765,
+       "y0": 0.6343,
+       "x1": 0.8241,
+       "y1": 0.647
+      },
+      {
+       "page_no": 6,
+       "x0": 0.1765,
+       "y0": 0.6482,
+       "x1": 0.3184,
+       "y1": 0.6607
+      }
+     ]
+    },
+    {
+     "chunk_id": 38,
+     "chunk_text": "To address this, we propose an Active Retrieval mechanism. As illustrated in Figure 5, the system operates in two stages: first, the agent generates a current topic based on the input context; second, this topic is used to retrieve relevant memories from each memory component. Retrieved results are then injected into the system prompt. For instance, given the query “Who is the CEO of Twitter?”, the agent may infer the topic “CEO of Twitter”, which is then used to retrieve the top-10 most relevant entries from each of the six memory components. Retrieved content is tagged according to its source, such as <episodic_memory>... </episodic_memory>, ensuring the model is aware of both the content and its origin. This automatic retrieval pipeline eliminates the need for explicit user prompts to trigger memory access and ensures the model can incorporate up-to-date, personalized, or contextual information during response generation.",
+     "page_no": 8,
+     "relevance_score": 85,
+     "chunk_type": "methodology",
+     "reason": "The proposal for an Active Retrieval mechanism provides a clear method for improving memory access in long-term applications. This is directly applicable to the user’s project.",
+     "suggested_use": "The user could implement the active retrieval mechanism to enhance contextual memory recall.",
+     "boxes": [
+      {
+       "page_no": 8,
+       "x0": 0.176,
+       "y0": 0.4917,
+       "x1": 0.8235,
+       "y1": 0.5045
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.5054,
+       "x1": 0.8256,
+       "y1": 0.5183
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.5195,
+       "x1": 0.8235,
+       "y1": 0.532
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.5331,
+       "x1": 0.8256,
+       "y1": 0.5458
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.5469,
+       "x1": 0.8235,
+       "y1": 0.5596
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.5608,
+       "x1": 0.8235,
+       "y1": 0.5733
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.5745,
+       "x1": 0.8235,
+       "y1": 0.5874
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.5884,
+       "x1": 0.8238,
+       "y1": 0.6009
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.6022,
+       "x1": 0.8238,
+       "y1": 0.6146
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.6159,
+       "x1": 0.5094,
+       "y1": 0.6284
+      }
+     ]
+    },
+    {
+     "chunk_id": 40,
+     "chunk_text": "3.3 Multi-Agent Workflow To manage the dynamic and heterogeneous nature of user interactions, we adopt a modular multiagent architecture. This system orchestrates input processing, memory updating, and information retrieval across six distinct memory components through a coordinated and efficient workflow. The overall system is governed by a central Meta Memory Manager and a set of specialized Memory Managers, each responsible for maintaining one memory type.",
+     "page_no": 8,
+     "relevance_score": 85,
+     "chunk_type": "methodology",
+     "reason": "This chunk describes a modular multi-agent architecture designed to manage memory interactions, which directly relates to building long-term memory systems for LLMs. The orchestration of memory components is particularly relevant for implementing a memory system.",
+     "suggested_use": "The user could adapt this multi-agent workflow to enhance memory management in their long-term memory system.",
+     "boxes": [
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.7138,
+       "x1": 0.1968,
+       "y1": 0.7264
+      },
+      {
+       "page_no": 8,
+       "x0": 0.2131,
+       "y0": 0.7138,
+       "x1": 0.3713,
+       "y1": 0.7264
+      },
+      {
+       "page_no": 8,
+       "x0": 0.176,
+       "y0": 0.7411,
+       "x1": 0.8262,
+       "y1": 0.7538
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.7549,
+       "x1": 0.8235,
+       "y1": 0.7676
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.7688,
+       "x1": 0.8235,
+       "y1": 0.7814
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.7822,
+       "x1": 0.8235,
+       "y1": 0.7952
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1758,
+       "y0": 0.7961,
+       "x1": 0.5845,
+       "y1": 0.8089
+      }
+     ]
+    },
+    {
+     "chunk_id": 41,
+     "chunk_text": "Memory Update Workflow As illustrated in Figure 7, when new input is received from the user, the system first automatically performs a search over the memory base. The retrieved information, together with the user input, is passed to the Meta Memory Manager. The Meta Memory Manager then analyzes the content and determines which memory components are relevant, routing the input to the corresponding Memory Managers. These Memory Managers update their respective memories in parallel while ensuring that redundant information is avoided within each memory type. After",
+     "page_no": 8,
+     "relevance_score": 85,
+     "chunk_type": "methodology",
+     "reason": "The description of the memory update workflow details how information is processed and updated, relevant for maintaining a long-term memory system. It introduces key steps in memory updating which the user could implement.",
+     "suggested_use": "The user could implement this workflow to structure how memory updates are handled in their system.",
+     "boxes": [
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.8305,
+       "x1": 0.3644,
+       "y1": 0.8432
+      },
+      {
+       "page_no": 8,
+       "x0": 0.3807,
+       "y0": 0.8306,
+       "x1": 0.8256,
+       "y1": 0.8433
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.8444,
+       "x1": 0.8256,
+       "y1": 0.8571
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.8579,
+       "x1": 0.8235,
+       "y1": 0.8708
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.872,
+       "x1": 0.8235,
+       "y1": 0.8846
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.8856,
+       "x1": 0.8235,
+       "y1": 0.8983
+      },
+      {
+       "page_no": 8,
+       "x0": 0.1765,
+       "y0": 0.8995,
+       "x1": 0.8238,
+       "y1": 0.9122
+      }
+     ]
+    },
+    {
+     "chunk_id": 60,
+     "chunk_text": "Single-Hop and Temporal: On fact lookup and temporal-ordering tasks, MIRIX shows significantly better performances than baselines, which validates the effectiveness of our hierarchical memory storage. We note that there is a minor gap between MIRIX and the Full-Context baseline on Single- Hop questions. Upon reviewing the results, we identified a major reason for this. In some cases, the questions are ambiguous. For example, consider the question “When is Melanie planning on going camping?” In the conversation history, Melanie stated “We’re thinking about going camping next month” in May, which would suggest June as the answer. However, she later mentioned in October, “Absolutely! It really helps me reset and recharge. I love camping trips with my fam, ’cause nature brings such peace and serenity,” referring to a more recent trip. Because MIRIX saves the consolidated event “On 19 October 2023, Melanie and her family went camping after their road trip,” it tends to prioritize the confirmed occurrence over the earlier plan, leading to discrepancies when the question expects the planned date rather than the actual event.",
+     "page_no": 12,
+     "relevance_score": 85,
+     "chunk_type": "results",
+     "reason": "This chunk presents experimental results on MIRIX's performance in fact lookup and temporal-ordering tasks, which are relevant for building a long-term memory system. It also identifies specific ambiguities that could impact memory performance, which is crucial for understanding limitations in memory retrieval.",
+     "suggested_use": "The user could adapt the findings on temporal ordering and ambiguity handling in MIRIX to improve their long-term memory system.",
+     "boxes": [
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.1284,
+       "x1": 0.8241,
+       "y1": 0.141
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.1421,
+       "x1": 0.8241,
+       "y1": 0.1548
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.156,
+       "x1": 0.8262,
+       "y1": 0.1685
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.1696,
+       "x1": 0.8256,
+       "y1": 0.1823
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.1832,
+       "x1": 0.8235,
+       "y1": 0.1961
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.197,
+       "x1": 0.8235,
+       "y1": 0.2099
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.2107,
+       "x1": 0.8235,
+       "y1": 0.2237
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.2247,
+       "x1": 0.8235,
+       "y1": 0.2374
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.2383,
+       "x1": 0.8235,
+       "y1": 0.2512
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.2523,
+       "x1": 0.8271,
+       "y1": 0.2649
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.2663,
+       "x1": 0.8235,
+       "y1": 0.2787
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.28,
+       "x1": 0.5707,
+       "y1": 0.2925
+      }
+     ]
+    },
+    {
+     "chunk_id": 62,
+     "chunk_text": "Multi-Hop: MIRIX demonstrates the largest gains in this category, outperforming all baselines by over 24 points. For example, in questions such as “Where did Caroline move from 4 years ago?”, where the correct answer is Sweden, the supporting evidence is dispersed across multiple parts of the conversation. One part may state “Caroline moved from her hometown 4 years ago”, while an earlier statement establishes that “Caroline’s hometown is Sweden”. For multi-hop questions like these, MIRIX achieves better performance because it explicitly stores the consolidated event “Caroline moved from her hometown, Sweden, 4 years ago”, removing the need to stitch together partial information at query time. In contrast, full-context methods must first retrieve the partial answer “hometown” and then figure out separately that “hometown” refers to “Swedon”. These multi-hop questions might be easy for reasoning models like OpenAI-O3, but for non-reasoning models such as gpt-4.1-mini, this additional reasoning step might fail, leading to slightly inferior performance compared with MIRIX.",
+     "page_no": 12,
+     "relevance_score": 85,
+     "chunk_type": "results",
+     "reason": "This chunk illustrates MIRIX's performance on multi-hop questions, showcasing how effective long-term memory can enhance retrieval of dispersed information. The description of how MIRIX alleviates reasoning burdens could directly apply to the user's project goals.",
+     "suggested_use": "The user may implement similar multi-hop strategies in their own long-term memory architecture.",
+     "boxes": [
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.3142,
+       "x1": 0.8241,
+       "y1": 0.327
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.3279,
+       "x1": 0.8256,
+       "y1": 0.3408
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1759,
+       "y0": 0.3419,
+       "x1": 0.8235,
+       "y1": 0.3546
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.3554,
+       "x1": 0.8235,
+       "y1": 0.3683
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.3692,
+       "x1": 0.8235,
+       "y1": 0.3821
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.3832,
+       "x1": 0.8235,
+       "y1": 0.3959
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1701,
+       "y0": 0.3967,
+       "x1": 0.8238,
+       "y1": 0.4097
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.4107,
+       "x1": 0.8235,
+       "y1": 0.4234
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.4243,
+       "x1": 0.8235,
+       "y1": 0.4372
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.4383,
+       "x1": 0.8235,
+       "y1": 0.451
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.4522,
+       "x1": 0.8238,
+       "y1": 0.465
+      },
+      {
+       "page_no": 12,
+       "x0": 0.1765,
+       "y0": 0.4659,
+       "x1": 0.4161,
+       "y1": 0.4785
+      }
+     ]
+    },
+    {
+     "chunk_id": 81,
+     "chunk_text": "Method Single Hop Multi-Hop Open Domain Temporal Overall gpt-4o-mini A-Mem 39.79 18.85 54.05 49.91 48.38 LangMem 62.23 47.92 71.12 23.43 58.10 OpenAI 63.79 42.92 62.29 21.71 52.90 Mem0 67.13 51.15 72.93 55.51 66.88 Mem0g 65.71 47.19 75.71 58.13 68.44 Memobase 63.83 52.08 71.82 80.37 70.91 Zep 74.11 66.04 67.71 79.76 75.14",
+     "page_no": 17,
+     "relevance_score": 85,
+     "chunk_type": "results",
+     "reason": "This chunk provides performance metrics across different methods, which could directly inform the user about effective strategies for implementing a long-term memory system. The comparisons highlight various techniques relevant to the user's project.",
+     "suggested_use": "The user could leverage the performance data of existing methods like LangMem and Mem0 to inform the design of their memory system.",
+     "boxes": [
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.1966,
+       "x1": 0.2832,
+       "y1": 0.2091
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3728,
+       "y0": 0.1966,
+       "x1": 0.4492,
+       "y1": 0.2091
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4688,
+       "y0": 0.1966,
+       "x1": 0.5429,
+       "y1": 0.2091
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5625,
+       "y0": 0.1966,
+       "x1": 0.6597,
+       "y1": 0.2091
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6792,
+       "y0": 0.1966,
+       "x1": 0.7465,
+       "y1": 0.2091
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7666,
+       "y0": 0.1966,
+       "x1": 0.8189,
+       "y1": 0.2091
+      },
+      {
+       "page_no": 17,
+       "x0": 0.185,
+       "y0": 0.2406,
+       "x1": 0.2012,
+       "y1": 0.3035
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.217,
+       "x1": 0.2805,
+       "y1": 0.2296
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.217,
+       "x1": 0.4293,
+       "y1": 0.2296
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.217,
+       "x1": 0.5242,
+       "y1": 0.2296
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.217,
+       "x1": 0.6294,
+       "y1": 0.2296
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.217,
+       "x1": 0.7312,
+       "y1": 0.2296
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.217,
+       "x1": 0.8111,
+       "y1": 0.2296
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.2308,
+       "x1": 0.2967,
+       "y1": 0.2434
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.2308,
+       "x1": 0.4293,
+       "y1": 0.2434
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.2308,
+       "x1": 0.5242,
+       "y1": 0.2434
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.2308,
+       "x1": 0.6294,
+       "y1": 0.2434
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.2308,
+       "x1": 0.7312,
+       "y1": 0.2434
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.2308,
+       "x1": 0.8111,
+       "y1": 0.2434
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.2446,
+       "x1": 0.2814,
+       "y1": 0.2571
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.2446,
+       "x1": 0.4293,
+       "y1": 0.2571
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.2446,
+       "x1": 0.5242,
+       "y1": 0.2571
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.2446,
+       "x1": 0.6294,
+       "y1": 0.2571
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.2446,
+       "x1": 0.7312,
+       "y1": 0.2571
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.2446,
+       "x1": 0.8111,
+       "y1": 0.2571
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.2583,
+       "x1": 0.2714,
+       "y1": 0.2709
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.2583,
+       "x1": 0.4293,
+       "y1": 0.2709
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.2583,
+       "x1": 0.5242,
+       "y1": 0.2709
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.2583,
+       "x1": 0.6294,
+       "y1": 0.2709
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.2583,
+       "x1": 0.7312,
+       "y1": 0.2709
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.2583,
+       "x1": 0.8111,
+       "y1": 0.2709
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.2702,
+       "x1": 0.2778,
+       "y1": 0.2847
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.2721,
+       "x1": 0.4293,
+       "y1": 0.2847
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.2721,
+       "x1": 0.5242,
+       "y1": 0.2847
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.272,
+       "x1": 0.6294,
+       "y1": 0.2846
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.2721,
+       "x1": 0.7312,
+       "y1": 0.2847
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.2721,
+       "x1": 0.8111,
+       "y1": 0.2847
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.2859,
+       "x1": 0.3004,
+       "y1": 0.2985
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.2859,
+       "x1": 0.4293,
+       "y1": 0.2985
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.2859,
+       "x1": 0.5242,
+       "y1": 0.2985
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.2859,
+       "x1": 0.6294,
+       "y1": 0.2985
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.2859,
+       "x1": 0.7312,
+       "y1": 0.2985
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.2859,
+       "x1": 0.8111,
+       "y1": 0.2985
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.2997,
+       "x1": 0.2542,
+       "y1": 0.3122
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.2997,
+       "x1": 0.4293,
+       "y1": 0.3122
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.2997,
+       "x1": 0.5242,
+       "y1": 0.3122
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.2997,
+       "x1": 0.6294,
+       "y1": 0.3122
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.2997,
+       "x1": 0.7312,
+       "y1": 0.3122
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.2997,
+       "x1": 0.8111,
+       "y1": 0.3122
+      }
+     ]
+    },
+    {
+     "chunk_id": 82,
+     "chunk_text": "Full-Context 80.14 46.89 58.33 90.49 77.51 gpt-4.1-mini LangMem 76.24 63.24 63.54 88.11 79.22 RAG-500 37.94 37.69 48.96 61.83 51.62 Mem0 62.41 57.32 44.79 66.47 62.47 MIRIX-Run1 85.46 80.06 64.58 87.16 83.98 MIRIX-Run2 85.46 85.36 64.58 91.32 87.34 MIRIX-Run3 84.40 85.67 67.71 86.68 84.82 Full-Context-Run1 88.30 71.74 72.92 92.98 86.43 Full-Context-Run2 88.29 81.31 71.88 92.50 88.13 Full-Context-Run3 89.01 80.06 70.83 92.63 88.00 Table 3: LLM-as-a-Judge scores (%, higher is better) for each question type in the LOCOMO dataset. As mentioned in Mem0 [5], as the average length in this dataset is only 9k, Full-Context is almost the upper-bound. Thus recovering the performance of Full-Context shows the advancements of MIRIX. For Zep, we only achieve 49.09 overall score with gpt-4.1-mini using the implementation from mem0, we are afraid there might be errors in their implementation, so we skip the results here.",
+     "page_no": 17,
+     "relevance_score": 85,
+     "chunk_type": "results",
+     "reason": "Similar to chunk 81, this chunk offers detailed performance results of various approaches, including MIRIX. This information is critical for understanding the effectiveness of different methods in managing long-term memory.",
+     "suggested_use": "The user can use this data to benchmark their own system against established methods and adapt relevant features.",
+     "boxes": [
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.3198,
+       "x1": 0.3119,
+       "y1": 0.3323
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.3198,
+       "x1": 0.4293,
+       "y1": 0.3323
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.3198,
+       "x1": 0.5242,
+       "y1": 0.3323
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.3198,
+       "x1": 0.6294,
+       "y1": 0.3323
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.3198,
+       "x1": 0.7312,
+       "y1": 0.3323
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.3198,
+       "x1": 0.8111,
+       "y1": 0.3323
+      },
+      {
+       "page_no": 17,
+       "x0": 0.185,
+       "y0": 0.369,
+       "x1": 0.2012,
+       "y1": 0.435
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.3401,
+       "x1": 0.2967,
+       "y1": 0.3527
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.3401,
+       "x1": 0.4293,
+       "y1": 0.3527
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.3401,
+       "x1": 0.5242,
+       "y1": 0.3527
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.3401,
+       "x1": 0.6294,
+       "y1": 0.3527
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.3401,
+       "x1": 0.7312,
+       "y1": 0.3527
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.3401,
+       "x1": 0.8111,
+       "y1": 0.3527
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.3539,
+       "x1": 0.2925,
+       "y1": 0.3665
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.3539,
+       "x1": 0.4293,
+       "y1": 0.3665
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.3539,
+       "x1": 0.5242,
+       "y1": 0.3665
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.3539,
+       "x1": 0.6294,
+       "y1": 0.3665
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.3539,
+       "x1": 0.7312,
+       "y1": 0.3665
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.3539,
+       "x1": 0.8111,
+       "y1": 0.3665
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.3677,
+       "x1": 0.2714,
+       "y1": 0.3802
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.3677,
+       "x1": 0.4293,
+       "y1": 0.3802
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.3677,
+       "x1": 0.5242,
+       "y1": 0.3802
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.3677,
+       "x1": 0.6294,
+       "y1": 0.3802
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.3677,
+       "x1": 0.7312,
+       "y1": 0.3802
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.3677,
+       "x1": 0.8111,
+       "y1": 0.3802
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.3876,
+       "x1": 0.3239,
+       "y1": 0.4002
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.3877,
+       "x1": 0.4293,
+       "y1": 0.4003
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.3877,
+       "x1": 0.5242,
+       "y1": 0.4003
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.3877,
+       "x1": 0.6294,
+       "y1": 0.4003
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.3877,
+       "x1": 0.7312,
+       "y1": 0.4003
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.3877,
+       "x1": 0.8111,
+       "y1": 0.4003
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.4014,
+       "x1": 0.3239,
+       "y1": 0.414
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.4015,
+       "x1": 0.4293,
+       "y1": 0.4141
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.4015,
+       "x1": 0.5242,
+       "y1": 0.4141
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.4015,
+       "x1": 0.6294,
+       "y1": 0.4141
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.4015,
+       "x1": 0.7312,
+       "y1": 0.4141
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.4015,
+       "x1": 0.8111,
+       "y1": 0.4141
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.4152,
+       "x1": 0.3239,
+       "y1": 0.4278
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.4153,
+       "x1": 0.4293,
+       "y1": 0.4279
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.4153,
+       "x1": 0.5242,
+       "y1": 0.4279
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.4153,
+       "x1": 0.6294,
+       "y1": 0.4279
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.4153,
+       "x1": 0.7312,
+       "y1": 0.4279
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.4153,
+       "x1": 0.8111,
+       "y1": 0.4279
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.4354,
+       "x1": 0.3526,
+       "y1": 0.448
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.4354,
+       "x1": 0.4293,
+       "y1": 0.448
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.4354,
+       "x1": 0.5242,
+       "y1": 0.448
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.4354,
+       "x1": 0.6294,
+       "y1": 0.448
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.4354,
+       "x1": 0.7312,
+       "y1": 0.448
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.4354,
+       "x1": 0.8111,
+       "y1": 0.448
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.4492,
+       "x1": 0.3526,
+       "y1": 0.4617
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.4492,
+       "x1": 0.4293,
+       "y1": 0.4617
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.4492,
+       "x1": 0.5242,
+       "y1": 0.4617
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.4492,
+       "x1": 0.6294,
+       "y1": 0.4617
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.4492,
+       "x1": 0.7312,
+       "y1": 0.4617
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.4492,
+       "x1": 0.8111,
+       "y1": 0.4617
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2289,
+       "y0": 0.4629,
+       "x1": 0.3526,
+       "y1": 0.4755
+      },
+      {
+       "page_no": 17,
+       "x0": 0.3927,
+       "y0": 0.4629,
+       "x1": 0.4293,
+       "y1": 0.4755
+      },
+      {
+       "page_no": 17,
+       "x0": 0.4875,
+       "y0": 0.4629,
+       "x1": 0.5242,
+       "y1": 0.4755
+      },
+      {
+       "page_no": 17,
+       "x0": 0.5928,
+       "y0": 0.4629,
+       "x1": 0.6294,
+       "y1": 0.4755
+      },
+      {
+       "page_no": 17,
+       "x0": 0.6945,
+       "y0": 0.4629,
+       "x1": 0.7312,
+       "y1": 0.4755
+      },
+      {
+       "page_no": 17,
+       "x0": 0.7745,
+       "y0": 0.4629,
+       "x1": 0.8111,
+       "y1": 0.4755
+      },
+      {
+       "page_no": 17,
+       "x0": 0.176,
+       "y0": 0.4887,
+       "x1": 0.8264,
+       "y1": 0.5017
+      },
+      {
+       "page_no": 17,
+       "x0": 0.1759,
+       "y0": 0.5026,
+       "x1": 0.8235,
+       "y1": 0.5151
+      },
+      {
+       "page_no": 17,
+       "x0": 0.1765,
+       "y0": 0.5163,
+       "x1": 0.8264,
+       "y1": 0.5289
+      },
+      {
+       "page_no": 17,
+       "x0": 0.1765,
+       "y0": 0.53,
+       "x1": 0.8235,
+       "y1": 0.543
+      },
+      {
+       "page_no": 17,
+       "x0": 0.1765,
+       "y0": 0.5439,
+       "x1": 0.7909,
+       "y1": 0.5565
+      }
+     ]
+    },
+    {
+     "chunk_id": 2,
+     "chunk_text": "We validate MIRIX in two demanding settings. First, on ScreenshotVQA, a challenging multimodal benchmark comprising nearly 20,000 high-resolution computer screenshots per sequence, requiring deep contextual understanding and where no existing memory systems can be applied, MIRIX achieves 35% higher accuracy than the RAG baseline while reducing storage requirements by 99.9%. Second, on LOCOMO, a long-form conversation benchmark with single-modal textual input, MIRIX attains state-of-the-art performance of 85.4%, far surpassing existing baselines. These results show that MIRIX sets a new performance standard for memory-augmented LLM Agents. To allow users to experience our memory system, we provide a packaged application powered by MIRIX. It monitors the screen in real time, builds a personalized memory base, and offers intuitive visualization and secure local storage to ensure privacy.",
+     "page_no": 1,
+     "relevance_score": 84,
+     "chunk_type": "results",
+     "reason": "This chunk provides experimental results validating the MIRIX system's effectiveness in demanding settings, directly supporting its usability for the user’s project. It gives comparative performance metrics.",
+     "suggested_use": "The user could reference these results to benchmark their implementation if they choose to adapt MIRIX.",
+     "boxes": [
+      {
+       "page_no": 1,
+       "x0": 0.4698,
+       "y0": 0.5305,
+       "x1": 0.7678,
+       "y1": 0.5429
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.5442,
+       "x1": 0.7655,
+       "y1": 0.5567
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.558,
+       "x1": 0.7676,
+       "y1": 0.5705
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.5718,
+       "x1": 0.7655,
+       "y1": 0.5843
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.5854,
+       "x1": 0.7676,
+       "y1": 0.5981
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.5994,
+       "x1": 0.7653,
+       "y1": 0.6118
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2345,
+       "y0": 0.6129,
+       "x1": 0.7649,
+       "y1": 0.6256
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.6267,
+       "x1": 0.7649,
+       "y1": 0.6394
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.6407,
+       "x1": 0.7649,
+       "y1": 0.6531
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.6543,
+       "x1": 0.7655,
+       "y1": 0.667
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.668,
+       "x1": 0.767,
+       "y1": 0.6807
+      },
+      {
+       "page_no": 1,
+       "x0": 0.2351,
+       "y0": 0.6819,
+       "x1": 0.7233,
+       "y1": 0.6945
+      }
+     ]
+    },
+    {
+     "chunk_id": 7,
+     "chunk_text": "To address this, a range of memory-augmented systems have been proposed. One common approach is the use of knowledge graphs, as seen in systems like Zep [24] and Cognee [20]. These frameworks are well-suited for representing structured relationships between entities but struggle to model sequential events, emotional states, full-length documents, or multi-modal inputs such as images. Another approach involves flattened memory architectures that store and retrieve textual chunks using vector databases. Examples include Letta [22], Mem0 [5], and ChatGPT’s memory system. Letta divides its memory into components—recall memory for conversation history, core memory for preferences, and archival memory for long documents—while ChatGPT focuses primarily on core and recall memories. Mem0 adopts a memory system that contains flattened facts distilled from the user inputs, which serves similar roles as Letta’s archival memory while being more distilled. While prevalent, these memory systems face several challenges: (1) Lack of compositional memory structure: Most approaches store all historical data in a single flat store without routing into specialized memory types (e.g., procedural, episodic, semantic), making retrieval inefficient and less accurate.",
+     "page_no": 2,
+     "relevance_score": 84,
+     "chunk_type": "background",
+     "reason": "This chunk reviews existing memory-augmented systems for LLMs and identifies their shortcomings, which is highly relevant for understanding the context of MIRIX.",
+     "suggested_use": "The user could use this information to highlight gaps in current systems and justify the need for improvement in their project.",
+     "boxes": [
+      {
+       "page_no": 2,
+       "x0": 0.176,
+       "y0": 0.2728,
+       "x1": 0.8235,
+       "y1": 0.2853
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.2865,
+       "x1": 0.8235,
+       "y1": 0.2991
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1759,
+       "y0": 0.3004,
+       "x1": 0.8235,
+       "y1": 0.3128
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.314,
+       "x1": 0.8238,
+       "y1": 0.3267
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.3279,
+       "x1": 0.8238,
+       "y1": 0.3404
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.3416,
+       "x1": 0.8235,
+       "y1": 0.3542
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.3553,
+       "x1": 0.8256,
+       "y1": 0.368
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.3691,
+       "x1": 0.8235,
+       "y1": 0.3818
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.383,
+       "x1": 0.8256,
+       "y1": 0.3955
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1759,
+       "y0": 0.3966,
+       "x1": 0.8256,
+       "y1": 0.4093
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.4104,
+       "x1": 0.8235,
+       "y1": 0.4231
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.4242,
+       "x1": 0.8241,
+       "y1": 0.4369
+      },
+      {
+       "page_no": 2,
+       "x0": 0.1765,
+       "y0": 0.438,
+       "x1": 0.7644,
+       "y1": 0.4506
+      }
+     ]
+    },
+    {
+     "chunk_id": 14,
+     "chunk_text": "In terms of results, because no existing memory systems can handle such a large volume of multimodal input, we compare against retrieval-augmented generation (RAG) baselines and long-context baselines. MIRIX achieves a 35% improvement over RAG baselines while reducing storage requirements by 99.9%, and a 410% improvement over longcontext baselines with a 93.3% reduction in storage. On LOCOMO, MIRIX reaches state-of-the-art performance with an overall accuracy of 85.38%, outperforming the best existing method by 8.0% and approaching the upper bound set by long-context models. To make our memory system more accessible, we also developed a personal assistant powered by MIRIX. With the user’s permission to capture screen content, the assistant continuously builds a memory from screenshots and can answer any questions related to this accumulated information. This represents our effort to bring advanced memory capabilities to everyone, enabling users to experience the benefits of our system firsthand.",
+     "page_no": 3,
+     "relevance_score": 84,
+     "chunk_type": "results",
+     "reason": "This chunk provides comprehensive performance results demonstrating MIRIX's capabilities, which are directly applicable to validating a memory system's performance.",
+     "suggested_use": "The user could reference these performance metrics to design benchmarks for their memory system.",
+     "boxes": [
+      {
+       "page_no": 3,
+       "x0": 0.5139,
+       "y0": 0.2317,
+       "x1": 0.8241,
+       "y1": 0.2443
+      },
+      {
+       "page_no": 3,
+       "x0": 0.1765,
+       "y0": 0.2456,
+       "x1": 0.8235,
+       "y1": 0.258
+      },
+      {
+       "page_no": 3,
+       "x0": 0.1765,
+       "y0": 0.2592,
+       "x1": 0.8238,
+       "y1": 0.2718
+      },
+      {
+       "page_no": 3,
+       "x0": 0.1765,
+       "y0": 0.273,
+       "x1": 0.8262,
+       "y1": 0.2856
+      },
+      {
+       "page_no": 3,
+       "x0": 0.1765,
+       "y0": 0.2868,
+       "x1": 0.8235,
+       "y1": 0.2994
+      },
+      {
+       "page_no": 3,
+       "x0": 0.1765,
+       "y0": 0.3005,
+       "x1": 0.8249,
+       "y1": 0.3132
+      },
+      {
+       "page_no": 3,
+       "x0": 0.1765,
+       "y0": 0.3142,
+       "x1": 0.8235,
+       "y1": 0.3269
+      },
+      {
+       "page_no": 3,
+       "x0": 0.1765,
+       "y0": 0.3282,
+       "x1": 0.8235,
+       "y1": 0.3407
+      },
+      {
+       "page_no": 3,
+       "x0": 0.1765,
+       "y0": 0.3419,
+       "x1": 0.8238,
+       "y1": 0.3544
+      },
+      {
+       "page_no": 3,
+       "x0": 0.1765,
+       "y0": 0.3556,
+       "x1": 0.8235,
+       "y1": 0.3682
+      },
+      {
+       "page_no": 3,
+       "x0": 0.1765,
+       "y0": 0.3694,
+       "x1": 0.818,
+       "y1": 0.382
+      }
+     ]
+    },
+    {
+     "chunk_id": 43,
+     "chunk_text": "Conversational Retrieval Workflow For interactive dialogues, the Chat Agent manages natural language communication with the user. To ground its responses in prior knowledge, it first performs an automatic search over the memory base upon receiving a user query. This initial search is a coarse retrieval spanning all six memory components and returns high-level summaries rather than detailed content. The Chat Agent then analyzes the query to determine which memory components warrant more targeted searches and selects appropriate retrieval methods accordingly. After obtaining the relevant results, it consolidates the information and synthesizes the final response. Moreover, if the user’s query involves updating memory—for example, providing new facts or corrections-the Chat Agent can interact directly with the corresponding Memory Managers to apply precise updates to specific memory components.",
+     "page_no": 9,
+     "relevance_score": 84,
+     "chunk_type": "methodology",
+     "reason": "The conversational retrieval workflow details how the system interacts with users, incorporating memory updates based on user queries, which is crucial for designing a responsive long-term memory system.",
+     "suggested_use": "The user could adopt elements of this retrieval workflow to implement natural language interactions in their memory system.",
+     "boxes": [
+      {
+       "page_no": 9,
+       "x0": 0.1765,
+       "y0": 0.4255,
+       "x1": 0.425,
+       "y1": 0.4382
+      },
+      {
+       "page_no": 9,
+       "x0": 0.4413,
+       "y0": 0.4254,
+       "x1": 0.8235,
+       "y1": 0.4383
+      },
+      {
+       "page_no": 9,
+       "x0": 0.1765,
+       "y0": 0.4395,
+       "x1": 0.8235,
+       "y1": 0.452
+      },
+      {
+       "page_no": 9,
+       "x0": 0.1765,
+       "y0": 0.4533,
+       "x1": 0.8235,
+       "y1": 0.4658
+      },
+      {
+       "page_no": 9,
+       "x0": 0.1765,
+       "y0": 0.4671,
+       "x1": 0.8235,
+       "y1": 0.4796
+      },
+      {
+       "page_no": 9,
+       "x0": 0.1765,
+       "y0": 0.4808,
+       "x1": 0.8235,
+       "y1": 0.4934
+      },
+      {
+       "page_no": 9,
+       "x0": 0.1765,
+       "y0": 0.4945,
+       "x1": 0.8235,
+       "y1": 0.5072
+      },
+      {
+       "page_no": 9,
+       "x0": 0.1765,
+       "y0": 0.5083,
+       "x1": 0.8235,
+       "y1": 0.5209
+      },
+      {
+       "page_no": 9,
+       "x0": 0.1765,
+       "y0": 0.5221,
+       "x1": 0.8235,
+       "y1": 0.5347
+      },
+      {
+       "page_no": 9,
+       "x0": 0.1759,
+       "y0": 0.5358,
+       "x1": 0.8235,
+       "y1": 0.5485
+      },
+      {
+       "page_no": 9,
+       "x0": 0.1765,
+       "y0": 0.5497,
+       "x1": 0.3713,
+       "y1": 0.5622
+      }
+     ]
+    },
+    {
+     "chunk_id": 80,
+     "chunk_text": "A Full Experimental Results with Different Runs We run MIRIX and Full-Context with gpt-4.1-mini three times and we report the full results in Table 3. There are variations across different runs, while MIRIX consistently achieves state-of-the-art results. Full predicted results and LLM-Judge scores are provided in the folder https://github.com/ Mirix-AI/MIRIX/tree/public_evaluation/public_evaluations/evaluation_metrics.",
+     "page_no": 17,
+     "relevance_score": 84,
+     "chunk_type": "results",
+     "reason": "This chunk presents experimental results demonstrating the performance of MIRIX compared to other systems. While it does not directly address the user's goal of storing forgotten information, the results could provide insights into the effectiveness of different memory techniques.",
+     "suggested_use": "The user could analyze the results to determine if any of the techniques might be adapted for their memory system.",
+     "boxes": [
+      {
+       "page_no": 17,
+       "x0": 0.1765,
+       "y0": 0.0919,
+       "x1": 0.1906,
+       "y1": 0.107
+      },
+      {
+       "page_no": 17,
+       "x0": 0.2101,
+       "y0": 0.0919,
+       "x1": 0.5988,
+       "y1": 0.107
+      },
+      {
+       "page_no": 17,
+       "x0": 0.1757,
+       "y0": 0.1232,
+       "x1": 0.8262,
+       "y1": 0.136
+      },
+      {
+       "page_no": 17,
+       "x0": 0.1765,
+       "y0": 0.137,
+       "x1": 0.8262,
+       "y1": 0.1495
+      },
+      {
+       "page_no": 17,
+       "x0": 0.1765,
+       "y0": 0.1508,
+       "x1": 0.8253,
+       "y1": 0.1636
+      },
+      {
+       "page_no": 17,
+       "x0": 0.1765,
+       "y0": 0.1645,
+       "x1": 0.8222,
+       "y1": 0.1773
+      }
+     ]
+    },
+    {
+     "chunk_id": 55,
+     "chunk_text": "MIRIX 85.11 83.70 65.62 88.39 85.38 Full-Context 88.53 77.70 71.88 92.70 87.52 Table 2: LLM-as-a-Judge scores (%, higher is better) for each question type in the LOCOMO dataset. As mentioned in Mem0 [5], as the average length in this dataset is only 9k, Full-Context is essentially the upper-bound. Thus recovering the performance of Full-Context shows the advancements of MIRIX. extracted information, resulting in a much smaller storage size. Compared to retrieval-augmented generation (RAG) baselines, MIRIX achieves a 35% improvement in accuracy while reducing storage requirements by 99.9%. Relative to the long-context Gemini baseline, MIRIX yields a 410% improvement in accuracy with a 93.3% reduction in storage.",
+     "page_no": 11,
+     "relevance_score": 80,
+     "chunk_type": "results",
+     "reason": "This chunk highlights MIRIX's superiority in terms of accuracy and storage efficiency compared to rivals, which is critical for asserting the strengths of their own system design.",
+     "suggested_use": "The user could use these findings to advocate for their system's efficiency improvements over others.",
+     "boxes": [
+      {
+       "page_no": 11,
+       "x0": 0.2467,
+       "y0": 0.3969,
+       "x1": 0.2982,
+       "y1": 0.4095
+      },
+      {
+       "page_no": 11,
+       "x0": 0.3698,
+       "y0": 0.3969,
+       "x1": 0.4064,
+       "y1": 0.4095
+      },
+      {
+       "page_no": 11,
+       "x0": 0.4646,
+       "y0": 0.3969,
+       "x1": 0.5012,
+       "y1": 0.4095
+      },
+      {
+       "page_no": 11,
+       "x0": 0.5698,
+       "y0": 0.397,
+       "x1": 0.6065,
+       "y1": 0.4096
+      },
+      {
+       "page_no": 11,
+       "x0": 0.6716,
+       "y0": 0.3969,
+       "x1": 0.7082,
+       "y1": 0.4095
+      },
+      {
+       "page_no": 11,
+       "x0": 0.7515,
+       "y0": 0.3969,
+       "x1": 0.7882,
+       "y1": 0.4095
+      },
+      {
+       "page_no": 11,
+       "x0": 0.2467,
+       "y0": 0.4171,
+       "x1": 0.3297,
+       "y1": 0.4297
+      },
+      {
+       "page_no": 11,
+       "x0": 0.3698,
+       "y0": 0.4171,
+       "x1": 0.4064,
+       "y1": 0.4297
+      },
+      {
+       "page_no": 11,
+       "x0": 0.4646,
+       "y0": 0.4171,
+       "x1": 0.5012,
+       "y1": 0.4297
+      },
+      {
+       "page_no": 11,
+       "x0": 0.5698,
+       "y0": 0.4171,
+       "x1": 0.6065,
+       "y1": 0.4297
+      },
+      {
+       "page_no": 11,
+       "x0": 0.6716,
+       "y0": 0.4171,
+       "x1": 0.7082,
+       "y1": 0.4297
+      },
+      {
+       "page_no": 11,
+       "x0": 0.7515,
+       "y0": 0.4171,
+       "x1": 0.7882,
+       "y1": 0.4297
+      },
+      {
+       "page_no": 11,
+       "x0": 0.176,
+       "y0": 0.4429,
+       "x1": 0.8264,
+       "y1": 0.4559
+      },
+      {
+       "page_no": 11,
+       "x0": 0.1759,
+       "y0": 0.4567,
+       "x1": 0.8241,
+       "y1": 0.4693
+      },
+      {
+       "page_no": 11,
+       "x0": 0.1765,
+       "y0": 0.4704,
+       "x1": 0.8235,
+       "y1": 0.4831
+      },
+      {
+       "page_no": 11,
+       "x0": 0.1765,
+       "y0": 0.4843,
+       "x1": 0.2285,
+       "y1": 0.4969
+      },
+      {
+       "page_no": 11,
+       "x0": 0.1765,
+       "y0": 0.5299,
+       "x1": 0.8235,
+       "y1": 0.5426
+      },
+      {
+       "page_no": 11,
+       "x0": 0.1765,
+       "y0": 0.5437,
+       "x1": 0.8235,
+       "y1": 0.5564
+      },
+      {
+       "page_no": 11,
+       "x0": 0.1765,
+       "y0": 0.5576,
+       "x1": 0.8249,
+       "y1": 0.5701
+      },
+      {
+       "page_no": 11,
+       "x0": 0.1765,
+       "y0": 0.5714,
+       "x1": 0.5691,
+       "y1": 0.5839
+      }
+     ]
+    },
+    {
+     "chunk_id": 52,
+     "chunk_text": "Student 1 Student 2 Student 3 Overall Acc ↑ Storage↓ Acc ↑ Storage↓ Acc ↑ Storage↓ Acc ↑ Storage↓ Gemini 0.0000 142.10MB 0.0952 438.86MB 0.2545 129.14MB 0.1166 236.70MB SigLIP@50 0.3636 22.55GB 0.4138 19.88GB 0.5455 2.82GB 0.4410 15.07GB MIRIX 0.5455 20.57MB 0.5667 19.83MB 0.6727 7.28MB 0.5950 15.89MB Table 1: Experimental Results on ScreenshotVQA.",
+     "page_no": 11,
+     "relevance_score": 75,
+     "chunk_type": "results",
+     "reason": "It details the accuracy and storage comparisons across users, giving insights into how various systems perform which could inform the user's project benchmarks and expectations.",
+     "suggested_use": "The user could reference these results to set performance targets for their own long-term memory system.",
+     "boxes": [
+      {
+       "page_no": 11,
+       "x0": 0.3096,
+       "y0": 0.0952,
+       "x1": 0.3653,
+       "y1": 0.1065
+      },
+      {
+       "page_no": 11,
+       "x0": 0.4486,
+       "y0": 0.0952,
+       "x1": 0.5044,
+       "y1": 0.1065
+      },
+      {
+       "page_no": 11,
+       "x0": 0.5877,
+       "y0": 0.0952,
+       "x1": 0.6434,
+       "y1": 0.1065
+      },
+      {
+       "page_no": 11,
+       "x0": 0.7325,
+       "y0": 0.0952,
+       "x1": 0.7762,
+       "y1": 0.1065
+      },
+      {
+       "page_no": 11,
+       "x0": 0.2796,
+       "y0": 0.1072,
+       "x1": 0.3141,
+       "y1": 0.1189
+      },
+      {
+       "page_no": 11,
+       "x0": 0.34,
+       "y0": 0.1072,
+       "x1": 0.3921,
+       "y1": 0.1189
+      },
+      {
+       "page_no": 11,
+       "x0": 0.4186,
+       "y0": 0.1072,
+       "x1": 0.4532,
+       "y1": 0.1189
+      },
+      {
+       "page_no": 11,
+       "x0": 0.4791,
+       "y0": 0.1072,
+       "x1": 0.5312,
+       "y1": 0.1189
+      },
+      {
+       "page_no": 11,
+       "x0": 0.5577,
+       "y0": 0.1072,
+       "x1": 0.5922,
+       "y1": 0.1189
+      },
+      {
+       "page_no": 11,
+       "x0": 0.6182,
+       "y0": 0.1072,
+       "x1": 0.6702,
+       "y1": 0.1189
+      },
+      {
+       "page_no": 11,
+       "x0": 0.6967,
+       "y0": 0.1072,
+       "x1": 0.7313,
+       "y1": 0.1189
+      },
+      {
+       "page_no": 11,
+       "x0": 0.7572,
+       "y0": 0.1072,
+       "x1": 0.8093,
+       "y1": 0.1189
+      },
+      {
+       "page_no": 11,
+       "x0": 0.2018,
+       "y0": 0.1259,
+       "x1": 0.2457,
+       "y1": 0.1372
+      },
+      {
+       "page_no": 11,
+       "x0": 0.2767,
+       "y0": 0.1259,
+       "x1": 0.317,
+       "y1": 0.1372
+      },
+      {
+       "page_no": 11,
+       "x0": 0.3345,
+       "y0": 0.1259,
+       "x1": 0.3976,
+       "y1": 0.1372
+      },
+      {
+       "page_no": 11,
+       "x0": 0.4158,
+       "y0": 0.1259,
+       "x1": 0.456,
+       "y1": 0.1372
+      },
+      {
+       "page_no": 11,
+       "x0": 0.4736,
+       "y0": 0.1259,
+       "x1": 0.5367,
+       "y1": 0.1372
+      },
+      {
+       "page_no": 11,
+       "x0": 0.5548,
+       "y0": 0.1259,
+       "x1": 0.5951,
+       "y1": 0.1372
+      },
+      {
+       "page_no": 11,
+       "x0": 0.6127,
+       "y0": 0.1259,
+       "x1": 0.6757,
+       "y1": 0.1372
+      },
+      {
+       "page_no": 11,
+       "x0": 0.6939,
+       "y0": 0.1259,
+       "x1": 0.7341,
+       "y1": 0.1372
+      },
+      {
+       "page_no": 11,
+       "x0": 0.7517,
+       "y0": 0.1259,
+       "x1": 0.8148,
+       "y1": 0.1372
+      },
+      {
+       "page_no": 11,
+       "x0": 0.1889,
+       "y0": 0.1383,
+       "x1": 0.2585,
+       "y1": 0.1496
+      },
+      {
+       "page_no": 11,
+       "x0": 0.2767,
+       "y0": 0.1383,
+       "x1": 0.317,
+       "y1": 0.1496
+      },
+      {
+       "page_no": 11,
+       "x0": 0.3394,
+       "y0": 0.1383,
+       "x1": 0.3927,
+       "y1": 0.1496
+      },
+      {
+       "page_no": 11,
+       "x0": 0.4158,
+       "y0": 0.1383,
+       "x1": 0.456,
+       "y1": 0.1496
+      },
+      {
+       "page_no": 11,
+       "x0": 0.4785,
+       "y0": 0.1383,
+       "x1": 0.5318,
+       "y1": 0.1496
+      },
+      {
+       "page_no": 11,
+       "x0": 0.5548,
+       "y0": 0.1383,
+       "x1": 0.5951,
+       "y1": 0.1496
+      },
+      {
+       "page_no": 11,
+       "x0": 0.6212,
+       "y0": 0.1383,
+       "x1": 0.6672,
+       "y1": 0.1496
+      },
+      {
+       "page_no": 11,
+       "x0": 0.6939,
+       "y0": 0.1383,
+       "x1": 0.7341,
+       "y1": 0.1496
+      },
+      {
+       "page_no": 11,
+       "x0": 0.7566,
+       "y0": 0.1383,
+       "x1": 0.8099,
+       "y1": 0.1496
+      },
+      {
+       "page_no": 11,
+       "x0": 0.2022,
+       "y0": 0.1507,
+       "x1": 0.2453,
+       "y1": 0.162
+      },
+      {
+       "page_no": 11,
+       "x0": 0.2767,
+       "y0": 0.1506,
+       "x1": 0.317,
+       "y1": 0.1619
+      },
+      {
+       "page_no": 11,
+       "x0": 0.3378,
+       "y0": 0.1506,
+       "x1": 0.3943,
+       "y1": 0.1619
+      },
+      {
+       "page_no": 11,
+       "x0": 0.4158,
+       "y0": 0.1506,
+       "x1": 0.456,
+       "y1": 0.1619
+      },
+      {
+       "page_no": 11,
+       "x0": 0.4769,
+       "y0": 0.1506,
+       "x1": 0.5334,
+       "y1": 0.1619
+      },
+      {
+       "page_no": 11,
+       "x0": 0.5548,
+       "y0": 0.1506,
+       "x1": 0.5951,
+       "y1": 0.1619
+      },
+      {
+       "page_no": 11,
+       "x0": 0.6196,
+       "y0": 0.1506,
+       "x1": 0.6688,
+       "y1": 0.1619
+      },
+      {
+       "page_no": 11,
+       "x0": 0.6939,
+       "y0": 0.1506,
+       "x1": 0.7341,
+       "y1": 0.1619
+      },
+      {
+       "page_no": 11,
+       "x0": 0.755,
+       "y0": 0.1506,
+       "x1": 0.8115,
+       "y1": 0.1619
+      },
+      {
+       "page_no": 11,
+       "x0": 0.3335,
+       "y0": 0.1748,
+       "x1": 0.666,
+       "y1": 0.1874
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "qa": [
+  {
+   "question": "What is this paper about?",
+   "response": {
+    "answer": "The paper discusses a modular memory architecture for large language model (LLM) agents, which includes various components such as Core Memory, Episodic Memory, Semantic Memory, Procedural Memory, Resource Memory, and a Knowledge Vault. This architecture is designed to effectively capture different aspects of user interactions and world knowledge, enabling LLMs to retrieve, reason, and act efficiently over time and across tasks. The paper aims to address inefficiencies in existing memory systems used in LLMs by providing a more structured approach to memory storage and retrieval.",
+    "confidence": 85,
+    "found_in_chunks": [
+     27,
+     7
+    ],
+    "found_in_pages": [
+     6,
+     2
+    ]
+   }
+  }
+ ]
+}

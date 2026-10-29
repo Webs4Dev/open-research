@@ -8,6 +8,7 @@ import { ErrorPanel } from "../components/common/ErrorPanel";
 import { getErrorMessage } from "../lib/errors";
 import { HISTORY_PAPERS_KEY, HISTORY_SEARCHES_KEY } from "../lib/queryKeys";
 import { relativeTime } from "../lib/relativeTime";
+import { useIsDemo } from "../components/auth/RequireAuth";
 
 // Longer lists collapse behind "Show all" so both panels stay scannable.
 const COLLAPSED_ROWS = 8;
@@ -44,6 +45,7 @@ export function Dashboard() {
 
 function SearchesPanel() {
   const queryClient = useQueryClient();
+  const isDemo = useIsDemo(); // the demo's history is shared, so nobody can delete it
   const searches = useQuery({ queryKey: HISTORY_SEARCHES_KEY, queryFn: listSavedSearches });
   const [confirmingId, setConfirmingId] = useState<number | null>(null);
 
@@ -107,7 +109,7 @@ function SearchesPanel() {
                   Keep
                 </button>
               </div>
-            ) : (
+            ) : isDemo ? null : (
               <button
                 type="button"
                 aria-label={`Delete search "${search.query}"`}
