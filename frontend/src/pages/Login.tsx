@@ -4,7 +4,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { login, register } from "../api/endpoints";
 import { getErrorMessage } from "../lib/errors";
 import { ME_QUERY_KEY } from "../components/auth/RequireAuth";
+import { BrandMark } from "../components/layout/Sidebar";
+import { ErrorPanel } from "../components/common/ErrorPanel";
 
+/** The first screen a visitor sees: what the app does on the left, the form on the right (stacked below 1024px). */
 export function Login() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,58 +30,86 @@ export function Login() {
     mutation.mutate();
   };
 
+  const isLogin = mode === "login";
+
   return (
-    <div className="flex min-h-full items-center justify-center bg-surface-1 px-4">
-      <form onSubmit={onSubmit} className="card w-full max-w-sm">
-        <h1 className="mb-4 text-lg font-medium">
-          {mode === "login" ? "Log in to OpenResearch" : "Create an account"}
-        </h1>
-        <label className="mb-1 block text-sm text-text-secondary" htmlFor="email">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          autoComplete="email"
-          required
-          maxLength={254}
-          className="input mb-3"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <label className="mb-1 block text-sm text-text-secondary" htmlFor="password">
-          Password {mode === "register" && <span className="text-text-muted">(at least 8 characters)</span>}
-        </label>
-        <input
-          id="password"
-          type="password"
-          autoComplete={mode === "login" ? "current-password" : "new-password"}
-          required
-          minLength={8}
-          maxLength={128}
-          className="input mb-4"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {mutation.isError && (
-          <p className="mb-3 text-sm text-red-600" role="alert">
-            {getErrorMessage(mutation.error)}
+    <div className="flex min-h-full flex-col bg-canvas px-10 py-10 max-lg:px-6 max-sm:px-4">
+      <BrandMark />
+
+      <main className="mx-auto grid w-full max-w-[1120px] flex-1 items-center gap-16 py-12 lg:grid-cols-[1fr_400px] max-lg:gap-10">
+        <header className="animate-rise">
+          <h1 className="max-w-xl text-balance font-display text-display text-ink max-sm:text-display-sm">
+            Research that starts with your project.
+          </h1>
+          <p className="mt-4 max-w-[52ch] text-body-lg text-ink-muted">
+            Search six sources at once, score every paper against what you're building, then read it with the relevant
+            passages highlighted and ask it questions.
           </p>
-        )}
-        <button type="submit" className="btn w-full" disabled={mutation.isPending}>
-          {mode === "login" ? "Log in" : "Create account"}
-        </button>
-        <button
-          type="button"
-          className="mt-3 w-full text-sm text-text-secondary hover:underline"
-          onClick={() => {
-            setMode(mode === "login" ? "register" : "login");
-            mutation.reset();
-          }}
-        >
-          {mode === "login" ? "No account? Create one" : "Have an account? Log in"}
-        </button>
-      </form>
+        </header>
+
+        <form onSubmit={onSubmit} className="card flex flex-col gap-4 animate-rise" style={{ animationDelay: "80ms" }}>
+          <h2 className="font-display text-h2 text-ink">{isLogin ? "Log in" : "Create an account"}</h2>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-label text-ink" htmlFor="email">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              required
+              maxLength={254}
+              className="input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-label text-ink" htmlFor="password">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              autoComplete={isLogin ? "current-password" : "new-password"}
+              aria-describedby={isLogin ? undefined : "password-hint"}
+              required
+              minLength={8}
+              maxLength={128}
+              className="input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {!isLogin && (
+              <p id="password-hint" className="text-body-sm text-ink-subtle">
+                At least 8 characters.
+              </p>
+            )}
+          </div>
+
+          {mutation.isError && <ErrorPanel message={getErrorMessage(mutation.error)} />}
+
+          <button type="submit" className="btn mt-2 w-full" disabled={mutation.isPending}>
+            {mutation.isPending ? (isLogin ? "Logging in…" : "Creating account…") : isLogin ? "Log in" : "Create account"}
+          </button>
+
+          <p className="text-center text-body-sm text-ink-subtle">
+            {isLogin ? "No account yet?" : "Already have an account?"}{" "}
+            <button
+              type="button"
+              className="rounded-sm font-medium text-accent-ink hover:underline"
+              onClick={() => {
+                setMode(isLogin ? "register" : "login");
+                mutation.reset();
+              }}
+            >
+              {isLogin ? "Create one" : "Log in"}
+            </button>
+          </p>
+        </form>
+      </main>
     </div>
   );
 }
