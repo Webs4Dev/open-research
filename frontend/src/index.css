@@ -22,7 +22,7 @@ body {
   .input {
     @apply min-h-10 w-full rounded-md border border-hairline-strong bg-surface-1 px-3 py-2 text-body
       text-ink transition-colors duration-fast placeholder:text-ink-subtle
-      hover:border-border-strong focus-visible:border-transparent;
+      hover:border-hairline-hover focus-visible:border-transparent;
   }
 
   .textarea {

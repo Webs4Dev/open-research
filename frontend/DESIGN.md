@@ -50,6 +50,7 @@ The canvas is tinted, and cards are pure white, so cards (and PDF pages) lift of
 | `surface-3` | `#E5E3EE` | pressed, selected rows, keycaps, the PDF backdrop |
 | `hairline` | `rgba(21,20,31,0.08)` | default 1px border |
 | `hairline-strong` | `rgba(21,20,31,0.16)` | hover border, dividers that must read |
+| `hairline-hover` | `rgba(21,20,31,0.24)` | hover border on inputs (already `hairline-strong` at rest) |
 
 ### Text
 

@@ -2,7 +2,7 @@
 
 // Design tokens from DESIGN.md. Components use these names only, never raw values.
 const ink = { DEFAULT: "#15141F", muted: "#45435A", subtle: "#636178", faint: "#A4A2B6" };
-const hairline = { DEFAULT: "rgba(21,20,31,0.08)", strong: "rgba(21,20,31,0.16)" };
+const hairline = { DEFAULT: "rgba(21,20,31,0.08)", strong: "rgba(21,20,31,0.16)", hover: "rgba(21,20,31,0.24)" };
 
 // Category hues: solid for text/icons, soft (12% on white) for chip backgrounds.
 const hue = (solid, soft) => ({ DEFAULT: solid, soft });
@@ -14,7 +14,6 @@ export default {
       colors: {
         canvas: "#F6F5FA",
         surface: {
-          0: "#FFFFFF", // legacy alias of surface-1, still used by pages not yet rebuilt
           1: "#FFFFFF",
           2: "#EFEEF5",
           3: "#E5E3EE",
@@ -38,24 +37,6 @@ export default {
         red: hue("#C42828", "#F8E5E5"),
         // PDF highlights: intentionally off-brand highlighter yellow (DESIGN.md).
         highlight: { DEFAULT: "rgba(255,224,0,0.35)", active: "rgba(255,200,0,0.70)", bar: "#FFC800" },
-
-        // Legacy names, mapped onto the new tokens until each page is rebuilt.
-        border: { DEFAULT: hairline.strong, strong: "rgba(21,20,31,0.24)", accent: "#3D6B00" },
-        text: {
-          primary: ink.DEFAULT,
-          secondary: ink.muted,
-          muted: ink.subtle,
-          accent: "#3D6B00",
-          success: "#08704C",
-          warning: "#965400",
-        },
-        chip: {
-          amber: "#F2EAE0",
-          "amber-text": "#965400",
-          teal: "#E1EEE9",
-          "teal-text": "#08704C",
-          success: "#E1EEE9",
-        },
       },
       fontFamily: {
         display: ['"Bricolage Grotesque"', "ui-sans-serif", "system-ui", "sans-serif"],
