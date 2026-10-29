@@ -1,118 +1,60 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import { CheckCircle2, ArrowLeft } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UploadDropzone } from "../components/workspace/UploadDropzone";
-import { ChoiceCards } from "../components/workspace/ChoiceCards";
-import { AskChat } from "../components/workspace/AskChat";
 import { Spinner } from "../components/common/Spinner";
+import { ErrorPanel } from "../components/common/ErrorPanel";
+import { PapersPanel } from "./Dashboard";
 import { ingestPdf } from "../api/endpoints";
-import { useWorkspaceStore } from "../store/workspaceStore";
-import { useActivityStore } from "../store/activityStore";
+import { HISTORY_PAPERS_KEY, paperFileKey } from "../lib/queryKeys";
 import { getErrorMessage, isCancelled } from "../lib/errors";
 import { useAbortController } from "../lib/useAbortController";
 
-type Stage = "dropzone" | "choice" | "ingesting" | "chat";
-
+/** Upload a paper (ingested right away, so Ask works) and open it in the paper view. */
 export function PdfWorkspace() {
   const navigate = useNavigate();
-  const file = useWorkspaceStore((s) => s.file);
-  const setFile = useWorkspaceStore((s) => s.setFile);
-  const ingestResult = useWorkspaceStore((s) => s.ingestResult);
-  const setIngestResult = useWorkspaceStore((s) => s.setIngestResult);
-  const resetWorkspace = useWorkspaceStore((s) => s.reset);
-
-  const [stage, setStage] = useState<Stage>(file && ingestResult ? "chat" : "dropzone");
-
-  const logActivity = useActivityStore((s) => s.logActivity);
+  const queryClient = useQueryClient();
   const { nextSignal, cancel } = useAbortController();
 
-  const ingestMutation = useMutation({
-    mutationFn: (f: File) => ingestPdf(f, nextSignal()),
-    onSuccess: (result) => {
-      setIngestResult(result);
-      setStage("chat");
-      logActivity({
-        type: "ingest",
-        label: result.filename,
-        detail: `${result.pages} pages · ${result.chunks_stored} chunks`,
-      });
+  const ingest = useMutation({
+    mutationFn: (file: File) => ingestPdf(file, nextSignal()),
+    onSuccess: (result, file) => {
+      queryClient.invalidateQueries({ queryKey: HISTORY_PAPERS_KEY });
+      queryClient.setQueryData(paperFileKey(result.paper_id), file); // the viewer needn't download it back
+      navigate(`/workspace/${result.paper_id}`);
     },
-    // Back to the choice cards (also after Cancel) so the user can retry or pick another action.
-    onError: () => setStage("choice"),
   });
 
-  const handleFileSelected = (f: File) => {
-    resetWorkspace();
-    ingestMutation.reset();
-    setFile(f);
-    setStage("choice");
-  };
-
-  const handleSwap = () => {
-    resetWorkspace();
-    ingestMutation.reset();
-    setStage("dropzone");
-  };
-
-  const handleAnalyse = () => {
-    // Analysis itself runs on the Analyze page so the project-description
-    // box lives next to the results — the file is already in the store.
-    navigate("/workspace/analyze");
-  };
-
-  const handleIngestAndAsk = () => {
-    if (!file) return;
-    setStage("ingesting");
-    ingestMutation.mutate(file);
-  };
-
   return (
-    <div>
-      <h1 className="mb-4 text-xl font-medium">PDF workspace</h1>
-
-      {stage === "dropzone" && <UploadDropzone onFileSelected={handleFileSelected} />}
-
-      {stage === "choice" && ingestMutation.isError && isCancelled(ingestMutation.error) && (
-        <p className="mb-3 text-sm text-text-muted">Ingest cancelled.</p>
-      )}
-
-      {stage === "choice" && ingestMutation.isError && !isCancelled(ingestMutation.error) && (
-        <p className="mb-3 text-sm text-red-600">
-          Ingest failed: {getErrorMessage(ingestMutation.error)}
+    <div className="pb-16">
+      <header className="mb-10">
+        <h1 className="font-display text-h1 text-ink max-sm:text-h1-sm">Workspace</h1>
+        <p className="mt-2 max-w-[60ch] text-body-lg text-ink-muted">
+          Upload a paper to see the passages that matter to your project highlighted, and ask it questions.
         </p>
+      </header>
+
+      {ingest.isPending ? (
+        <Spinner label={`Reading ${ingest.variables.name}…`} onCancel={cancel} />
+      ) : (
+        <UploadDropzone onFileSelected={(file) => ingest.mutate(file)} />
       )}
 
-      {stage === "choice" && file && (
-        <ChoiceCards
-          filename={file.name}
-          onSwap={handleSwap}
-          onAnalyse={handleAnalyse}
-          onIngestAndAsk={handleIngestAndAsk}
-        />
-      )}
-
-      {stage === "ingesting" && <Spinner label={`Ingesting ${file?.name}…`} onCancel={cancel} />}
-
-      {stage === "chat" && file && ingestResult && (
-        <div>
-          <div className="mb-4 flex items-center gap-2.5 rounded bg-surface-1 px-3 py-2.5">
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">{ingestResult.filename}</p>
-              <p className="flex items-center gap-1 text-xs text-text-success">
-                <CheckCircle2 size={13} />
-                Ingested · {ingestResult.pages} pages · {ingestResult.chunks_stored} chunks
-              </p>
-            </div>
-            <button className="btn-secondary px-2.5 py-1.5 text-xs" onClick={() => setStage("choice")}>
-              <ArrowLeft size={13} />
-              Back
-            </button>
-          </div>
-
-          <AskChat paperId={ingestResult.paper_id} paperTitle={ingestResult.filename} />
+      {ingest.isError && (
+        <div className="mt-4">
+          {isCancelled(ingest.error) ? (
+            <p className="text-body-sm text-ink-subtle">Upload cancelled.</p>
+          ) : (
+            <ErrorPanel
+              message={`Couldn't read ${ingest.variables.name}: ${getErrorMessage(ingest.error)}`}
+              onRetry={() => ingest.mutate(ingest.variables)}
+            />
+          )}
         </div>
       )}
+
+      <div className="mt-12">
+        <PapersPanel uploadLink={false} />
+      </div>
     </div>
   );
 }

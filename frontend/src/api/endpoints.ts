@@ -1,7 +1,12 @@
+import axios from "axios";
 import { apiClient } from "./client";
 import type {
   SearchRequest,
   SearchResponse,
+  SearchSummary,
+  PaperSummary,
+  QAMessage,
+  SavedAnalysis,
   PDFIngestResponse,
   PDFAnalysisResponse,
   PDFQARequest,
@@ -32,6 +37,53 @@ export async function searchPapers(body: SearchRequest, signal?: AbortSignal): P
 export async function getSavedSearch(id: number): Promise<SearchResponse> {
   const { data } = await apiClient.get<SearchResponse>(`/history/searches/${id}`);
   return data;
+}
+
+// GET /api/v1/history/searches: newest first, at most 100.
+export async function listSavedSearches(): Promise<SearchSummary[]> {
+  const { data } = await apiClient.get<SearchSummary[]>("/history/searches");
+  return data;
+}
+
+// DELETE /api/v1/history/searches/{id}
+export async function deleteSavedSearch(id: number): Promise<void> {
+  await apiClient.delete(`/history/searches/${id}`);
+}
+
+// GET /api/v1/history/papers: papers this user has uploaded for Q&A, newest first.
+export async function listSavedPapers(): Promise<PaperSummary[]> {
+  const { data } = await apiClient.get<PaperSummary[]>("/history/papers");
+  return data;
+}
+
+// GET /api/v1/history/papers/{paper_id}/qa: this user's saved Q&A for one paper, oldest first.
+export async function listPaperQA(paperId: string): Promise<QAMessage[]> {
+  const { data } = await apiClient.get<QAMessage[]>(`/history/papers/${paperId}/qa`);
+  return data;
+}
+
+// GET /api/v1/history/papers/{paper_id}/analysis: the latest analysis, or null if never scored.
+export async function getPaperAnalysis(paperId: string): Promise<SavedAnalysis | null> {
+  const { data } = await apiClient.get<SavedAnalysis | null>(`/history/papers/${paperId}/analysis`);
+  return data;
+}
+
+// GET /api/v1/papers/{paper_id}/file: the stored PDF, so a saved paper reopens without re-uploading.
+export async function getPaperFile(paperId: string, signal?: AbortSignal): Promise<Blob> {
+  try {
+    const { data } = await apiClient.get<Blob>(`/papers/${paperId}/file`, {
+      responseType: "blob",
+      timeout: TIMEOUT_MS.ingest,
+      signal,
+    });
+    return data;
+  } catch (err) {
+    // The error body arrives as a Blob too; parse it so getErrorMessage() can show `detail`.
+    if (axios.isAxiosError(err) && err.response?.data instanceof Blob) {
+      err.response.data = await err.response.data.text().then(JSON.parse).catch(() => undefined);
+    }
+    throw err;
+  }
 }
 
 // GET /api/v1/sources

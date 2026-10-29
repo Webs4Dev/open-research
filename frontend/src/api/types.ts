@@ -61,6 +61,34 @@ export interface SearchResponse {
   search_id?: number | null; // id in the user's saved history
 }
 
+// ---- Saved history (backend/api/routes/history.py) ----
+
+export interface SearchSummary {
+  id: number;
+  query: string;
+  result_count: number;
+  created_at: string; // ISO 8601, UTC
+}
+
+export interface QAMessage {
+  id: number;
+  question: string;
+  response: PDFQAResponse;
+  created_at: string; // ISO 8601, UTC
+}
+
+export interface SavedAnalysis {
+  description: string; // what it was scored against (the shared draft may have changed since)
+  result: PDFAnalysisResponse;
+  created_at: string; // ISO 8601, UTC
+}
+
+export interface PaperSummary {
+  paper_id: string;
+  filename: string;
+  created_at: string; // ISO 8601, UTC
+}
+
 // ---- PDF ingest / analyze / ask (backend/schemas/pdf.py, relevance.py) ----
 
 export interface PDFIngestResponse {

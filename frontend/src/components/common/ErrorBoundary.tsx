@@ -23,8 +23,8 @@ export class ErrorBoundary extends Component<Props, State> {
 
     return (
       <div>
-        <h1 className="mb-2 text-xl font-medium">Something went wrong</h1>
-        <p className="mb-4 text-sm text-text-secondary">
+        <h1 className="mb-2 font-display text-h2 text-ink">Something went wrong</h1>
+        <p className="mb-4 max-w-[68ch] text-body text-ink-muted">
           This page hit an unexpected error: {this.state.error.message}
         </p>
         <button className="btn-secondary" onClick={() => this.setState({ error: null })}>
