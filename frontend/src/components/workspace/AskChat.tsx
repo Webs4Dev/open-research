@@ -155,19 +155,20 @@ function Turn({
       <div>
         <p className="whitespace-pre-wrap text-body-lg text-ink">{response.answer}</p>
         <div className="mt-3 flex flex-wrap items-center gap-2">
+          {response.found_in_pages.length > 0 && <span className="text-body-sm text-ink-subtle">Found on</span>}
           {/* Several matching chunks can sit on one page, so the server may repeat a page. */}
           {[...new Set(response.found_in_pages)].map((page) => (
             <button
               key={page}
               type="button"
               aria-label={`Show page ${page}`}
-              className="chip bg-surface-2 font-mono text-ink-muted transition-colors duration-fast hover:bg-surface-3 hover:text-ink"
+              className="chip bg-surface-2 text-ink-muted transition-colors duration-fast hover:bg-surface-3 hover:text-ink"
               onClick={() => onJumpToPage(page)}
             >
-              p. {page}
+              Page <span className="font-mono tabular-nums">{page}</span>
             </button>
           ))}
-          <span className="font-mono text-mono tabular-nums text-ink-subtle">{response.confidence}% confident</span>
+          <span className="font-mono text-mono tabular-nums text-ink-subtle">· {response.confidence}% confident</span>
         </div>
       </div>
     </li>

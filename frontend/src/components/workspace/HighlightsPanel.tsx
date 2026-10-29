@@ -174,7 +174,9 @@ export function HighlightsPanel({ paperId, file, activeChunkId, onSelectChunk }:
                           <div className="mb-2 flex flex-wrap items-center gap-2">
                             <ChunkTypeBadge type={chunk.chunk_type} />
                             {chunk.page_no && (
-                              <span className="chip bg-surface-2 font-mono text-ink-muted">p. {chunk.page_no}</span>
+                              <span className="chip bg-surface-2 text-ink-muted">
+                                Page <span className="font-mono tabular-nums">{chunk.page_no}</span>
+                              </span>
                             )}
                           </div>
                           <p className="text-body text-ink">{chunk.reason}</p>
