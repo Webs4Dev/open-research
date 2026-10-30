@@ -109,7 +109,7 @@ def test_demo_email_cannot_be_registered_even_when_the_demo_is_off(client):
 def test_broken_demo_data_disables_the_demo_instead_of_the_app(monkeypatch, tmp_path):
     import backend.main as main
     from fastapi.testclient import TestClient
-    from tests.api.conftest import CSRF
+    from helpers import CSRF
 
     def broken_seed():
         raise RuntimeError("fixture missing")
