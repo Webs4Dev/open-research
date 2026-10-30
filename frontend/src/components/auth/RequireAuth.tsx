@@ -2,7 +2,6 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { getMe } from "../../api/endpoints";
-import { ErrorPanel } from "../common/ErrorPanel";
 import { getErrorMessage } from "../../lib/errors";
 import { ME_QUERY_KEY } from "../../lib/auth";
 
@@ -15,14 +14,11 @@ export function RequireAuth() {
     return <p role="status" className="p-6 text-body-sm text-ink-subtle">Loading…</p>;
   }
   if (me.isError) {
-    if (axios.isAxiosError(me.error) && me.error.response?.status === 401) {
-      return <Navigate to="/login" replace state={{ from: location.pathname }} />;
-    }
-    return (
-      <div className="p-6">
-        <ErrorPanel message={getErrorMessage(me.error)} onRetry={() => me.refetch()} />
-      </div>
-    );
+    // Any failure lands on /login, so visitors always see the sign-in page. A 401 is just "not logged in";
+    // anything else (backend down or waking up) is shown there too, before they type a password.
+    const notLoggedIn = axios.isAxiosError(me.error) && me.error.response?.status === 401;
+    const problem = notLoggedIn ? undefined : getErrorMessage(me.error);
+    return <Navigate to="/login" replace state={{ from: location.pathname, problem }} />;
   }
   return <Outlet />;
 }
