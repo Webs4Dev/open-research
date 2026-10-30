@@ -35,7 +35,7 @@ app.add_middleware(
 
 1. Push this project to a GitHub repo.
 2. In Netlify: **Add new site → Import an existing project**, pick the repo.
-3. Build settings are already in `netlify.toml` (`npm run build`, publish `dist`) — Netlify will pick them up automatically.
+3. Set **Base directory** to `frontend` (the app lives in a subfolder). The rest of the build settings are in `frontend/netlify.toml` (`npm run build`, publish `dist`, Node 22), and Netlify picks them up automatically.
 4. Under **Site settings → Environment variables**, add `VITE_API_URL` pointing at your deployed backend (e.g. a Render or Railway URL).
 5. Deploy. The SPA redirect in `netlify.toml` makes client-side routes like `/workspace` work on refresh.
 
