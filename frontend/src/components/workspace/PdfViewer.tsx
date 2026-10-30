@@ -106,6 +106,8 @@ export function PdfViewer({ file, chunks, activeChunkId, onChunkClick, jump }: P
       scrollToPage(currentPage, 0, false);
     }
     wasReady.current = true;
+    // currentPage is read only when the pane comes back; re-running on every page change would fight the scroll.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jump, ready, pageWidth]);
 
   // Only pages within a screen of the viewport get a canvas; the rest are sized placeholders.

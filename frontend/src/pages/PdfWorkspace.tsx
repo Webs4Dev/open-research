@@ -8,7 +8,7 @@ import { ingestPdf } from "../api/endpoints";
 import { HISTORY_PAPERS_KEY, paperFileKey } from "../lib/queryKeys";
 import { getErrorMessage, isCancelled } from "../lib/errors";
 import { useAbortController } from "../lib/useAbortController";
-import { useIsDemo } from "../components/auth/RequireAuth";
+import { useIsDemo } from "../lib/auth";
 
 /** Upload a paper (ingested right away, so Ask works) and open it in the paper view. */
 export function PdfWorkspace() {

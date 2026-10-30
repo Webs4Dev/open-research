@@ -6,7 +6,7 @@ import type { PDFQAResponse, QAMessage } from "../../api/types";
 import { ErrorPanel } from "../common/ErrorPanel";
 import { getErrorMessage } from "../../lib/errors";
 import { paperQAKey } from "../../lib/queryKeys";
-import { DEMO_HINT, useIsDemo } from "../auth/RequireAuth";
+import { DEMO_HINT, useIsDemo } from "../../lib/auth";
 
 interface AskChatProps {
   paperId: string;

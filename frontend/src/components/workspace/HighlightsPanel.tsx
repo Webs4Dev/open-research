@@ -11,7 +11,7 @@ import { ScoreMeter } from "../search/ScoreMeter";
 import { getErrorMessage, isCancelled } from "../../lib/errors";
 import { useAbortController } from "../../lib/useAbortController";
 import { paperAnalysisKey } from "../../lib/queryKeys";
-import { DEMO_HINT, useIsDemo } from "../auth/RequireAuth";
+import { DEMO_HINT, useIsDemo } from "../../lib/auth";
 
 interface HighlightsPanelProps {
   paperId: string;

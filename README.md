@@ -271,7 +271,9 @@ pip install -r requirements-dev.txt
 pytest
 ```
 
-`pytest` runs only `tests/api/` (offline, with a throwaway database and a fake OpenAI key).
-The older scripts directly under `tests/` call live paid APIs, so run those by hand only.
+`pytest` runs offline: each test gets a throwaway database and Chroma collection, and a fake
+OpenAI client answers every LLM and embedding call, so it never spends credits.
+The scripts in `scripts/manual/` call live paid APIs, so run those by hand only
+(from the repo root, with `PYTHONPATH=.`).
 
 ---

@@ -11,7 +11,7 @@ import { getErrorMessage, isCancelled } from "../lib/errors";
 import { useAbortController } from "../lib/useAbortController";
 import { sourceMeta } from "../lib/sources";
 import { HISTORY_SEARCHES_KEY } from "../lib/queryKeys";
-import { DEMO_HINT, useIsDemo } from "../components/auth/RequireAuth";
+import { DEMO_HINT, useIsDemo } from "../lib/auth";
 
 // Each paper costs one LLM ranking call, so keep this small.
 const MAX_RESULTS_PER_SOURCE = 10;
@@ -46,15 +46,16 @@ export function SearchPapers() {
   // the source list settles), so a late /sources response can't overwrite the user's edits.
   // No chips selected means all sources, so a search that used every source restores as none selected.
   const allSources = sourcesQuery.data?.available_sources;
-  const restoredId = useRef<number | null>(null);
-  useEffect(() => {
-    if (!savedQuery.data || sourcesQuery.isPending || restoredId.current === savedId) return;
-    restoredId.current = savedId;
+  // Adjusted during render rather than in an effect (react.dev "you might not need an effect").
+  const [restoredId, setRestoredId] = useState<number | null>(null);
+  if (savedQuery.data && !sourcesQuery.isPending && restoredId !== savedId) {
+    setRestoredId(savedId);
     setQuery(savedQuery.data.query);
-    if (!allSources) return; // /sources failed: no chips to restore
-    const requested = savedQuery.data.sources_requested.filter((s) => allSources.includes(s)); // drop removed sources
-    setSelectedSources(requested.length === allSources.length ? [] : requested);
-  }, [savedQuery.data, sourcesQuery.isPending, allSources, savedId]);
+    if (allSources) { // /sources failed: no chips to restore
+      const requested = savedQuery.data.sources_requested.filter((s) => allSources.includes(s)); // drop removed sources
+      setSelectedSources(requested.length === allSources.length ? [] : requested);
+    }
+  }
 
   const { nextSignal, cancel } = useAbortController();
 
