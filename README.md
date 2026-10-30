@@ -1,6 +1,7 @@
 # OpenResearch
 
 [![CI](https://github.com/Webs4Dev/open-research/actions/workflows/ci.yml/badge.svg)](https://github.com/Webs4Dev/open-research/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **Research that starts with your project.** OpenResearch searches six academic sources at once,
 scores every paper against what you are building, and then lets you read a paper with the passages
@@ -198,3 +199,7 @@ The demo paper is *MIRIX: Multi-Agent Memory System for LLM-Based Agents* by Yu 
 ([arXiv:2507.07957](https://arxiv.org/abs/2507.07957)), used under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) and redistributed unmodified.
 The screenshots above show it.
+
+## License
+
+[MIT](LICENSE) © 2026 Devansh Shah. The demo paper in `backend/demo_data/` keeps its own CC BY 4.0 license.
