@@ -13,7 +13,7 @@ export function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
-  const state = location.state as { from?: string; mode?: "register"; problem?: string } | null;
+  const state = location.state as { from?: string; mode?: "register" } | null;
   // The demo banner's "Create your account" opens the register form directly.
   const [mode, setMode] = useState<"login" | "register">(state?.mode === "register" ? "register" : "login");
   const [email, setEmail] = useState("");
@@ -78,8 +78,6 @@ export function Login() {
         </div>
 
         <form onSubmit={onSubmit} className="card flex flex-col gap-4 animate-rise" style={{ animationDelay: "80ms" }}>
-          {/* Why RequireAuth sent us here (e.g. backend unreachable); replaced by the real result once they try. */}
-          {state?.problem && mutation.isIdle && demo.isIdle && <ErrorPanel message={state.problem} />}
           <h2 className="font-display text-h2 text-ink">{isLogin ? "Log in" : "Create an account"}</h2>
 
           <div className="flex flex-col gap-1.5">
