@@ -36,10 +36,10 @@ describe("RequireAuth", () => {
     expect(screen.queryByRole("alert")).toBeNull();
   });
 
-  it("still shows the login page when the backend can't be reached, and says why", async () => {
+  it("shows a clean login page when the backend can't be reached", async () => {
     vi.mocked(getMe).mockRejectedValue(new AxiosError("Network Error", "ERR_NETWORK"));
     renderProtectedPage();
     expect(await screen.findByRole("heading", { name: "Log in" })).toBeTruthy();
-    expect(screen.getByRole("alert").textContent).toMatch(/Couldn't reach the backend/);
+    expect(screen.queryByRole("alert")).toBeNull(); // the error appears only once they try to log in
   });
 });
