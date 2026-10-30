@@ -2,7 +2,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Eye, Menu, X } from "lucide-react";
 import { BrandMark, Sidebar } from "./Sidebar";
-import { useIsDemo, useLogout } from "../auth/RequireAuth";
+import { useIsDemo, useLogout } from "../../lib/auth";
 import { ErrorBoundary } from "../common/ErrorBoundary";
 
 export function AppShell() {
@@ -21,6 +21,7 @@ export function AppShell() {
   useEffect(() => {
     if (!drawerOpen) return;
     const page = pageRef.current;
+    const menuButton = menuButtonRef.current;
     if (page) page.inert = true;
     closeButtonRef.current?.focus();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setDrawerOpen(false);
@@ -28,7 +29,7 @@ export function AppShell() {
     return () => {
       if (page) page.inert = false;
       window.removeEventListener("keydown", onKey);
-      menuButtonRef.current?.focus();
+      menuButton?.focus();
     };
   }, [drawerOpen]);
 

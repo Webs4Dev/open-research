@@ -8,7 +8,7 @@ import { ErrorPanel } from "../components/common/ErrorPanel";
 import { getErrorMessage } from "../lib/errors";
 import { HISTORY_PAPERS_KEY, HISTORY_SEARCHES_KEY } from "../lib/queryKeys";
 import { relativeTime } from "../lib/relativeTime";
-import { useIsDemo } from "../components/auth/RequireAuth";
+import { useIsDemo } from "../lib/auth";
 
 // Longer lists collapse behind "Show all" so both panels stay scannable.
 const COLLAPSED_ROWS = 8;

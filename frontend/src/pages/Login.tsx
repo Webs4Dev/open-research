@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
 import { listSavedPapers, login, register, startDemo } from "../api/endpoints";
 import { getErrorMessage } from "../lib/errors";
-import { ME_QUERY_KEY } from "../components/auth/RequireAuth";
+import { ME_QUERY_KEY } from "../lib/auth";
 import { BrandMark } from "../components/layout/Sidebar";
 import { ErrorPanel } from "../components/common/ErrorPanel";
 

@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { Home, Search, FileText, LogOut } from "lucide-react";
 import type { User } from "../../api/types";
-import { ME_QUERY_KEY, useLogout } from "../auth/RequireAuth";
+import { ME_QUERY_KEY, useLogout } from "../../lib/auth";
 
 const navItems = [
   { to: "/", label: "Dashboard", icon: Home, end: true },
