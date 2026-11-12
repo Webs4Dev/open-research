@@ -78,6 +78,11 @@ export default {
       },
       backgroundImage: {
         aurora: "linear-gradient(120deg, #8B6CFF 0%, #FF6FC4 45%, #FFB938 100%)",
+        // Soft green wash behind the canvas so empty space doesn't read as blank (DESIGN.md: Canvas glow).
+        glow:
+          "radial-gradient(64rem 44rem at 0% 0%, rgba(200,245,90,0.45), transparent 70%), " +
+          "radial-gradient(52rem 40rem at 100% 55%, rgba(200,245,90,0.28), transparent 70%), " +
+          "radial-gradient(48rem 32rem at 10% 100%, rgba(8,112,76,0.12), transparent 70%)",
       },
       keyframes: {
         rise: { from: { opacity: "0", transform: "translateY(8px)" }, to: { opacity: "1", transform: "none" } },

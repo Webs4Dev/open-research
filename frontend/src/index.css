@@ -9,7 +9,7 @@ body,
 }
 
 body {
-  @apply bg-canvas font-sans text-body text-ink antialiased;
+  @apply bg-canvas bg-glow bg-fixed font-sans text-body text-ink antialiased;
 }
 
 /* No lone word on a heading's or paragraph's last line. In the base layer so a utility can override it. */
