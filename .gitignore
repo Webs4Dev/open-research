@@ -18,3 +18,6 @@ data/
 
 # Impeccable critique snapshots (local design-review history)
 .impeccable/
+
+# Personal video-recording notes and scripts (not part of the app)
+demo/
