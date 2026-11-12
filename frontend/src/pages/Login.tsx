@@ -49,7 +49,7 @@ export function Login() {
   const isLogin = mode === "login";
 
   return (
-    <div className="flex min-h-full flex-col bg-canvas px-10 py-10 max-lg:px-6 max-sm:px-4">
+    <div className="flex min-h-full flex-col px-10 py-10 max-lg:px-6 max-sm:px-4">
       <header>
         <BrandMark />
       </header>

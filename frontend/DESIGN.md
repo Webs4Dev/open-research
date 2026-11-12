@@ -112,6 +112,14 @@ Score = 0-100 total from ranking. Shown as a mono number plus a thin meter.
 Allowed in exactly these places: the focus glow behind the hero search omnibox (25% opacity on light)
 and the progress bar of a running search/analysis. Never on text blocks, cards or buttons. The brand mark is a lime tile with the black logo (Devansh's pick).
 
+### Canvas glow (background only)
+
+`glow` token: two soft lime washes (top-left 45%, right-middle 28% of `accent`) and a faint mint wash
+(bottom-left, 12%), applied once on `body` over `canvas` and fixed to the viewport. It gives empty
+space some depth so pages don't read as blank. It is the one exception to "lime is a signal": it is so faint
+it never competes with a lime fill. Only on the page background: never on cards, panels or the PDF pane
+(those are solid surfaces and cover it).
+
 ### PDF highlights (exception, intentionally off-brand)
 
 PDF pages stay white (they are papers). Highlights stay highlighter yellow so they read as
