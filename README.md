@@ -7,6 +7,8 @@
 scores every paper against what you are building, and then lets you read a paper with the passages
 that matter to you highlighted in the PDF and ask it questions.
 
+**Video walkthrough:** [Watch on YouTube](https://youtu.be/c_C9pT2J2Rw)
+
 ![A paper open in the workspace: the PDF with relevant passages highlighted on the left, scored passages on the right](.github/assets/paper-view.png)
 
 ---
